@@ -1,28 +1,68 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <Layout>
+    <v-sheet color="grey lighten-4" class="px-3 pt-3 pb-3">
+      <v-skeleton-loader
+        class="mx-auto"
+        max-width="400"
+        type="card"
+      ></v-skeleton-loader>
+      <v-skeleton-loader
+        class="mx-auto"
+        max-width="400"
+        type="card"
+      ></v-skeleton-loader>
+      <v-skeleton-loader
+        class="mx-auto"
+        max-width="400"
+        type="card"
+      ></v-skeleton-loader>
+      <v-skeleton-loader
+        class="mx-auto"
+        max-width="400"
+        type="card"
+      ></v-skeleton-loader>
+      <v-skeleton-loader
+        class="mx-auto"
+        max-width="400"
+        type="card"
+      ></v-skeleton-loader>
+    </v-sheet>
+  </Layout>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import Layout from "./layouts/default.vue";
 export default {
-  name: 'App',
+  props: {
+    source: String
+  },
   components: {
-    HelloWorld
-  }
-}
+    Layout
+  },
+  data: () => ({
+    drawer: null,
+    items: [
+      { icon: "lightbulb_outline", text: "Notes" },
+      { icon: "touch_app", text: "Reminders" },
+      { divider: true },
+      { heading: "Labels" },
+      { icon: "add", text: "Create new label" },
+      { divider: true },
+      { icon: "archive", text: "Archive" },
+      { icon: "delete", text: "Trash" },
+      { divider: true },
+      { icon: "settings", text: "Settings" },
+      { icon: "chat_bubble", text: "Trash" },
+      { icon: "help", text: "Help" },
+      { icon: "phonelink", text: "App downloads" },
+      { icon: "keyboard", text: "Keyboard shortcuts" }
+    ]
+  })
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+#keep .v-navigation-drawer__border {
+  display: none;
 }
 </style>

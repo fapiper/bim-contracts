@@ -31,33 +31,33 @@
 </template>
 
 <script>
-import Layout from "./layouts/default.vue";
+import Layout from './layouts/default.vue';
 export default {
   props: {
-    source: String
+    source: String,
   },
   components: {
-    Layout
+    Layout,
   },
   data: () => ({
     drawer: null,
     items: [
-      { icon: "lightbulb_outline", text: "Notes" },
-      { icon: "touch_app", text: "Reminders" },
+      { icon: 'lightbulb_outline', text: 'Notes' },
+      { icon: 'touch_app', text: 'Reminders' },
       { divider: true },
-      { heading: "Labels" },
-      { icon: "add", text: "Create new label" },
+      { heading: 'Labels' },
+      { icon: 'add', text: 'Create new label' },
       { divider: true },
-      { icon: "archive", text: "Archive" },
-      { icon: "delete", text: "Trash" },
+      { icon: 'archive', text: 'Archive' },
+      { icon: 'delete', text: 'Trash' },
       { divider: true },
-      { icon: "settings", text: "Settings" },
-      { icon: "chat_bubble", text: "Trash" },
-      { icon: "help", text: "Help" },
-      { icon: "phonelink", text: "App downloads" },
-      { icon: "keyboard", text: "Keyboard shortcuts" }
-    ]
-  })
+      { icon: 'settings', text: 'Settings' },
+      { icon: 'chat_bubble', text: 'Trash' },
+      { icon: 'help', text: 'Help' },
+      { icon: 'phonelink', text: 'App downloads' },
+      { icon: 'keyboard', text: 'Keyboard shortcuts' },
+    ],
+  }),
 };
 </script>
 

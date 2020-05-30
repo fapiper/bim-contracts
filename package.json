@@ -1,6 +1,33 @@
 {
   "name": "bim-contracts",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/repype/bim-contracts.git"
+  },
+  "scripts": {
+    "serve": "cd client && yarn run serve",
+    "contracts:compile": "truffle compile",
+    "contracts:migrate": "truffle migrate",
+    "run-server": "node ./household-server/index.js",
+    "lint-all": "eslint *.js household-server/ mock-sensor/ test/ helpers/ household-ui/src utility-js/ scripts/ migrations/ && yarn lint-contracts",
+    "lint-contracts": "solium -d contracts/",
+    "format-all": "eslint *.js household-server/ mock-sensor/ test/ helpers/ household-ui/src utility-js/ scripts/ migrations/ --fix && yarn format-contracts",
+    "format-contracts": "solium -d contracts/ --fix"
+  },
   "author": "Fabian Piper <fabianpiper@web.de>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.1.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "eslint-plugin-vue": "^6.2.2",
+    "prettier": "^2.0.5"
+  }
 }

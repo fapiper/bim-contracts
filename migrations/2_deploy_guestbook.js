@@ -1,5 +1,5 @@
-const Guestbook = artifacts.require("Guestbook");
+const Guestbook = artifacts.require('Guestbook');
 
-module.exports = function(deployer) {
+module.exports = function (deployer) {
   deployer.deploy(Guestbook);
 };

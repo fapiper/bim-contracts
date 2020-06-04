@@ -1,19 +1,16 @@
 const express = require('express');
-const cors = require('cors');
+const morgan = require('morgan');
 
+const { handleError } = require('./helpers/error');
 const routes = require('./routes');
 
 const app = express();
 
-app.use(express.json());
-app.use(cors());
+const errorMiddleware = (err, req, res, next) => handleError(err, res);
 
-const loggingMiddleware = (req, res, next) => {
-  console.log('Request at', req.originalUrl);
-  next();
-};
+app.use(morgan('dev'));
 
-app.use('/', loggingMiddleware);
+app.use('/', errorMiddleware);
 app.use('/', routes);
 
 module.exports = app;

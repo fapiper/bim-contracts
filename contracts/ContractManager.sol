@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21;
+pragma solidity >=0.4.21 <0.7.0;
 
 import './ConstructionProject.sol';
 
@@ -11,7 +11,7 @@ import './ConstructionProject.sol';
 contract ContractManager {
     address public generalContractor; // Rolle Generalunternehmer
 
-    ConstructionProject constructionProject;
+    ConstructionProject public constructionProject;
 
     modifier onlyGeneralContractor {
         require(msg.sender == generalContractor, 'No permission.');

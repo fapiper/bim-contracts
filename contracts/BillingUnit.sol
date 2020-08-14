@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21;
+pragma solidity >=0.4.21 <0.7.0;
 
 /**
  * @title BillingUnit
@@ -26,7 +26,7 @@ contract BillingUnit {
     uint256 totalFinishedBoQItems;
 
     State state;
-    bytes32 hash;
+    bytes32 public hash;
 
     modifier onlySubContractor(uint256 id) {
         require(msg.sender == boQItems[id].subContractor, 'No permission.');

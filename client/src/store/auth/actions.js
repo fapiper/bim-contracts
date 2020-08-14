@@ -1,5 +1,4 @@
-import { Cookies } from 'quasar';
-
+import { Cookies, Notify } from 'quasar';
 const user = {
   data: { id: -1 },
   attributes: {
@@ -23,6 +22,10 @@ export function login(state, data) {
     token: 'EXAMPLE_TOKEN',
     rememberMe: data.rememberMe,
   });
+  Notify.create({
+    message: 'Erfolgreich eingeloggt',
+  });
+
   return true;
 }
 

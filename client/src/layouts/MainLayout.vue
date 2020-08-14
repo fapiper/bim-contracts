@@ -10,23 +10,12 @@
     <q-drawer v-model="drawer" show-if-above :breakpoint="500">
       <q-scroll-area class="fit">
         <q-list padding class="menu-list">
-          <q-item active clickable v-ripple>
-            <q-item-section avatar>
-              <q-icon name="star" />
-            </q-item-section>
-
-            <q-item-section>
-              Star
-            </q-item-section>
-          </q-item>
           <q-item
             clickable
             v-ripple
             v-for="link in essentialLinks"
             :key="link.title"
-            tag="a"
-            target="_blank"
-            :href="link.link"
+            :to="link.link"
           >
             <q-item-section avatar>
               <q-icon :name="link.icon" />
@@ -54,12 +43,12 @@ const linksData = [
     link: 'dashboard',
   },
   {
-    title: 'Leistungsverzeichnis',
+    title: 'Leistungsverzeichnisse',
     icon: 'assignment',
     link: '',
   },
   {
-    title: 'Abrechnungsplan',
+    title: 'Abrechnungen',
     icon: 'account_balance',
     link: '',
   },
@@ -97,7 +86,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.menu-list .q-item {
-  border-radius: 0 32px 32px 0;
-}
+// .menu-list .q-item {
+//   border-radius: 0 32px 32px 0;
+// }
 </style>

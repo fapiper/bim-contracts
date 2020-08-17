@@ -9,6 +9,7 @@ import './ConstructionProject.sol';
  */
 
 contract ContractManager {
+    address public admin; // Superadmin
     address public generalContractor; // Rolle Generalunternehmer
 
     ConstructionProject public constructionProject;
@@ -21,7 +22,9 @@ contract ContractManager {
     /**
      * @dev Instantiates a Contract Manager factory with initial values
      */
-    constructor() public {}
+    constructor() public {
+        admin = msg.sender;
+    }
 
     /**
      * @dev Registers general contractor

@@ -7,7 +7,12 @@
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-model="drawer" show-if-above :breakpoint="500">
+    <q-drawer
+      v-model="drawer"
+      show-if-above
+      :breakpoint="500"
+      content-class="bg-grey-1"
+    >
       <q-scroll-area class="fit">
         <q-list padding class="menu-list">
           <q-item
@@ -40,26 +45,16 @@ const linksData = [
   {
     title: 'Dashboard',
     icon: 'dashboard',
-    link: 'dashboard',
+    link: '/dashboard',
   },
   {
-    title: 'Leistungsverzeichnisse',
+    title: 'Projekte',
     icon: 'assignment',
-    link: '',
+    link: '/projects',
   },
   {
-    title: 'Abrechnungen',
-    icon: 'account_balance',
-    link: '',
-  },
-  {
-    title: 'Akteure',
+    title: 'Kontakte',
     icon: 'group',
-    link: '',
-  },
-  {
-    title: 'Baufortschritt',
-    icon: 'trending_up',
     link: '',
   },
   {

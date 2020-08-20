@@ -7,12 +7,11 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Index.vue') },
       { path: 'dashboard', component: () => import('pages/Dashboard.vue') },
+      { path: '/projects', component: () => import('pages/Project/Index.vue') },
       {
-        path: '/projects',
+        path: '/projects/',
         component: () => import('layouts/ProjectLayout.vue'),
-        meta: { auth: true },
         children: [
-          { path: '', component: () => import('pages/Project/Index.vue') },
           { path: 'boqs', component: () => import('pages/Project/Boqs.vue') },
         ],
       },

@@ -9,12 +9,10 @@ const user = {
 };
 
 export function register(state, data) {
-  console.log('register', data);
   return true;
 }
 
 export function login(state, data) {
-  console.log('login', data);
   state.commit('setUser', user);
   // const token = response.data.token;
   // axiosInstance.defaults.headers.common.Authorization = 'Bearer ' + token;
@@ -42,7 +40,6 @@ export function setToken(state, data) {
 
 export async function fetch(state) {
   const token = Cookies.get('authorization_token');
-  console.log('fetch', 'w/ token', token);
   if (token) {
     // axiosInstance.defaults.headers.common.Authorization = 'Bearer ' + token;
     state.commit('setUser', user);
@@ -50,21 +47,17 @@ export async function fetch(state) {
 }
 
 export function logout(state) {
-  console.log('logout');
   Cookies.remove('authorization_token');
   state.commit('setUser', null);
 }
 
 export function verify(state, token) {
-  console.log('verify', token);
   return true;
 }
 export function passwordForgot(state, data) {
-  console.log('passwordForgot', data);
   return true;
 }
 
 export function passwordReset(state, { token, data }) {
-  console.log('passwordReset', token, data);
   return true;
 }

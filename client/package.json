@@ -13,7 +13,8 @@
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
     "quasar": "^1.0.0",
-    "vuelidate": "^0.7.5"
+    "vuelidate": "^0.7.5",
+    "web3": "^1.2.11"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0"

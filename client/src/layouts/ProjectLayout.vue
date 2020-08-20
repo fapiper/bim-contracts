@@ -19,12 +19,6 @@
 
 <script>
 export default {
-  // name: 'LayoutName',
-
-  data() {
-    return {
-      leftDrawer: true,
-    };
-  },
+  name: 'LayoutProject',
 };
 </script>

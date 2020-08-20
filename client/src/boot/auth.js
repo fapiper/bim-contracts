@@ -1,5 +1,3 @@
-import auth from '../store/auth';
-
 const isArrayOrString = (variable) =>
   typeof variable === typeof [] || typeof variable === typeof '';
 
@@ -7,7 +5,7 @@ export default ({ app, router, store, Vue }) => {
   /**
    * Register auth store
    */
-  store.registerModule('auth', auth);
+  // This is already done inside index file of store -> store.registerModule('auth', auth);
 
   /**
    * Register route authentication guard

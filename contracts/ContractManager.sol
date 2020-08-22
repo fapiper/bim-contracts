@@ -9,10 +9,12 @@ import './ConstructionProject.sol';
  */
 
 contract ContractManager {
+    event ConstructionProjectCreated(uint256 indexed index);
+
     address public admin; // Superadmin
     address public generalContractor; // Rolle Generalunternehmer
 
-    ConstructionProject public constructionProject;
+    ConstructionProject[] public constructionProjects;
 
     modifier onlyGeneralContractor {
         require(msg.sender == generalContractor, 'No permission.');
@@ -34,6 +36,13 @@ contract ContractManager {
     }
 
     /**
+     * @dev Counts number of construction projects
+     */
+    function getProjectsLength() public view returns (uint256 projectsLength) {
+        return constructionProjects.length;
+    }
+
+    /**
      * @dev Creates a new construction project
      */
     function createConstructionProject()
@@ -41,7 +50,8 @@ contract ContractManager {
         onlyGeneralContractor
         returns (bool success)
     {
-        constructionProject = new ConstructionProject();
+        constructionProjects.push(new ConstructionProject());
+        emit ConstructionProjectCreated(constructionProjects.length);
         return true;
     }
 }

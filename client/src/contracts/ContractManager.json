@@ -1,0 +1,1977 @@
+{
+  "contractName": "ContractManager",
+  "abi": [
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "ConstructionProjectCreated",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "constructionProjects",
+      "outputs": [
+        {
+          "internalType": "contract ConstructionProject",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "generalContractor",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "registerGeneralContractor",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getProjectsLength",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "projectsLength",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "createConstructionProject",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "success",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"ConstructionProjectCreated\",\"type\":\"event\"},{\"constant\":true,\"inputs\":[],\"name\":\"admin\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"constructionProjects\",\"outputs\":[{\"internalType\":\"contract ConstructionProject\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"createConstructionProject\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"generalContractor\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":true,\"inputs\":[],\"name\":\"getProjectsLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"projectsLength\",\"type\":\"uint256\"}],\"payable\":false,\"stateMutability\":\"view\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[],\"name\":\"registerGeneralContractor\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Store & retreive value in a variable\",\"methods\":{\"constructor\":{\"details\":\"Instantiates a Contract Manager factory with initial values\"},\"createConstructionProject()\":{\"details\":\"Creates a new construction project\"},\"getProjectsLength()\":{\"details\":\"Counts number of construction projects\"},\"registerGeneralContractor()\":{\"details\":\"Registers general contractor\"}},\"title\":\"ContractManager\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ContractManager.sol\":\"ContractManager\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ConstructionProject.sol\":{\"keccak256\":\"0x39fbaa186ca961f25c03272a353debd2e1afffc8969a0283867e3602d2f51c65\",\"urls\":[\"bzz-raw://0ac932291055bb971b022895a4cc4ea748062abd4f14474645058eec70b8ec95\",\"dweb:/ipfs/Qme41BYwzV9pwVhmeBe8HYDEoGfpZta5huv8sw15pZQmcJ\"]},\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ContractManager.sol\":{\"keccak256\":\"0x90ab703dba23187d000506dd0193096ff808366012359465a5bf90e7feed872b\",\"urls\":[\"bzz-raw://8f632ca0abad580e29dac1b38bfec637f4361dd93bf3ab4f7cdb9740bbcbd916\",\"dweb:/ipfs/QmcF5g5ZF369D92ZkbzmGLYhNrV2c2WqN8CJWV73aZVQ2X\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506111d7806100606000396000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c806315eda9301461006757806323ad46cd146100d5578063c6bdc0a2146100df578063cb8e054f146100fd578063f6696b9d14610147578063f851a44014610169575b600080fd5b6100936004803603602081101561007d57600080fd5b81019080803590602001909291905050506101b3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100dd6101ef565b005b6100e7610232565b6040518082815260200191505060405180910390f35b61010561023f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61014f610265565b604051808215151515815260200191505060405180910390f35b6101716103f1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600281815481106101c057fe5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b33600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000600280549050905090565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461032a576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b600260405161033890610416565b604051809103906000f080158015610354573d6000803e3d6000fd5b5090806001815401808255809150509060018203906000526020600020016000909192909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506002805490507f52a7b1a4c0d2e64ca94de2c139082187b166fd7854f15c760fc8a8626b15f4cc60405160405180910390a26001905090565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b610d7f806104248339019056fe608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610d1f806100606000396000f3fe608060405234801561001057600080fd5b50600436106100885760003560e01c8063ca5f158d1161005b578063ca5f158d146101c9578063cb8e054f146101d3578063dfdd78ca1461021d578063f0cccf981461026d57610088565b8063099e47b11461008d5780636c03b400146100dd5780638f13eda91461012757806390d698d314610183575b600080fd5b6100c3600480360360408110156100a357600080fd5b8101908080359060200190929190803590602001909291905050506102bd565b604051808215151515815260200191505060405180910390f35b6100e56103a3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101696004803603602081101561013d57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506103c9565b604051808215151515815260200191505060405180910390f35b6101af6004803603602081101561019957600080fd5b81019080803590602001909291905050506103e9565b604051808215151515815260200191505060405180910390f35b6101d16105d7565b005b6101db6106f3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6102536004803603604081101561023357600080fd5b810190808035906020019092919080359060200190929190505050610718565b604051808215151515815260200191505060405180910390f35b6102a36004803603604081101561028357600080fd5b810190808035906020019092919080359060200190929190505050610899565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610381576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b8260056000848152602001908152602001600020819055506001905092915050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60026020528060005260406000206000915054906101000a900460ff1681565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146104ad576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b6003600083815260200190815260200160002060000160009054906101000a900460ff1615610544576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260168152602001807f424f5120616c7265616479207370656369666965642e0000000000000000000081525060200191505060405180910390fd5b60006040519080825280602002602001820160405280156105745781602001602082028038833980820191505090505b5060036000848152602001908152602001600020600101908051906020019061059e929190610c2b565b5060016003600084815260200190815260200160002060000160006101000a81548160ff02191690831515021790555060019050919050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610699576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b6001600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff021916908315150217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000816004600085815260200190815260200160002060030160009054906101000a900460ff16600381111561074a57fe5b1061075457600080fd5b81600381111561076057fe5b6004600085815260200190815260200160002060030160006101000a81548160ff0219169083600381111561079157fe5b021790555060008090505b600460008581526020019081526020016000206002018054905081101561083d5760006004600086815260200190815260200160002060020182815481106107e057fe5b90600052602060002001549050836004600083815260200190815260200160002060030160009054906101000a900460ff16600381111561081d57fe5b101561082f5761082d8185610718565b505b50808060010191505061079c565b50827f39f4579fe037f1f2dacbbe9f93f835c2fe2d905dad6c62e8cf6cfef14804a7ae83600381111561086c57fe5b6040518082600381111561087c57fe5b60ff16815260200191505060405180910390a26001905092915050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461095d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b6000801b60046000848152602001908152602001600020600001541415806109a557506003600083815260200190815260200160002060000160009054906101000a900460ff165b610a17576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260188152602001807f506172656e74206973206e6f74207370656369666965642e000000000000000081525060200191505060405180910390fd5b6000801b600460008581526020019081526020016000206000015414610aa5576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252601f8152602001807f576f726b204974656d20697320616c7265616479207370656369666965642e0081525060200191505060405180910390fd5b60405180608001604052808481526020018381526020016000604051908082528060200260200182016040528015610aec5781602001602082028038833980820191505090505b50815260200160006003811115610aff57fe5b8152506004600085815260200190815260200160002060008201518160000155602082015181600101556040820151816002019080519060200190610b45929190610c78565b5060608201518160030160006101000a81548160ff02191690836003811115610b6a57fe5b02179055509050506003600083815260200190815260200160002060000160009054906101000a900460ff1615610be05760036000838152602001908152602001600020600101839080600181540180825580915050906001820390600052602060002001600090919290919091505550610c21565b600460008381526020019081526020016000206002018390806001815401808255809150509060018203906000526020600020016000909192909190915055505b6001905092915050565b828054828255906000526020600020908101928215610c67579160200282015b82811115610c66578251825591602001919060010190610c4b565b5b509050610c749190610cc5565b5090565b828054828255906000526020600020908101928215610cb4579160200282015b82811115610cb3578251825591602001919060010190610c98565b5b509050610cc19190610cc5565b5090565b610ce791905b80821115610ce3576000816000905550600101610ccb565b5090565b9056fea265627a7a7231582007bed6262a0597b0f6cbb56c0323948f9bd90f7ef14e03329490c611194c7dd964736f6c63430005100032a265627a7a723158201aed3caa4ef989ed5bc08013a1dec19a9cc6d858490dcc755e1409188ba9412c64736f6c63430005100032",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100625760003560e01c806315eda9301461006757806323ad46cd146100d5578063c6bdc0a2146100df578063cb8e054f146100fd578063f6696b9d14610147578063f851a44014610169575b600080fd5b6100936004803603602081101561007d57600080fd5b81019080803590602001909291905050506101b3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6100dd6101ef565b005b6100e7610232565b6040518082815260200191505060405180910390f35b61010561023f565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61014f610265565b604051808215151515815260200191505060405180910390f35b6101716103f1565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b600281815481106101c057fe5b906000526020600020016000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b33600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550565b6000600280549050905090565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461032a576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b600260405161033890610416565b604051809103906000f080158015610354573d6000803e3d6000fd5b5090806001815401808255809150509060018203906000526020600020016000909192909190916101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550506002805490507f52a7b1a4c0d2e64ca94de2c139082187b166fd7854f15c760fc8a8626b15f4cc60405160405180910390a26001905090565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b610d7f806104248339019056fe608060405234801561001057600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550610d1f806100606000396000f3fe608060405234801561001057600080fd5b50600436106100885760003560e01c8063ca5f158d1161005b578063ca5f158d146101c9578063cb8e054f146101d3578063dfdd78ca1461021d578063f0cccf981461026d57610088565b8063099e47b11461008d5780636c03b400146100dd5780638f13eda91461012757806390d698d314610183575b600080fd5b6100c3600480360360408110156100a357600080fd5b8101908080359060200190929190803590602001909291905050506102bd565b604051808215151515815260200191505060405180910390f35b6100e56103a3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6101696004803603602081101561013d57600080fd5b81019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506103c9565b604051808215151515815260200191505060405180910390f35b6101af6004803603602081101561019957600080fd5b81019080803590602001909291905050506103e9565b604051808215151515815260200191505060405180910390f35b6101d16105d7565b005b6101db6106f3565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b6102536004803603604081101561023357600080fd5b810190808035906020019092919080359060200190929190505050610718565b604051808215151515815260200191505060405180910390f35b6102a36004803603604081101561028357600080fd5b810190808035906020019092919080359060200190929190505050610899565b604051808215151515815260200191505060405180910390f35b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610381576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b8260056000848152602001908152602001600020819055506001905092915050565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60026020528060005260406000206000915054906101000a900460ff1681565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff16146104ad576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b6003600083815260200190815260200160002060000160009054906101000a900460ff1615610544576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260168152602001807f424f5120616c7265616479207370656369666965642e0000000000000000000081525060200191505060405180910390fd5b60006040519080825280602002602001820160405280156105745781602001602082028038833980820191505090505b5060036000848152602001908152602001600020600101908051906020019061059e929190610c2b565b5060016003600084815260200190815260200160002060000160006101000a81548160ff02191690831515021790555060019050919050565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614610699576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b6001600260003373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff021916908315150217905550565b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b6000816004600085815260200190815260200160002060030160009054906101000a900460ff16600381111561074a57fe5b1061075457600080fd5b81600381111561076057fe5b6004600085815260200190815260200160002060030160006101000a81548160ff0219169083600381111561079157fe5b021790555060008090505b600460008581526020019081526020016000206002018054905081101561083d5760006004600086815260200190815260200160002060020182815481106107e057fe5b90600052602060002001549050836004600083815260200190815260200160002060030160009054906101000a900460ff16600381111561081d57fe5b101561082f5761082d8185610718565b505b50808060010191505061079c565b50827f39f4579fe037f1f2dacbbe9f93f835c2fe2d905dad6c62e8cf6cfef14804a7ae83600381111561086c57fe5b6040518082600381111561087c57fe5b60ff16815260200191505060405180910390a26001905092915050565b60008060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff161461095d576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252600e8152602001807f4e6f207065726d697373696f6e2e00000000000000000000000000000000000081525060200191505060405180910390fd5b6000801b60046000848152602001908152602001600020600001541415806109a557506003600083815260200190815260200160002060000160009054906101000a900460ff165b610a17576040517f08c379a00000000000000000000000000000000000000000000000000000000081526004018080602001828103825260188152602001807f506172656e74206973206e6f74207370656369666965642e000000000000000081525060200191505060405180910390fd5b6000801b600460008581526020019081526020016000206000015414610aa5576040517f08c379a000000000000000000000000000000000000000000000000000000000815260040180806020018281038252601f8152602001807f576f726b204974656d20697320616c7265616479207370656369666965642e0081525060200191505060405180910390fd5b60405180608001604052808481526020018381526020016000604051908082528060200260200182016040528015610aec5781602001602082028038833980820191505090505b50815260200160006003811115610aff57fe5b8152506004600085815260200190815260200160002060008201518160000155602082015181600101556040820151816002019080519060200190610b45929190610c78565b5060608201518160030160006101000a81548160ff02191690836003811115610b6a57fe5b02179055509050506003600083815260200190815260200160002060000160009054906101000a900460ff1615610be05760036000838152602001908152602001600020600101839080600181540180825580915050906001820390600052602060002001600090919290919091505550610c21565b600460008381526020019081526020016000206002018390806001815401808255809150509060018203906000526020600020016000909192909190915055505b6001905092915050565b828054828255906000526020600020908101928215610c67579160200282015b82811115610c66578251825591602001919060010190610c4b565b5b509050610c749190610cc5565b5090565b828054828255906000526020600020908101928215610cb4579160200282015b82811115610cb3578251825591602001919060010190610c98565b5b509050610cc19190610cc5565b5090565b610ce791905b80821115610ce3576000816000905550600101610ccb565b5090565b9056fea265627a7a7231582007bed6262a0597b0f6cbb56c0323948f9bd90f7ef14e03329490c611194c7dd964736f6c63430005100032a265627a7a723158201aed3caa4ef989ed5bc08013a1dec19a9cc6d858490dcc755e1409188ba9412c64736f6c63430005100032",
+  "sourceMap": "183:1223:1:-;;;650:56;8:9:-1;5:2;;;30:1;27;20:12;5:2;650:56:1;689:10;681:5;;:18;;;;;;;;;;;;;;;;;;183:1223;;;;;;",
+  "deployedSourceMap": "183:1223:1:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;183:1223:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;383:49;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;383:49:1;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;769:91;;;:::i;:::-;;933:125;;;:::i;:::-;;;;;;;;;;;;;;;;;;;316:32;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1127:277;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;276:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;383:49;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;769:91::-;843:10;823:17;;:30;;;;;;;;;;;;;;;;;;769:91::o;933:125::-;983:22;1024:20;:27;;;;1017:34;;933:125;:::o;316:32::-;;;;;;;;;;;;;:::o;1127:277::-;1226:12;502:17;;;;;;;;;;;488:31;;:10;:31;;;480:58;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1254:20;1280:25;;;;;:::i;:::-;;;;;;;;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;1280:25:1;1254:52;;39:1:-1;33:3;27:10;23:18;57:10;52:3;45:23;79:10;72:17;;0:93;1254:52:1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1348:20;:27;;;;1321:55;;;;;;;;;;1393:4;1386:11;;1127:277;:::o;276:20::-;;;;;;;;;;;;;:::o;183:1223::-;;;;;;;;:::o",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.21 <0.7.0;\n\nimport './ConstructionProject.sol';\n\n/**\n * @title ContractManager\n * @dev Store & retreive value in a variable\n */\n\ncontract ContractManager {\n    event ConstructionProjectCreated(uint256 indexed index);\n\n    address public admin; // Superadmin\n    address public generalContractor; // Rolle Generalunternehmer\n\n    ConstructionProject[] public constructionProjects;\n\n    modifier onlyGeneralContractor {\n        require(msg.sender == generalContractor, 'No permission.');\n        _;\n    }\n\n    /**\n     * @dev Instantiates a Contract Manager factory with initial values\n     */\n    constructor() public {\n        admin = msg.sender;\n    }\n\n    /**\n     * @dev Registers general contractor\n     */\n    function registerGeneralContractor() public {\n        generalContractor = msg.sender;\n    }\n\n    /**\n     * @dev Counts number of construction projects\n     */\n    function getProjectsLength() public view returns (uint256 projectsLength) {\n        return constructionProjects.length;\n    }\n\n    /**\n     * @dev Creates a new construction project\n     */\n    function createConstructionProject()\n        public\n        onlyGeneralContractor\n        returns (bool success)\n    {\n        constructionProjects.push(new ConstructionProject());\n        emit ConstructionProjectCreated(constructionProjects.length);\n        return true;\n    }\n}\n",
+  "sourcePath": "C:/Users/fabia/WebstormProjects/bim-contracts/contracts/ContractManager.sol",
+  "ast": {
+    "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ContractManager.sol",
+    "exportedSymbols": {
+      "ContractManager": [
+        376
+      ]
+    },
+    "id": 377,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 301,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".21",
+          "<",
+          "0.7",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:32:1"
+      },
+      {
+        "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ConstructionProject.sol",
+        "file": "./ConstructionProject.sol",
+        "id": 302,
+        "nodeType": "ImportDirective",
+        "scope": 377,
+        "sourceUnit": 300,
+        "src": "66:35:1",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [
+          299
+        ],
+        "contractKind": "contract",
+        "documentation": "@title ContractManager\n@dev Store & retreive value in a variable",
+        "fullyImplemented": true,
+        "id": 376,
+        "linearizedBaseContracts": [
+          376
+        ],
+        "name": "ContractManager",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 306,
+            "name": "ConstructionProjectCreated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 305,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 304,
+                  "indexed": true,
+                  "name": "index",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 306,
+                  "src": "247:21:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 303,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "247:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "246:23:1"
+            },
+            "src": "214:56:1"
+          },
+          {
+            "constant": false,
+            "id": 308,
+            "name": "admin",
+            "nodeType": "VariableDeclaration",
+            "scope": 376,
+            "src": "276:20:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 307,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "276:7:1",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 310,
+            "name": "generalContractor",
+            "nodeType": "VariableDeclaration",
+            "scope": 376,
+            "src": "316:32:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 309,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "316:7:1",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 313,
+            "name": "constructionProjects",
+            "nodeType": "VariableDeclaration",
+            "scope": 376,
+            "src": "383:49:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+              "typeString": "contract ConstructionProject[]"
+            },
+            "typeName": {
+              "baseType": {
+                "contractScope": null,
+                "id": 311,
+                "name": "ConstructionProject",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 299,
+                "src": "383:19:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                  "typeString": "contract ConstructionProject"
+                }
+              },
+              "id": 312,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "383:21:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage_ptr",
+                "typeString": "contract ConstructionProject[]"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 324,
+              "nodeType": "Block",
+              "src": "470:86:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 319,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 316,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 428,
+                            "src": "488:3:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 317,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": null,
+                          "src": "488:10:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address_payable",
+                            "typeString": "address payable"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "id": 318,
+                          "name": "generalContractor",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 310,
+                          "src": "502:17:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "488:31:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4e6f207065726d697373696f6e2e",
+                        "id": 320,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "521:16:1",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_69780765e9135524b60cbfcabde1ddb4b64c8c6ec8497a854251b4bd760d9c3a",
+                          "typeString": "literal_string \"No permission.\""
+                        },
+                        "value": "No permission."
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_69780765e9135524b60cbfcabde1ddb4b64c8c6ec8497a854251b4bd760d9c3a",
+                          "typeString": "literal_string \"No permission.\""
+                        }
+                      ],
+                      "id": 315,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        431,
+                        432
+                      ],
+                      "referencedDeclaration": 432,
+                      "src": "480:7:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 321,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "480:58:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 322,
+                  "nodeType": "ExpressionStatement",
+                  "src": "480:58:1"
+                },
+                {
+                  "id": 323,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "548:1:1"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 325,
+            "name": "onlyGeneralContractor",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 314,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "470:0:1"
+            },
+            "src": "439:117:1",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 333,
+              "nodeType": "Block",
+              "src": "671:35:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 331,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 328,
+                      "name": "admin",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 308,
+                      "src": "681:5:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 329,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 428,
+                        "src": "689:3:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 330,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "689:10:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "src": "681:18:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 332,
+                  "nodeType": "ExpressionStatement",
+                  "src": "681:18:1"
+                }
+              ]
+            },
+            "documentation": "@dev Instantiates a Contract Manager factory with initial values",
+            "id": 334,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 326,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "661:2:1"
+            },
+            "returnParameters": {
+              "id": 327,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "671:0:1"
+            },
+            "scope": 376,
+            "src": "650:56:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 342,
+              "nodeType": "Block",
+              "src": "813:47:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 340,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 337,
+                      "name": "generalContractor",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 310,
+                      "src": "823:17:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 338,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 428,
+                        "src": "843:3:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 339,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "843:10:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "src": "823:30:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 341,
+                  "nodeType": "ExpressionStatement",
+                  "src": "823:30:1"
+                }
+              ]
+            },
+            "documentation": "@dev Registers general contractor",
+            "id": 343,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerGeneralContractor",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 335,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "803:2:1"
+            },
+            "returnParameters": {
+              "id": 336,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "813:0:1"
+            },
+            "scope": 376,
+            "src": "769:91:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 351,
+              "nodeType": "Block",
+              "src": "1007:51:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 348,
+                      "name": "constructionProjects",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 313,
+                      "src": "1024:20:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+                        "typeString": "contract ConstructionProject[] storage ref"
+                      }
+                    },
+                    "id": 349,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "length",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": null,
+                    "src": "1024:27:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 347,
+                  "id": 350,
+                  "nodeType": "Return",
+                  "src": "1017:34:1"
+                }
+              ]
+            },
+            "documentation": "@dev Counts number of construction projects",
+            "id": 352,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getProjectsLength",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 344,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "959:2:1"
+            },
+            "returnParameters": {
+              "id": 347,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 346,
+                  "name": "projectsLength",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 352,
+                  "src": "983:22:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 345,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "983:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "982:24:1"
+            },
+            "scope": 376,
+            "src": "933:125:1",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 374,
+              "nodeType": "Block",
+              "src": "1244:160:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 363,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "NewExpression",
+                          "src": "1280:23:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_creation_nonpayable$__$returns$_t_contract$_ConstructionProject_$299_$",
+                            "typeString": "function () returns (contract ConstructionProject)"
+                          },
+                          "typeName": {
+                            "contractScope": null,
+                            "id": 362,
+                            "name": "ConstructionProject",
+                            "nodeType": "UserDefinedTypeName",
+                            "referencedDeclaration": 299,
+                            "src": "1284:19:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                              "typeString": "contract ConstructionProject"
+                            }
+                          }
+                        },
+                        "id": 364,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1280:25:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                          "typeString": "contract ConstructionProject"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                          "typeString": "contract ConstructionProject"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 359,
+                        "name": "constructionProjects",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 313,
+                        "src": "1254:20:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+                          "typeString": "contract ConstructionProject[] storage ref"
+                        }
+                      },
+                      "id": 361,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "push",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "1254:25:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_contract$_ConstructionProject_$299_$returns$_t_uint256_$",
+                        "typeString": "function (contract ConstructionProject) returns (uint256)"
+                      }
+                    },
+                    "id": 365,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1254:52:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 366,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1254:52:1"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 368,
+                          "name": "constructionProjects",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 313,
+                          "src": "1348:20:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+                            "typeString": "contract ConstructionProject[] storage ref"
+                          }
+                        },
+                        "id": 369,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "length",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "1348:27:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 367,
+                      "name": "ConstructionProjectCreated",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 306,
+                      "src": "1321:26:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_uint256_$returns$__$",
+                        "typeString": "function (uint256)"
+                      }
+                    },
+                    "id": 370,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1321:55:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 371,
+                  "nodeType": "EmitStatement",
+                  "src": "1316:60:1"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 372,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "1393:4:1",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 358,
+                  "id": 373,
+                  "nodeType": "Return",
+                  "src": "1386:11:1"
+                }
+              ]
+            },
+            "documentation": "@dev Creates a new construction project",
+            "id": 375,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 355,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 354,
+                  "name": "onlyGeneralContractor",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 325,
+                  "src": "1187:21:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1187:21:1"
+              }
+            ],
+            "name": "createConstructionProject",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 353,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1161:2:1"
+            },
+            "returnParameters": {
+              "id": 358,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 357,
+                  "name": "success",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 375,
+                  "src": "1226:12:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 356,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1226:4:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1225:14:1"
+            },
+            "scope": 376,
+            "src": "1127:277:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 377,
+        "src": "183:1223:1"
+      }
+    ],
+    "src": "32:1375:1"
+  },
+  "legacyAST": {
+    "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ContractManager.sol",
+    "exportedSymbols": {
+      "ContractManager": [
+        376
+      ]
+    },
+    "id": 377,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 301,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.4",
+          ".21",
+          "<",
+          "0.7",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "32:32:1"
+      },
+      {
+        "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ConstructionProject.sol",
+        "file": "./ConstructionProject.sol",
+        "id": 302,
+        "nodeType": "ImportDirective",
+        "scope": 377,
+        "sourceUnit": 300,
+        "src": "66:35:1",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [
+          299
+        ],
+        "contractKind": "contract",
+        "documentation": "@title ContractManager\n@dev Store & retreive value in a variable",
+        "fullyImplemented": true,
+        "id": 376,
+        "linearizedBaseContracts": [
+          376
+        ],
+        "name": "ContractManager",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "anonymous": false,
+            "documentation": null,
+            "id": 306,
+            "name": "ConstructionProjectCreated",
+            "nodeType": "EventDefinition",
+            "parameters": {
+              "id": 305,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 304,
+                  "indexed": true,
+                  "name": "index",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 306,
+                  "src": "247:21:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 303,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "247:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "246:23:1"
+            },
+            "src": "214:56:1"
+          },
+          {
+            "constant": false,
+            "id": 308,
+            "name": "admin",
+            "nodeType": "VariableDeclaration",
+            "scope": 376,
+            "src": "276:20:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 307,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "276:7:1",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 310,
+            "name": "generalContractor",
+            "nodeType": "VariableDeclaration",
+            "scope": 376,
+            "src": "316:32:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_address",
+              "typeString": "address"
+            },
+            "typeName": {
+              "id": 309,
+              "name": "address",
+              "nodeType": "ElementaryTypeName",
+              "src": "316:7:1",
+              "stateMutability": "nonpayable",
+              "typeDescriptions": {
+                "typeIdentifier": "t_address",
+                "typeString": "address"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "constant": false,
+            "id": 313,
+            "name": "constructionProjects",
+            "nodeType": "VariableDeclaration",
+            "scope": 376,
+            "src": "383:49:1",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+              "typeString": "contract ConstructionProject[]"
+            },
+            "typeName": {
+              "baseType": {
+                "contractScope": null,
+                "id": 311,
+                "name": "ConstructionProject",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 299,
+                "src": "383:19:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                  "typeString": "contract ConstructionProject"
+                }
+              },
+              "id": 312,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "383:21:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage_ptr",
+                "typeString": "contract ConstructionProject[]"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 324,
+              "nodeType": "Block",
+              "src": "470:86:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "commonType": {
+                          "typeIdentifier": "t_address",
+                          "typeString": "address"
+                        },
+                        "id": 319,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "leftExpression": {
+                          "argumentTypes": null,
+                          "expression": {
+                            "argumentTypes": null,
+                            "id": 316,
+                            "name": "msg",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 428,
+                            "src": "488:3:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_magic_message",
+                              "typeString": "msg"
+                            }
+                          },
+                          "id": 317,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "sender",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": null,
+                          "src": "488:10:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address_payable",
+                            "typeString": "address payable"
+                          }
+                        },
+                        "nodeType": "BinaryOperation",
+                        "operator": "==",
+                        "rightExpression": {
+                          "argumentTypes": null,
+                          "id": 318,
+                          "name": "generalContractor",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 310,
+                          "src": "502:17:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_address",
+                            "typeString": "address"
+                          }
+                        },
+                        "src": "488:31:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      },
+                      {
+                        "argumentTypes": null,
+                        "hexValue": "4e6f207065726d697373696f6e2e",
+                        "id": 320,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": true,
+                        "kind": "string",
+                        "lValueRequested": false,
+                        "nodeType": "Literal",
+                        "src": "521:16:1",
+                        "subdenomination": null,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_stringliteral_69780765e9135524b60cbfcabde1ddb4b64c8c6ec8497a854251b4bd760d9c3a",
+                          "typeString": "literal_string \"No permission.\""
+                        },
+                        "value": "No permission."
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        },
+                        {
+                          "typeIdentifier": "t_stringliteral_69780765e9135524b60cbfcabde1ddb4b64c8c6ec8497a854251b4bd760d9c3a",
+                          "typeString": "literal_string \"No permission.\""
+                        }
+                      ],
+                      "id": 315,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        431,
+                        432
+                      ],
+                      "referencedDeclaration": 432,
+                      "src": "480:7:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
+                        "typeString": "function (bool,string memory) pure"
+                      }
+                    },
+                    "id": 321,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "480:58:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 322,
+                  "nodeType": "ExpressionStatement",
+                  "src": "480:58:1"
+                },
+                {
+                  "id": 323,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "548:1:1"
+                }
+              ]
+            },
+            "documentation": null,
+            "id": 325,
+            "name": "onlyGeneralContractor",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 314,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "470:0:1"
+            },
+            "src": "439:117:1",
+            "visibility": "internal"
+          },
+          {
+            "body": {
+              "id": 333,
+              "nodeType": "Block",
+              "src": "671:35:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 331,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 328,
+                      "name": "admin",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 308,
+                      "src": "681:5:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 329,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 428,
+                        "src": "689:3:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 330,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "689:10:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "src": "681:18:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 332,
+                  "nodeType": "ExpressionStatement",
+                  "src": "681:18:1"
+                }
+              ]
+            },
+            "documentation": "@dev Instantiates a Contract Manager factory with initial values",
+            "id": 334,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 326,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "661:2:1"
+            },
+            "returnParameters": {
+              "id": 327,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "671:0:1"
+            },
+            "scope": 376,
+            "src": "650:56:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 342,
+              "nodeType": "Block",
+              "src": "813:47:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 340,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 337,
+                      "name": "generalContractor",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 310,
+                      "src": "823:17:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address",
+                        "typeString": "address"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 338,
+                        "name": "msg",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 428,
+                        "src": "843:3:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_magic_message",
+                          "typeString": "msg"
+                        }
+                      },
+                      "id": 339,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "sender",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "843:10:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_address_payable",
+                        "typeString": "address payable"
+                      }
+                    },
+                    "src": "823:30:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 341,
+                  "nodeType": "ExpressionStatement",
+                  "src": "823:30:1"
+                }
+              ]
+            },
+            "documentation": "@dev Registers general contractor",
+            "id": 343,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerGeneralContractor",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 335,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "803:2:1"
+            },
+            "returnParameters": {
+              "id": 336,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "813:0:1"
+            },
+            "scope": 376,
+            "src": "769:91:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 351,
+              "nodeType": "Block",
+              "src": "1007:51:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "expression": {
+                      "argumentTypes": null,
+                      "id": 348,
+                      "name": "constructionProjects",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 313,
+                      "src": "1024:20:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+                        "typeString": "contract ConstructionProject[] storage ref"
+                      }
+                    },
+                    "id": 349,
+                    "isConstant": false,
+                    "isLValue": true,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "memberName": "length",
+                    "nodeType": "MemberAccess",
+                    "referencedDeclaration": null,
+                    "src": "1024:27:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "functionReturnParameters": 347,
+                  "id": 350,
+                  "nodeType": "Return",
+                  "src": "1017:34:1"
+                }
+              ]
+            },
+            "documentation": "@dev Counts number of construction projects",
+            "id": 352,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getProjectsLength",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 344,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "959:2:1"
+            },
+            "returnParameters": {
+              "id": 347,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 346,
+                  "name": "projectsLength",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 352,
+                  "src": "983:22:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 345,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "983:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "982:24:1"
+            },
+            "scope": 376,
+            "src": "933:125:1",
+            "stateMutability": "view",
+            "superFunction": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 374,
+              "nodeType": "Block",
+              "src": "1244:160:1",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "arguments": [],
+                        "expression": {
+                          "argumentTypes": [],
+                          "id": 363,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "nodeType": "NewExpression",
+                          "src": "1280:23:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_creation_nonpayable$__$returns$_t_contract$_ConstructionProject_$299_$",
+                            "typeString": "function () returns (contract ConstructionProject)"
+                          },
+                          "typeName": {
+                            "contractScope": null,
+                            "id": 362,
+                            "name": "ConstructionProject",
+                            "nodeType": "UserDefinedTypeName",
+                            "referencedDeclaration": 299,
+                            "src": "1284:19:1",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                              "typeString": "contract ConstructionProject"
+                            }
+                          }
+                        },
+                        "id": 364,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "1280:25:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                          "typeString": "contract ConstructionProject"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_contract$_ConstructionProject_$299",
+                          "typeString": "contract ConstructionProject"
+                        }
+                      ],
+                      "expression": {
+                        "argumentTypes": null,
+                        "id": 359,
+                        "name": "constructionProjects",
+                        "nodeType": "Identifier",
+                        "overloadedDeclarations": [],
+                        "referencedDeclaration": 313,
+                        "src": "1254:20:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+                          "typeString": "contract ConstructionProject[] storage ref"
+                        }
+                      },
+                      "id": 361,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": false,
+                      "lValueRequested": false,
+                      "memberName": "push",
+                      "nodeType": "MemberAccess",
+                      "referencedDeclaration": null,
+                      "src": "1254:25:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_arraypush_nonpayable$_t_contract$_ConstructionProject_$299_$returns$_t_uint256_$",
+                        "typeString": "function (contract ConstructionProject) returns (uint256)"
+                      }
+                    },
+                    "id": 365,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1254:52:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "id": 366,
+                  "nodeType": "ExpressionStatement",
+                  "src": "1254:52:1"
+                },
+                {
+                  "eventCall": {
+                    "argumentTypes": null,
+                    "arguments": [
+                      {
+                        "argumentTypes": null,
+                        "expression": {
+                          "argumentTypes": null,
+                          "id": 368,
+                          "name": "constructionProjects",
+                          "nodeType": "Identifier",
+                          "overloadedDeclarations": [],
+                          "referencedDeclaration": 313,
+                          "src": "1348:20:1",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_array$_t_contract$_ConstructionProject_$299_$dyn_storage",
+                            "typeString": "contract ConstructionProject[] storage ref"
+                          }
+                        },
+                        "id": 369,
+                        "isConstant": false,
+                        "isLValue": true,
+                        "isPure": false,
+                        "lValueRequested": false,
+                        "memberName": "length",
+                        "nodeType": "MemberAccess",
+                        "referencedDeclaration": null,
+                        "src": "1348:27:1",
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_uint256",
+                          "typeString": "uint256"
+                        }
+                      ],
+                      "id": 367,
+                      "name": "ConstructionProjectCreated",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 306,
+                      "src": "1321:26:1",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_event_nonpayable$_t_uint256_$returns$__$",
+                        "typeString": "function (uint256)"
+                      }
+                    },
+                    "id": 370,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "1321:55:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 371,
+                  "nodeType": "EmitStatement",
+                  "src": "1316:60:1"
+                },
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "hexValue": "74727565",
+                    "id": 372,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": true,
+                    "kind": "bool",
+                    "lValueRequested": false,
+                    "nodeType": "Literal",
+                    "src": "1393:4:1",
+                    "subdenomination": null,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    },
+                    "value": "true"
+                  },
+                  "functionReturnParameters": 358,
+                  "id": 373,
+                  "nodeType": "Return",
+                  "src": "1386:11:1"
+                }
+              ]
+            },
+            "documentation": "@dev Creates a new construction project",
+            "id": 375,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [
+              {
+                "arguments": null,
+                "id": 355,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 354,
+                  "name": "onlyGeneralContractor",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 325,
+                  "src": "1187:21:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_modifier$__$",
+                    "typeString": "modifier ()"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "1187:21:1"
+              }
+            ],
+            "name": "createConstructionProject",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 353,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1161:2:1"
+            },
+            "returnParameters": {
+              "id": 358,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 357,
+                  "name": "success",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 375,
+                  "src": "1226:12:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  },
+                  "typeName": {
+                    "id": 356,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1226:4:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1225:14:1"
+            },
+            "scope": 376,
+            "src": "1127:277:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 377,
+        "src": "183:1223:1"
+      }
+    ],
+    "src": "32:1375:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {
+        "0x52a7b1a4c0d2e64ca94de2c139082187b166fd7854f15c760fc8a8626b15f4cc": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "name": "ConstructionProjectCreated",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x852543528aF03b706b2785dFd3103898Ed256eaD",
+      "transactionHash": "0xffb4894b5c42a5713ce6b2a012ff68c352a62f5790d92a9897fdaf5c5855e716"
+    }
+  },
+  "schemaVersion": "3.2.3",
+  "updatedAt": "2020-08-22T12:08:45.694Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "details": "Store & retreive value in a variable",
+    "methods": {
+      "constructor": {
+        "details": "Instantiates a Contract Manager factory with initial values"
+      },
+      "createConstructionProject()": {
+        "details": "Creates a new construction project"
+      },
+      "getProjectsLength()": {
+        "details": "Counts number of construction projects"
+      },
+      "registerGeneralContractor()": {
+        "details": "Registers general contractor"
+      }
+    },
+    "title": "ContractManager"
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

@@ -12,6 +12,8 @@
     "@quasar/extras": "^1.0.0",
     "axios": "^0.18.1",
     "core-js": "^3.6.5",
+    "ipfs": "~0.46.0",
+    "orbit-db": "^0.24.2",
     "quasar": "^1.0.0",
     "vuelidate": "^0.7.5",
     "web3": "^1.2.11"

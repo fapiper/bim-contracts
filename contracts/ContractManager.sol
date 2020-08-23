@@ -48,7 +48,7 @@ contract ContractManager {
     function createConstructionProject()
         public
         onlyGeneralContractor
-        returns (bool success)
+        returns (bool)
     {
         constructionProjects.push(new ConstructionProject());
         emit ConstructionProjectCreated(constructionProjects.length);

@@ -1,5 +1,7 @@
 <template>
   <q-page padding>
+    User
+    <pre>{{ $auth.user().privateKey }}</pre>
     <h1 class="text-h3">Projektauswahl</h1>
     <div v-if="projectLength <= 0" class="text-center">
       <h4 class="text-subtitle1">
@@ -38,7 +40,7 @@
 </template>
 
 <script>
-const PROJECT_CONTRACT_ADDRESS = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
+const PROJECT_CONTRACT_ADDRESS = '0x93b18A8edc20941fb9E0A7B812D0354dD55529D8';
 
 export default {
   name: 'PageProjectIndex',
@@ -46,6 +48,7 @@ export default {
     this.init();
     this.loadProjects();
   },
+  computed: {},
   data() {
     return {
       projects: [],
@@ -63,6 +66,8 @@ export default {
       const length = await this.contractManager.methods
         .getProjectsLength()
         .call();
+      console.log('projects length', length);
+
       this.projectLength = parseInt(length, 10);
       this.contractManager.events
         .ConstructionProjectCreated()
@@ -70,9 +75,13 @@ export default {
           console.log('projects length', index);
           this.projectLength = parseInt(index, 10);
         });
+      // this.$web3.eth.getAccounts(console.log);
     },
     loadProjects() {},
     async addProject() {
+      // const account = this.$web3.eth.accounts.privateKeyToAccount(
+      //   this.$auth.user().privateKey
+      // );
       const accounts = await this.$web3.eth.getAccounts();
       console.log('Accounts', accounts);
       await this.contractManager.methods

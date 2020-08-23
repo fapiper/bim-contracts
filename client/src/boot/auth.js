@@ -15,7 +15,7 @@ export default ({ app, router, store, Vue }) => {
     if (record) {
       store.dispatch('auth/fetch');
       if (!store.getters['auth/loggedIn']) {
-        console.log('not logged in');
+        console.log('Not logged in');
         next('/auth/login');
       } else if (
         isArrayOrString(record.meta.auth) &&
@@ -57,14 +57,14 @@ export default ({ app, router, store, Vue }) => {
   helper.login = (data) => {
     return store.dispatch('auth/login', data);
   };
-  helper.setToken = (token) => {
-    return store.dispatch('auth/setToken', token);
+  helper.setToken = (user) => {
+    return store.dispatch('auth/setToken', user);
   };
   helper.logout = () => {
     return store.dispatch('auth/logout');
   };
-  helper.verify = (token) => {
-    return store.dispatch('auth/verify', token);
+  helper.verify = (user) => {
+    return store.dispatch('auth/verify', user);
   };
   helper.fetch = () => {
     return store.dispatch('auth/fetch');

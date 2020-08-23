@@ -5,6 +5,7 @@ export function setUser(state, data) {
       email: data.attributes.email,
       name: data.attributes.name,
       roleNames: data.attributes.roleNames,
+      privateKey: data.attributes.privateKey,
     };
   } else {
     state.user = null;

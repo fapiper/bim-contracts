@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import auth from './auth';
+import web3 from './web3';
 
 Vue.use(Vuex);
 
@@ -17,6 +18,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       auth,
+      web3,
     },
 
     // enable strict mode (adds overhead!)

@@ -1,5 +1,7 @@
-const ContractManager = artifacts.require('ContractManager');
+const ConstructionProjectFactory = artifacts.require(
+  'ConstructionProjectFactory'
+);
 
 module.exports = function (deployer) {
-  deployer.deploy(ContractManager);
+  deployer.deploy(ConstructionProjectFactory);
 };

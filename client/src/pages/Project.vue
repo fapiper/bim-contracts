@@ -1,27 +1,26 @@
 <template>
   <q-page padding>
-    User
-    <pre>{{ $auth.user().privateKey }}</pre>
     <h1 class="text-h3">Projektauswahl</h1>
-    <div v-if="projectLength <= 0" class="text-center">
+    <div v-if="projects.length <= 0" class="text-center">
       <h4 class="text-subtitle1">
         Bislang sind noch keine Projekte vorhanden
       </h4>
     </div>
     <div class="row items-start q-gutter-md">
       <q-card
-        v-for="project in projectLength"
-        :key="project"
+        v-for="(project, index) of projects"
+        :key="index"
         class="project-card"
       >
         <q-card-section class="bg-grey-8 text-white">
-          <div class="text-h5">Projekt {{ project }}</div>
-          <div class="text-subtitle3">von John Doe</div>
+          <div class="text-h5">Projekt {{ index + 1 }}</div>
+          <div class="text-subtitle3">{{ project.address }}</div>
         </q-card-section>
         <q-separator />
         <q-card-actions align="left">
-          <q-btn flat>Action 1</q-btn>
-          <q-btn flat>Action 2</q-btn>
+          <q-btn flat :to="'projects/' + project.address + '/boqs'"
+            >Auswählen</q-btn
+          >
         </q-card-actions>
       </q-card>
     </div>
@@ -40,21 +39,21 @@
 </template>
 
 <script>
-const PROJECT_CONTRACT_ADDRESS = '0x93b18A8edc20941fb9E0A7B812D0354dD55529D8';
+const PROJECT_CONTRACT_ADDRESS = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
 export default {
   name: 'PageProjectIndex',
-  mounted() {
-    this.init();
+  async mounted() {
+    await this.init();
     this.loadProjects();
   },
   computed: {},
   data() {
     return {
       projects: [],
-      projectLength: 0,
-      contract: require('../../contracts/ContractManager.json'),
+      contract: require('../contracts/ConstructionProjectFactory.json'),
       contractManager: {},
+      account: null,
     };
   },
   methods: {
@@ -63,33 +62,33 @@ export default {
         this.contract.abi,
         PROJECT_CONTRACT_ADDRESS
       );
-      const length = await this.contractManager.methods
-        .getProjectsLength()
-        .call();
-      console.log('projects length', length);
-
-      this.projectLength = parseInt(length, 10);
+      const accounts = await this.$web3.eth.getAccounts();
+      this.account = accounts[0];
       this.contractManager.events
         .ConstructionProjectCreated()
-        .on('data', ({ returnValues: { index } }) => {
-          console.log('projects length', index);
-          this.projectLength = parseInt(index, 10);
+        .on('data', ({ returnValues: { contractAddress } }) => {
+          console.log('created project', this.projects);
+          this.projects.push({
+            address: contractAddress,
+          });
         });
-      // this.$web3.eth.getAccounts(console.log);
     },
-    loadProjects() {},
+    async loadProjects() {
+      const projects = await this.contractManager.methods
+        .getProjectsByOwner(this.account)
+        .call();
+      console.log('got projects by owner', projects);
+      this.projects = projects.map((p) => ({
+        address: p,
+      }));
+    },
     async addProject() {
       // const account = this.$web3.eth.accounts.privateKeyToAccount(
       //   this.$auth.user().privateKey
       // );
-      const accounts = await this.$web3.eth.getAccounts();
-      console.log('Accounts', accounts);
-      await this.contractManager.methods
-        .registerGeneralContractor()
-        .send({ from: accounts[0] });
       this.contractManager.methods
         .createConstructionProject()
-        .send({ from: accounts[0] });
+        .send({ from: this.account });
     },
   },
 };
@@ -98,5 +97,6 @@ export default {
 .project-card {
   width: 100%;
   max-width: 420px;
+  overflow: hidden;
 }
 </style>

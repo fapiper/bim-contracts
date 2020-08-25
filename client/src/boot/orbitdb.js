@@ -18,20 +18,20 @@ export default async ({ Vue }) => {
     // const value = db.get('name');
     // console.log(value);
 
-    const db = await orbitdb.log('hello');
-    await db.load();
+    // const db = await orbitdb.log('hello');
+    // await db.load();
 
-    // Listen for updates from peers
-    db.events.on('replicated', (address) => {
-      console.log(db.iterator({ limit: -1 }).collect());
-    });
+    // // Listen for updates from peers
+    // db.events.on('replicated', (address) => {
+    //   console.log(db.iterator({ limit: -1 }).collect());
+    // });
 
-    // Add an entry
-    const hash = await db.add('world');
-    console.log(hash);
+    // // Add an entry
+    // const hash = await db.add('world');
+    // console.log(hash);
 
-    // Query
-    const result = db.iterator({ limit: -1 }).collect();
-    console.log(JSON.stringify(result, null, 2));
+    // // Query
+    // const result = db.iterator({ limit: -1 }).collect();
+    // console.log(JSON.stringify(result, null, 2));
   });
 };

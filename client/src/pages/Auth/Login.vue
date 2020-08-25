@@ -11,23 +11,17 @@
         <q-form @submit.prevent="login" class="q-gutter-md">
           <q-input
             filled
-            id="email"
-            v-model.trim="data.body.email"
-            type="email"
-            label="Email-Adresse"
-            :error="this.$v.data.body.email.$error"
-            autofocus
-          />
-
-          <q-input
-            filled
-            id="password"
-            v-model="data.body.password"
-            type="password"
-            label="Passwort"
-            :error="$v.data.body.password.$error"
+            id="privateKey"
+            v-model="data.privateKey"
+            type="text"
+            label="Private Key"
+            :error="$v.data.privateKey.$error"
             @keyup.enter="login"
-          />
+          >
+            <template v-slot:prepend>
+              <q-icon name="vpn_key" />
+            </template>
+          </q-input>
 
           <q-checkbox
             id="rememberMe"
@@ -51,28 +45,27 @@
 </template>
 
 <script>
-import { email, required } from 'vuelidate/lib/validators';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   name: 'PageLogin',
   data() {
     return {
       data: {
-        body: {
-          email: '',
-          password: '',
-        },
+        name: 'Max Mustermann',
+        privateKey:
+          '80acab76550a5291e414f6cba8cba4f0163e628a8f65033f4d73cca8683248f3',
         rememberMe: false,
       },
       loading: false,
     };
   },
   methods: {
-    login() {
+    async login() {
       this.$v.data.$touch();
       if (!this.$v.data.$error) {
         this.loading = true;
-        this.$auth.login(this.data);
+        await this.$auth.login(this.data);
         this.loading = false;
         this.$router.push('/');
       }
@@ -80,14 +73,8 @@ export default {
   },
   validations: {
     data: {
-      body: {
-        email: {
-          required,
-          email,
-        },
-        password: {
-          required,
-        },
+      privateKey: {
+        required,
       },
     },
   },

@@ -68,11 +68,6 @@ export default {
         this.contract.abi,
         PROJECT_CONTRACT_ADDRESS
       );
-      const account = this.$web3.eth.accounts.privateKeyToAccount(
-        '0x' + this.user.privateKey
-      );
-      this.$web3.eth.accounts.wallet.add(account);
-      this.$web3.eth.defaultAccount = account.address;
       this.contractManager.events
         .ConstructionProjectCreated()
         .on('data', ({ returnValues: { contractAddress } }) => {
@@ -84,7 +79,7 @@ export default {
     },
     async loadProjects() {
       const projects = await this.contractManager.methods
-        .getProjectsByOwner(this.account)
+        .getProjectsByOwner(this.user.account.address)
         .call();
       console.log('got projects by owner', projects);
       this.projects = projects.map((p) => ({
@@ -95,9 +90,10 @@ export default {
       // const account = this.$web3.eth.accounts.privateKeyToAccount(
       //   this.$auth.user().privateKey
       // );
-      this.contractManager.methods
+      console.log('address', this.user.account.address);
+      await this.contractManager.methods
         .createConstructionProject()
-        .send({ from: this.account, gas: 2000000 });
+        .send({ from: this.user.account.address, gas: 2000000 });
     },
   },
 };

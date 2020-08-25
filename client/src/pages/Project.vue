@@ -47,13 +47,19 @@ export default {
     await this.init();
     this.loadProjects();
   },
-  computed: {},
+  computed: {
+    user() {
+      return this.$auth.user();
+    },
+    account() {
+      return this.$web3.eth.defaultAccount;
+    },
+  },
   data() {
     return {
       projects: [],
       contract: require('../contracts/ConstructionProjectFactory.json'),
       contractManager: {},
-      account: null,
     };
   },
   methods: {
@@ -62,8 +68,11 @@ export default {
         this.contract.abi,
         PROJECT_CONTRACT_ADDRESS
       );
-      const accounts = await this.$web3.eth.getAccounts();
-      this.account = accounts[0];
+      const account = this.$web3.eth.accounts.privateKeyToAccount(
+        '0x' + this.user.privateKey
+      );
+      this.$web3.eth.accounts.wallet.add(account);
+      this.$web3.eth.defaultAccount = account.address;
       this.contractManager.events
         .ConstructionProjectCreated()
         .on('data', ({ returnValues: { contractAddress } }) => {
@@ -88,7 +97,7 @@ export default {
       // );
       this.contractManager.methods
         .createConstructionProject()
-        .send({ from: this.account });
+        .send({ from: this.account, gas: 2000000 });
     },
   },
 };

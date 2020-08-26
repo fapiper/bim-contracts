@@ -4,6 +4,9 @@
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
         <q-toolbar-title>BIMContracts</q-toolbar-title>
+        <q-space />
+
+        <q-btn flat label="Abmelden" icon-right="login" @click="logout" />
       </q-toolbar>
     </q-header>
 
@@ -77,6 +80,12 @@ export default {
       drawer: false,
       essentialLinks: linksData,
     };
+  },
+  methods: {
+    logout() {
+      this.$auth.logout();
+      this.$router.go('/');
+    },
   },
 };
 </script>

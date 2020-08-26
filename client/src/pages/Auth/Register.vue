@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="login-card">
+    <div class="register-card">
       <q-card-section>
         <h1 class="text-h3 text-center">
           Registrieren
@@ -34,6 +34,14 @@
             />
           </div>
         </q-form>
+        <div class="q-mt-md">
+          <p>
+            Account bereits vorhanden?
+            <router-link to="/auth/login">
+              Hier anmelden
+            </router-link>
+          </p>
+        </div>
       </q-card-section>
     </div>
   </q-page>
@@ -52,7 +60,9 @@ export default {
         { desc: 'Subunternehmer', id: 2 },
       ],
       data: {
-        role: 0,
+        name: 'Max Mustermann',
+        role: { desc: 'Bauherr', id: 0 },
+        rememberMe: false,
       },
       loading: false,
     };

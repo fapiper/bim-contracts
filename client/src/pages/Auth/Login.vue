@@ -39,6 +39,14 @@
             />
           </div>
         </q-form>
+        <div class="q-mt-md">
+          <p>
+            Noch keinen Account?
+            <router-link to="/auth/register">
+              Hier registrieren
+            </router-link>
+          </p>
+        </div>
       </q-card-section>
     </div>
   </q-page>

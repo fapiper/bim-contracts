@@ -1,5 +1,21 @@
 <template>
   <q-page padding>
+    <q-banner inline-actions class="text-white bg-red" v-if="error">
+      <template v-slot:avatar>
+        <q-icon name="warning" color="white" />
+      </template>
+
+      Beim Laden der Projekte ist ein Fehler aufgetreten.
+      <template v-slot:action>
+        <q-btn
+          flat
+          color="white"
+          label="Erneut versuchen"
+          @click="loadProjects"
+        />
+      </template>
+    </q-banner>
+
     <h1 class="text-h3">Projektauswahl</h1>
     <template v-if="loading">
       <div class="row justify-center">
@@ -34,7 +50,7 @@
       <q-page-sticky position="bottom" :offset="[18, 18]">
         <q-btn
           glossy
-          label="Neues Projekt hinzufügen"
+          label="Neues Bauprojekt hinzufügen"
           fab-mini
           color="primary"
           icon="add"
@@ -64,6 +80,7 @@ export default {
   },
   data() {
     return {
+      error: false,
       loading: true,
       projects: [],
       contract: require('../contracts/ConstructionProjectFactory.json'),
@@ -86,24 +103,40 @@ export default {
         });
     },
     async loadProjects() {
-      const projects = await this.contractManager.methods
-        .getProjectsByOwner(this.user.account.address)
-        .call();
-      this.projects = projects.map((p) => ({
-        address: p,
-      }));
+      console.log('load Projects');
+      this.loading = true;
+      try {
+        const projects = await this.contractManager.methods
+          .getProjectsByOwner(this.user.account.address)
+          .call();
+        this.projects = projects.map((p) => ({
+          address: p,
+        }));
+        this.error = false;
+      } catch (error) {
+        console.error('Error loading projects', error);
+        this.error = true;
+      }
       this.loading = false;
     },
     async addProject() {
-      // const account = this.$web3.eth.accounts.privateKeyToAccount(
-      //   this.$auth.user().privateKey
-      // );
-      // await this.$web3.eth.accounts.wallet.add(this.user.account);
-      // console.log('added wallet. address', this.user.account.address);
-      const res = await this.contractManager.methods
-        .createConstructionProject()
-        .send({ from: this.user.account.address, gas: 2000000 });
-      console.log('created project', res);
+      try {
+        await this.contractManager.methods
+          .createConstructionProject()
+          .send({ from: this.user.account.address, gas: 2000000 });
+        this.$q.notify({
+          type: 'positive',
+          message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
+          position: 'bottom-right',
+        });
+      } catch (error) {
+        console.error('Error adding project', error);
+        this.$q.notify({
+          type: 'negative',
+          message: `Beim Hinzufügen des Bauprojektes ist ein Fehler aufgetreten`,
+          position: 'bottom-right',
+        });
+      }
     },
   },
 };

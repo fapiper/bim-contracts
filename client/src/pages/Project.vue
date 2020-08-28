@@ -61,7 +61,7 @@
 
     <q-dialog v-model="dialog" position="bottom">
       <q-card style="width: 800px; max-width: 92vw;">
-        <q-form @submit="onSubmit" @reset="onReset">
+        <q-form>
           <q-card-section class="row items-center q-pb-none">
             <div class="text-h6">Bauprojekt hinzufügen</div>
             <q-space />
@@ -101,7 +101,7 @@
                 :name="2"
                 title="Smart Contracts Container hochladen"
                 icon="view_compact"
-                :done="project.scc"
+                :done="typeof project.scc.name == 'string'"
               >
                 <q-file
                   class="q-mt-md"
@@ -126,7 +126,7 @@
                 title="Vertragsrelevante Dokumente hinterlegen"
                 caption="Optional"
                 icon="gavel"
-                :done="project.documents"
+                :done="project.documents.length > 0"
               >
                 <q-file
                   class="q-mt-md"
@@ -152,7 +152,6 @@
                 :name="4"
                 title="Bauprojekt hinzufügen"
                 icon="view_compact"
-                :done="project.scc"
               >
                 <p>Folgendes Bauprojekt wird hinzugefügt:</p>
                 <q-field filled label="Name" stack-label readonly>
@@ -210,9 +209,6 @@ export default {
     user() {
       return this.$auth.user();
     },
-    account() {
-      return this.$web3.eth.defaultAccount;
-    },
   },
   data() {
     return {
@@ -223,7 +219,7 @@ export default {
       project: {
         name: '',
         scc: null,
-        documents: null,
+        documents: [],
       },
       contract: require('../contracts/ConstructionProjectFactory.json'),
       contractManager: {},
@@ -251,7 +247,6 @@ export default {
         });
     },
     async loadProjects() {
-      console.log('load Projects');
       this.loading = true;
       try {
         const projects = await this.contractManager.methods
@@ -268,11 +263,26 @@ export default {
       this.loading = false;
     },
     async addProject() {
-      console.log('project', this.project);
+      console.log('add project');
+      const file = this.project.scc;
       try {
         // await this.contractManager.methods
         //   .createConstructionProject()
         //   .send({ from: this.user.account.address, gas: 2000000 });
+        const reader = new FileReader();
+        reader.addEventListener('loadend', async (e) => {
+          const doc = reader.result;
+          console.log('reader result', doc);
+          const hash = await this.$orbit.containerdb.put({
+            _id: 'QmAwesomeIpfsHash',
+            name: 'shamb0t',
+            followers: 500,
+          });
+          // const hash = await this.$orbit.containerdb.put(doc);
+          console.log('hash', hash);
+        });
+        reader.readAsText(file);
+
         this.$q.notify({
           type: 'positive',
           message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,

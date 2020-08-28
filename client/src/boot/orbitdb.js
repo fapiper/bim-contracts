@@ -5,12 +5,17 @@ import OrbitDB from 'orbit-db';
 export default async ({ Vue }) => {
   // Create IPFS instance
   const initIPFSInstance = async () => {
-    return await IPFS.create({ repo: './js-ipfs-repo' });
+    return await IPFS.create({ repo: './bim-contracts-ipfs' });
   };
 
   initIPFSInstance().then(async (ipfs) => {
+    // instantiate custom store
     const orbitdb = await OrbitDB.createInstance(ipfs);
-    Vue.prototype.$orbitdb = orbitdb;
+    const containerdb = await orbitdb.docs('bim-contracts.container', {}); // DIN SPEC 91350 in json
+    Vue.prototype.$ipfs = ipfs;
+    Vue.prototype.$orbit = {
+      containerdb,
+    };
 
     // Create / Open a database
     // const db = await orbitdb.keyvalue('first-database');

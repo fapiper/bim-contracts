@@ -33,5 +33,34 @@ export default async ({ Vue }) => {
     // // Query
     // const result = db.iterator({ limit: -1 }).collect();
     // console.log(JSON.stringify(result, null, 2));
+    // const orbit = {};
+    // orbit.register = (data) => {
+    //   return store.dispatch('auth/register', data);
+    // };
+    // orbit.loggedIn = () => {
+    //   return store.getters['auth/loggedIn'];
+    // };
+    // orbit.check = (roles) => {
+    //   return store.getters['auth/check'](roles);
+    // };
+    // orbit.login = (data) => {
+    //   return store.dispatch('auth/login', data);
+    // };
+    // orbit.setToken = (user) => {
+    //   return store.dispatch('auth/setToken', user);
+    // };
+    // orbit.logout = () => {
+    //   return store.dispatch('auth/logout');
+    // };
+    // orbit.verify = (user) => {
+    //   return store.dispatch('auth/verify', user);
+    // };
+    // orbit.fetch = () => {
+    //   return store.dispatch('auth/fetch');
+    // };
+    // orbit.user = () => {
+    //   return store.getters['auth/user'];
+    // };
+    // Vue.prototype.$orbit = helper;
   });
 };

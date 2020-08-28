@@ -54,10 +54,146 @@
           fab-mini
           color="primary"
           icon="add"
-          @click="addProject"
+          @click="openDialog"
         >
         </q-btn> </q-page-sticky
     ></template>
+
+    <q-dialog v-model="dialog" position="bottom">
+      <q-card style="width: 800px; max-width: 92vw;">
+        <q-form @submit="onSubmit" @reset="onReset">
+          <q-card-section class="row items-center q-pb-none">
+            <div class="text-h6">Bauprojekt hinzufügen</div>
+            <q-space />
+            <q-btn icon="close" flat round dense v-close-popup />
+          </q-card-section>
+          <q-card-section>
+            <q-stepper
+              v-model="stepper.step"
+              header-nav
+              ref="stepper"
+              color="primary"
+              flat
+              vertical
+            >
+              <q-step
+                :name="1"
+                title="Name"
+                icon="settings"
+                :done="project.name !== ''"
+              >
+                <q-input
+                  class="q-mt-md"
+                  filled
+                  v-model="project.name"
+                  label="Name"
+                  hint="Der Name des Bauprojektes"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 0) ||
+                      'Ein Name muss angegeben werden',
+                  ]"
+                />
+              </q-step>
+
+              <q-step
+                :name="2"
+                title="Smart Contracts Container hochladen"
+                icon="view_compact"
+                :done="project.scc"
+              >
+                <q-file
+                  class="q-mt-md"
+                  filled
+                  bottom-slots
+                  v-model="project.scc"
+                  label="Datei hier ablegen"
+                  counter
+                >
+                  <template v-slot:before>
+                    <q-icon name="attach_file" />
+                  </template>
+
+                  <template v-slot:append>
+                    <q-btn round dense flat icon="add" @click.stop />
+                  </template>
+                </q-file>
+              </q-step>
+
+              <q-step
+                :name="3"
+                title="Vertragsrelevante Dokumente hinterlegen"
+                caption="Optional"
+                icon="gavel"
+                :done="project.documents"
+              >
+                <q-file
+                  class="q-mt-md"
+                  filled
+                  bottom-slots
+                  v-model="project.documents"
+                  multiple
+                  append
+                  label="Dateien hier ablegen"
+                  counter
+                  use-chips
+                >
+                  <template v-slot:before>
+                    <q-icon name="attach_file" />
+                  </template>
+
+                  <template v-slot:append>
+                    <q-btn round dense flat icon="add" @click.stop />
+                  </template>
+                </q-file>
+              </q-step>
+              <q-step
+                :name="4"
+                title="Bauprojekt hinzufügen"
+                icon="view_compact"
+                :done="project.scc"
+              >
+                <p>Folgendes Bauprojekt wird hinzugefügt:</p>
+                <q-field filled label="Name" stack-label readonly>
+                  <template v-slot:control>
+                    <div class="self-center full-width no-outline" tabindex="0">
+                      {{ project.name }}
+                    </div>
+                  </template>
+                </q-field>
+
+                <q-btn
+                  class="q-mt-md full-width"
+                  @click="addProject"
+                  color="primary"
+                  label="Bauprojekt hinzufügen"
+                />
+              </q-step>
+            </q-stepper>
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-actions>
+            <q-btn
+              v-if="stepper.step < 4"
+              @click="stepper.step++"
+              color="primary"
+              label="Weiter"
+            />
+            <q-btn
+              v-if="stepper.step > 1"
+              flat
+              @click="stepper.step--"
+              color="primary"
+              label="Zurück"
+              class="q-ml-sm"
+            />
+          </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -82,9 +218,21 @@ export default {
     return {
       error: false,
       loading: true,
+      dialog: false,
       projects: [],
+      project: {
+        name: '',
+        scc: null,
+        documents: null,
+      },
       contract: require('../contracts/ConstructionProjectFactory.json'),
       contractManager: {},
+      stepper: {
+        step: 1,
+        done1: false,
+        done2: false,
+        done3: false,
+      },
     };
   },
   methods: {
@@ -120,10 +268,11 @@ export default {
       this.loading = false;
     },
     async addProject() {
+      console.log('project', this.project);
       try {
-        await this.contractManager.methods
-          .createConstructionProject()
-          .send({ from: this.user.account.address, gas: 2000000 });
+        // await this.contractManager.methods
+        //   .createConstructionProject()
+        //   .send({ from: this.user.account.address, gas: 2000000 });
         this.$q.notify({
           type: 'positive',
           message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
@@ -137,6 +286,9 @@ export default {
           position: 'bottom-right',
         });
       }
+    },
+    openDialog() {
+      this.dialog = true;
     },
   },
 };

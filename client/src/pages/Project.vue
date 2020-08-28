@@ -197,6 +197,7 @@
 </template>
 
 <script>
+import { xml2js } from 'xml-js';
 const PROJECT_CONTRACT_ADDRESS = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
 export default {
@@ -218,7 +219,7 @@ export default {
       projects: [],
       project: {
         name: '',
-        scc: null,
+        scc: {},
         documents: [],
       },
       contract: require('../contracts/ConstructionProjectFactory.json'),
@@ -266,28 +267,25 @@ export default {
       console.log('add project');
       const file = this.project.scc;
       try {
-        // await this.contractManager.methods
-        //   .createConstructionProject()
-        //   .send({ from: this.user.account.address, gas: 2000000 });
         const reader = new FileReader();
         reader.addEventListener('loadend', async (e) => {
-          const doc = reader.result;
-          console.log('reader result', doc);
+          const container = xml2js(reader.result, { compact: true });
+          console.log('container', container);
           const hash = await this.$orbit.containerdb.put({
             _id: 'QmAwesomeIpfsHash',
-            name: 'shamb0t',
-            followers: 500,
+            container,
           });
-          // const hash = await this.$orbit.containerdb.put(doc);
           console.log('hash', hash);
+          this.$q.notify({
+            type: 'positive',
+            message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
+            position: 'bottom-right',
+          });
+          // await this.contractManager.methods
+          //   .createConstructionProject()
+          //   .send({ from: this.user.account.address, gas: 2000000 });
         });
-        reader.readAsText(file);
-
-        this.$q.notify({
-          type: 'positive',
-          message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
-          position: 'bottom-right',
-        });
+        reader.readAsBinaryString(file);
       } catch (error) {
         console.error('Error adding project', error);
         this.$q.notify({

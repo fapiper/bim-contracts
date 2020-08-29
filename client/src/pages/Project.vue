@@ -1,21 +1,5 @@
 <template>
   <q-page padding>
-    <q-banner inline-actions class="text-white bg-red" v-if="error">
-      <template v-slot:avatar>
-        <q-icon name="warning" color="white" />
-      </template>
-
-      Beim Laden der Projekte ist ein Fehler aufgetreten.
-      <template v-slot:action>
-        <q-btn
-          flat
-          color="white"
-          label="Erneut versuchen"
-          @click="loadProjects"
-        />
-      </template>
-    </q-banner>
-
     <h1 class="text-h3">Projektauswahl</h1>
     <template v-if="loading">
       <div class="row justify-center">
@@ -54,7 +38,7 @@
           fab-mini
           color="primary"
           icon="add"
-          @click="openDialog"
+          @click="dialog = true"
         >
         </q-btn> </q-page-sticky
     ></template>
@@ -101,7 +85,7 @@
                 :name="2"
                 title="Smart Contracts Container hochladen"
                 icon="view_compact"
-                :done="typeof project.scc.name == 'string'"
+                :done="project.scc && typeof project.scc.name == 'string'"
               >
                 <q-file
                   class="q-mt-md"
@@ -197,13 +181,22 @@
 </template>
 
 <script>
+import Transmission from '../mixins/transmitter.js';
 import { xml2js } from 'xml-js';
-const PROJECT_CONTRACT_ADDRESS = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
+
+import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
+const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
 export default {
   name: 'PageProjectIndex',
-  async mounted() {
-    await this.init();
+  mixins: [Transmission],
+  mounted() {
+    this.contract.events.ConstructionProjectCreated().on('data', (event) => {
+      this.projects.push({
+        address: event.returnValues.contractAddress,
+      });
+    });
+
     this.loadProjects();
   },
   computed: {
@@ -213,90 +206,51 @@ export default {
   },
   data() {
     return {
-      error: false,
       loading: true,
       dialog: false,
       projects: [],
       project: {
         name: '',
-        scc: {},
+        scc: null,
         documents: [],
       },
-      contract: require('../contracts/ConstructionProjectFactory.json'),
-      contractManager: {},
+      contract: new this.$web3.eth.Contract(
+        ProjectFactoryAbi,
+        ProjectFactoryAddress
+      ),
+      reader: new FileReader(),
       stepper: {
         step: 1,
-        done1: false,
-        done2: false,
-        done3: false,
       },
     };
   },
   methods: {
-    async init() {
-      this.contractManager = await new this.$web3.eth.Contract(
-        this.contract.abi,
-        PROJECT_CONTRACT_ADDRESS
-      );
-      this.contractManager.events
-        .ConstructionProjectCreated()
-        .on('data', (event) => {
-          console.log('created project', event);
-          this.projects.push({
-            address: event.returnValues.contractAddress,
-          });
-        });
-    },
     async loadProjects() {
       this.loading = true;
-      try {
-        const projects = await this.contractManager.methods
-          .getProjectsByOwner(this.user.account.address)
-          .call();
-        this.projects = projects.map((p) => ({
-          address: p,
-        }));
-        this.error = false;
-      } catch (error) {
-        console.error('Error loading projects', error);
-        this.error = true;
-      }
+      const projects = await this.contract.methods
+        .getProjectsByOwner(this.user.account.address)
+        .call();
+      this.projects = projects.map((p) => ({
+        address: p,
+      }));
       this.loading = false;
     },
     async addProject() {
-      console.log('add project');
-      const file = this.project.scc;
-      try {
-        const reader = new FileReader();
-        reader.addEventListener('loadend', async (e) => {
-          const container = xml2js(reader.result, { compact: true });
-          console.log('container', container);
-          const hash = await this.$orbit.containerdb.put({
-            _id: 'QmAwesomeIpfsHash',
-            container,
-          });
-          console.log('hash', hash);
-          this.$q.notify({
-            type: 'positive',
-            message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
-            position: 'bottom-right',
-          });
-          // await this.contractManager.methods
-          //   .createConstructionProject()
-          //   .send({ from: this.user.account.address, gas: 2000000 });
-        });
-        reader.readAsBinaryString(file);
-      } catch (error) {
-        console.error('Error adding project', error);
+      const packProject = async () => {
+        await this.hashAndPack(
+          this.user.account.address,
+          this.$orbit.containerdb,
+          xml2js(this.reader.result, { compact: true }),
+          this.contract.methods.createConstructionProject
+        );
         this.$q.notify({
-          type: 'negative',
-          message: `Beim Hinzufügen des Bauprojektes ist ein Fehler aufgetreten`,
+          type: 'positive',
+          message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
           position: 'bottom-right',
         });
-      }
-    },
-    openDialog() {
-      this.dialog = true;
+      };
+      this.reader.addEventListener('loadend', packProject.bind(this));
+      this.reader.readAsBinaryString(this.project.scc);
     },
   },
 };

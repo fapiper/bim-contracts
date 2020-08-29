@@ -7981,7 +7981,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.3",
-  "updatedAt": "2020-08-28T19:04:47.051Z",
+  "updatedAt": "2020-08-29T13:55:15.968Z",
   "devdoc": {
     "details": "Store & retreive value in a variable",
     "methods": {

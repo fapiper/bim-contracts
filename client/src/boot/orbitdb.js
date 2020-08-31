@@ -11,10 +11,12 @@ export default async ({ Vue }) => {
   initIPFSInstance().then(async (ipfs) => {
     // instantiate custom store
     const orbitdb = await OrbitDB.createInstance(ipfs);
-    const containerdb = await orbitdb.docs('bim-contracts.container', {}); // DIN SPEC 91350 in json
+    const projectdb = await orbitdb.docs('bim-contracts.container', {
+      indexBy: 'address',
+    }); // DIN SPEC 91350 in json
     Vue.prototype.$ipfs = ipfs;
     Vue.prototype.$orbit = {
-      containerdb,
+      projectdb,
     };
 
     // Create / Open a database

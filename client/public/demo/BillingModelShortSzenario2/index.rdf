@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE rdf:RDF [
+	<!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+	<!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+	<!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+	<!ENTITY xml 'http://www.w3.org/XML/1998/namespace'>
+	<!ENTITY owl 'http://www.w3.org/2002/07/owl#'>
+	<!ENTITY ct 'http://www.iso-icdd.org/draft/Container.rdf#'>
+]>
+<rdf:RDF xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns="http://www.inf.bi.rub.de/icdd/index.rdf#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:ct="http://www.iso-icdd.org/draft/Container.rdf#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <ct:ContainerDescription rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf">
+    <ct:conformanceIndicator>part1</ct:conformanceIndicator>
+    <ct:containsDocument rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#28548aaf-8b2c-41ec-93a0-d9f474be99e3" />
+    <ct:containsDocument rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#a62aa641-2f97-482f-9d6c-50c73da3d7ed" />
+    <ct:containsDocument rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#ac9ca769-7607-4aca-a4f8-e0e35621424d" />
+    <ct:containsDocument rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#fad6fc1f-492d-4fac-bbec-0cc4436fce0c" />
+    <ct:description>Initial Version of the BillingModelShortSzenario2.icdd</ct:description>
+    <ct:isModified rdf:datatype="&xsd;boolean">True</ct:isModified>
+    <ct:modificationDate rdf:datatype="&xsd;dateTime">17.07.2020 15:34:05</ct:modificationDate>
+    <ct:versionDescription>Initial Version</ct:versionDescription>
+    <ct:versionID>1</ct:versionID>
+    <owl:imports rdf:resource="http://www.iso-icdd.org/draft/Container.rdf" />
+    <owl:imports rdf:resource="http://www.iso-icdd.org/draft/Linkset.rdf" />
+  </ct:ContainerDescription>
+  <ct:InternalDocument rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf#28548aaf-8b2c-41ec-93a0-d9f474be99e3">
+    <ct:creator rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#8a89c08c-78fb-4d51-9190-2ef8ffb41ad8" />
+    <ct:description>This document has been added using the ICDDToolkitLibrary.</ct:description>
+    <ct:filename>BMlinks.xml</ct:filename>
+    <ct:filetype>.xml</ct:filetype>
+    <ct:format>.xml</ct:format>
+    <ct:isModified rdf:datatype="&xsd;boolean">True</ct:isModified>
+    <ct:modificationDate rdf:datatype="&xsd;dateTime">17.07.2020 15:34:12</ct:modificationDate>
+    <ct:modifier rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#8a89c08c-78fb-4d51-9190-2ef8ffb41ad8" />
+    <ct:versionDescription>This is the first version added using the ICDDToolkitLibrary.</ct:versionDescription>
+    <ct:versionID>1</ct:versionID>
+  </ct:InternalDocument>
+  <ct:Person rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf#56dd5d64-0b39-44da-819a-b0e53d1e6f63">
+    <ct:description>BIMcontracts DemoTest</ct:description>
+    <ct:name>xuling</ct:name>
+  </ct:Person>
+  <ct:Person rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf#8a89c08c-78fb-4d51-9190-2ef8ffb41ad8">
+    <ct:description>BIMcontracts DemoTest</ct:description>
+    <ct:name>xuling</ct:name>
+  </ct:Person>
+  <ct:InternalDocument rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf#a62aa641-2f97-482f-9d6c-50c73da3d7ed">
+    <ct:creator rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#56dd5d64-0b39-44da-819a-b0e53d1e6f63" />
+    <ct:description>This document has been added using the ICDDToolkitLibrary.</ct:description>
+    <ct:filename>Bauwerksmodell_1.ifc</ct:filename>
+    <ct:filetype>.ifc</ct:filetype>
+    <ct:format>.ifc</ct:format>
+    <ct:isModified rdf:datatype="&xsd;boolean">True</ct:isModified>
+    <ct:modificationDate rdf:datatype="&xsd;dateTime">17.07.2020 12:21:18</ct:modificationDate>
+    <ct:modifier rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#56dd5d64-0b39-44da-819a-b0e53d1e6f63" />
+    <ct:versionDescription>This is the first version added using the ICDDToolkitLibrary.</ct:versionDescription>
+    <ct:versionID>1</ct:versionID>
+  </ct:InternalDocument>
+  <ct:InternalDocument rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf#ac9ca769-7607-4aca-a4f8-e0e35621424d">
+    <ct:creator rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#56dd5d64-0b39-44da-819a-b0e53d1e6f63" />
+    <ct:description>This document has been added using the ICDDToolkitLibrary.</ct:description>
+    <ct:filename>Leistungsverzeichnis_1.x82</ct:filename>
+    <ct:filetype>.x82</ct:filetype>
+    <ct:format>.x82</ct:format>
+    <ct:isModified rdf:datatype="&xsd;boolean">True</ct:isModified>
+    <ct:modificationDate rdf:datatype="&xsd;dateTime">17.07.2020 12:21:18</ct:modificationDate>
+    <ct:modifier rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#56dd5d64-0b39-44da-819a-b0e53d1e6f63" />
+    <ct:versionDescription>This is the first version added using the ICDDToolkitLibrary.</ct:versionDescription>
+    <ct:versionID>1</ct:versionID>
+  </ct:InternalDocument>
+  <ct:InternalDocument rdf:about="http://www.inf.bi.rub.de/icdd/index.rdf#fad6fc1f-492d-4fac-bbec-0cc4436fce0c">
+    <ct:creator rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#8a89c08c-78fb-4d51-9190-2ef8ffb41ad8" />
+    <ct:description>This document has been added using the ICDDToolkitLibrary.</ct:description>
+    <ct:filename>BillingModel.xml</ct:filename>
+    <ct:filetype>.xml</ct:filetype>
+    <ct:format>.xml</ct:format>
+    <ct:isModified rdf:datatype="&xsd;boolean">True</ct:isModified>
+    <ct:modificationDate rdf:datatype="&xsd;dateTime">17.07.2020 15:34:12</ct:modificationDate>
+    <ct:modifier rdf:resource="http://www.inf.bi.rub.de/icdd/index.rdf#8a89c08c-78fb-4d51-9190-2ef8ffb41ad8" />
+    <ct:versionDescription>This is the first version added using the ICDDToolkitLibrary.</ct:versionDescription>
+    <ct:versionID>1</ct:versionID>
+  </ct:InternalDocument>
+</rdf:RDF>

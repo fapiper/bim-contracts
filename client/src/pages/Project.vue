@@ -51,6 +51,15 @@
             <q-space />
             <q-btn icon="close" flat round dense v-close-popup />
           </q-card-section>
+          <q-card-section class="q-pb-none">
+            <q-btn
+              label="Demoprojekt hinzufügen"
+              color="primary"
+              @click="useDemoProject"
+            >
+            </q-btn>
+          </q-card-section>
+
           <q-card-section>
             <q-stepper
               v-model="stepper.step"
@@ -62,49 +71,71 @@
             >
               <q-step
                 :name="1"
-                title="Name"
-                icon="settings"
-                :done="project.name !== ''"
+                title="BIM Contracts Container initialisieren"
+                icon="create_new_folder"
+                :done="project.boqs.length > 0"
               >
-                <q-input
-                  class="q-mt-md"
-                  filled
-                  v-model="project.name"
-                  label="Name"
-                  hint="Der Name des Bauprojektes"
-                  lazy-rules
-                  :rules="[
-                    (val) =>
-                      (val && val.length > 0) ||
-                      'Ein Name muss angegeben werden',
-                  ]"
-                />
+                <div class="q-gutter-md q-mt-md">
+                  <q-file
+                    filled
+                    bottom-slots
+                    @input="readBoQs"
+                    v-model="boqs"
+                    multiple
+                    append
+                    label="Leistungsverzeichnisse"
+                    counter
+                    use-chips
+                  >
+                    <template v-slot:before>
+                      <q-icon name="assignment" />
+                    </template>
+
+                    <template v-slot:append>
+                      <q-btn round dense flat icon="add" @click.stop />
+                    </template>
+                  </q-file>
+                  <q-file
+                    filled
+                    bottom-slots
+                    @input="readBillingModel"
+                    v-model="billingModel"
+                    label="Abrechnungsplan"
+                    counter
+                    use-chips
+                  >
+                    <template v-slot:before>
+                      <q-icon name="account_balance" />
+                    </template>
+
+                    <template v-slot:append>
+                      <q-btn round dense flat icon="add" @click.stop />
+                    </template>
+                  </q-file>
+                </div>
               </q-step>
 
               <q-step
                 :name="2"
-                title="Smart Contracts Container hochladen"
-                icon="view_compact"
-                :done="project.scc && typeof project.scc.name == 'string'"
+                title="Name"
+                icon="settings"
+                :done="project.name !== ''"
               >
-                <q-file
-                  class="q-mt-md"
-                  filled
-                  bottom-slots
-                  v-model="project.scc"
-                  label="Datei hier ablegen"
-                  counter
-                >
-                  <template v-slot:before>
-                    <q-icon name="attach_file" />
-                  </template>
-
-                  <template v-slot:append>
-                    <q-btn round dense flat icon="add" @click.stop />
-                  </template>
-                </q-file>
+                <div class="q-gutter-md q-mt-md">
+                  <q-input filled v-model="project.name" label="Name" />
+                  <q-input
+                    filled
+                    v-model="project.designation"
+                    label="Bezeichnung"
+                  />
+                  <q-input
+                    filled
+                    v-model="project.decription"
+                    label="Beschreibung"
+                    type="textarea"
+                  />
+                </div>
               </q-step>
-
               <q-step
                 :name="3"
                 title="Vertragsrelevante Dokumente hinterlegen"
@@ -124,7 +155,7 @@
                   use-chips
                 >
                   <template v-slot:before>
-                    <q-icon name="attach_file" />
+                    <q-icon name="description" />
                   </template>
 
                   <template v-slot:append>
@@ -132,11 +163,7 @@
                   </template>
                 </q-file>
               </q-step>
-              <q-step
-                :name="4"
-                title="Bauprojekt hinzufügen"
-                icon="view_compact"
-              >
+              <q-step :name="4" title="Bauprojekt hinzufügen" icon="done_all">
                 <p>Folgendes Bauprojekt wird hinzugefügt:</p>
                 <q-field filled label="Name" stack-label readonly>
                   <template v-slot:control>
@@ -158,20 +185,20 @@
 
           <q-separator />
 
-          <q-card-actions>
+          <q-card-actions align="center">
             <q-btn
-              v-if="stepper.step < 4"
-              @click="stepper.step++"
-              color="primary"
-              label="Weiter"
-            />
-            <q-btn
-              v-if="stepper.step > 1"
+              :style="{ visibility: stepper.step > 1 ? 'visible' : 'hidden' }"
               flat
               @click="stepper.step--"
               color="primary"
               label="Zurück"
               class="q-ml-sm"
+            />
+            <q-btn
+              :style="{ visibility: stepper.step < 4 ? 'visible' : 'hidden' }"
+              @click="stepper.step++"
+              color="primary"
+              label="Weiter"
             />
           </q-card-actions>
         </q-form>
@@ -181,7 +208,6 @@
 </template>
 
 <script>
-import Transmission from '../mixins/transmitter.js';
 import { xml2js } from 'xml-js';
 
 import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
@@ -189,19 +215,17 @@ const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
 export default {
   name: 'PageProjectIndex',
-  mixins: [Transmission],
   mounted() {
     this.contract.events.ConstructionProjectCreated().on('data', (event) => {
       this.projects.push({
         address: event.returnValues.contractAddress,
       });
     });
-
     this.loadProjects();
   },
   computed: {
-    user() {
-      return this.$auth.user();
+    address() {
+      return this.$auth.user().account.address;
     },
   },
   data() {
@@ -211,24 +235,40 @@ export default {
       projects: [],
       project: {
         name: '',
-        scc: null,
+        designation: '',
+        description: '',
+        boqs: [],
+        billingModel: null,
         documents: [],
       },
       contract: new this.$web3.eth.Contract(
         ProjectFactoryAbi,
         ProjectFactoryAddress
       ),
-      reader: new FileReader(),
       stepper: {
         step: 1,
       },
+      boqs: [],
+      billingModel: null,
     };
   },
   methods: {
+    async send() {
+      const data = {
+        ...this.project,
+        created: new Date().toJSON(),
+      };
+      const res = await this.contract.methods
+        .createConstructionProject()
+        .send({ from: this.address, gas: 2000000 });
+      data.address =
+        res.events.ConstructionProjectCreated.returnValues.contractAddress;
+      await this.$orbit.projectdb.put(data);
+    },
     async loadProjects() {
       this.loading = true;
       const projects = await this.contract.methods
-        .getProjectsByOwner(this.user.account.address)
+        .getProjectsByOwner(this.address)
         .call();
       this.projects = projects.map((p) => ({
         address: p,
@@ -236,21 +276,46 @@ export default {
       this.loading = false;
     },
     async addProject() {
-      const packProject = async () => {
-        await this.hashAndPack(
-          this.user.account.address,
-          this.$orbit.containerdb,
-          xml2js(this.reader.result, { compact: true }),
-          this.contract.methods.createConstructionProject
-        );
+      try {
+        await this.send();
+        this.dialog = false;
         this.$q.notify({
           type: 'positive',
           message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
           position: 'bottom-right',
         });
+      } catch (error) {
+        console.error(error);
+        this.$q.notify({
+          type: 'negative',
+          message: `Beim Hinzufügen des Bauprojektes ist ein Fehler aufgetreten`,
+          position: 'bottom-right',
+        });
+      }
+    },
+    useDemoProject() {
+      console.log('demo is not supported');
+    },
+    readBillingModel(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.project.billingModel = xml2js(reader.result, {
+          compact: true,
+        });
       };
-      this.reader.addEventListener('loadend', packProject.bind(this));
-      this.reader.readAsBinaryString(this.project.scc);
+      reader.readAsText(file);
+    },
+    readBoQs(files) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const boq = xml2js(reader.result, { compact: true });
+        this.project.boqs.push(boq);
+        this.project.name = boq.GAEB.PrjInfo.NamePrj._text;
+        this.project.designation = boq.GAEB.PrjInfo.LblPrj._text;
+      };
+      Object.keys(files).forEach((i) => {
+        reader.readAsText(files[i]);
+      });
     },
   },
 };

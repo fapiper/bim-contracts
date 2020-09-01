@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21 <0.7.0;
+pragma solidity >=0.4.21;
 
 // import '@openzeppelin/contracts/access/Roles.sol';
-
+import './CloneFactory.sol';
 import './ConstructionProject.sol';
 
 /**
@@ -10,13 +10,15 @@ import './ConstructionProject.sol';
  * @dev Store & retreive value in a variable
  */
 
-contract ConstructionProjectFactory {
+contract ConstructionProjectFactory is CloneFactory {
     event ConstructionProjectCreated(address indexed contractAddress);
 
     struct ProjectEntry {
         address contractAddress;
         address owner;
     }
+
+    address public implementation;
 
     address public admin; // Superadmin
     address public generalContractor; // Rolle Generalunternehmer
@@ -32,7 +34,8 @@ contract ConstructionProjectFactory {
     /**
      * @dev Instantiates a Contract Manager factory with initial values
      */
-    constructor() public {
+    constructor(address _implementation) public {
+        implementation = _implementation;
         admin = msg.sender;
     }
 
@@ -70,12 +73,10 @@ contract ConstructionProjectFactory {
         public
         returns (bool)
     {
-        ConstructionProject project = new ConstructionProject(
-            _hash,
-            _container
-        );
+        address clone = createClone(implementation);
+        ConstructionProject(clone).init(_hash, _container);
         ProjectEntry memory constructionProject = ProjectEntry(
-            address(project),
+            clone,
             msg.sender
         );
         ownerProjectCount[msg.sender] += 1;

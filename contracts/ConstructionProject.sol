@@ -1,4 +1,4 @@
-pragma solidity >=0.4.22 <0.7.0;
+pragma solidity >=0.4.21;
 
 /**
  * @title ConstructionProject
@@ -47,7 +47,12 @@ contract ConstructionProject {
     /**
      * @dev Instantiates a Contract Manager factory with initial values
      */
-    constructor(bytes32 _hash, bytes32 _container) public {
+    constructor() public {}
+
+    /**
+     * @dev Instantiates a Contract Manager factory with initial values
+     */
+    function init(bytes32 _hash, bytes32 _container) public {
         generalContractor = msg.sender;
         hash = _hash;
         container = _container;

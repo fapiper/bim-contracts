@@ -240,7 +240,7 @@ import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistu
 import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
 import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
-const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
+const ProjectFactoryAddress = '0x89BE8d0A09c24727060f09a8BC9DC784D008B3B6';
 
 export default {
   name: 'PageProjectIndex',

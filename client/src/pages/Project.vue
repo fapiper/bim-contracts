@@ -294,17 +294,30 @@ export default {
   },
   methods: {
     async send() {
-      const data = {
+      const created = new Date().toJSON();
+      const projectHash = this.$web3.utils.sha3(this.project.name + created);
+      const containerHash = this.$web3.utils.sha3(projectHash + created);
+
+      const project = {
+        hash: projectHash,
+        containerHash,
+        ownerAddress: this.address,
         ...this.project,
-        created: new Date().toJSON(),
+        created,
       };
-      const res = await this.contract.methods
-        .createConstructionProject()
+      const container = {
+        hash: containerHash,
+        projectHash,
+        ownerAddress: this.address,
+        ...this.container,
+        created,
+      };
+      await this.$db.$projects.put(project);
+      await this.$db.$container.put(container);
+      console.log('created', project, container);
+      await this.contract.methods
+        .createConstructionProject(projectHash, containerHash)
         .send({ from: this.address, gas: 2000000 });
-      data.address =
-        res.events.ConstructionProjectCreated.returnValues.contractAddress;
-      await this.$db.$projects.put(data);
-      await this.$db.$container.put(data);
     },
     async loadProjects() {
       this.loading = true;

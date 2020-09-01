@@ -66,8 +66,14 @@ contract ConstructionProjectFactory {
     /**
      * @dev Creates a new construction project
      */
-    function createConstructionProject() public returns (bool) {
-        ConstructionProject project = new ConstructionProject();
+    function createConstructionProject(bytes32 _hash, bytes32 _container)
+        public
+        returns (bool)
+    {
+        ConstructionProject project = new ConstructionProject(
+            _hash,
+            _container
+        );
         ProjectEntry memory constructionProject = ProjectEntry(
             address(project),
             msg.sender

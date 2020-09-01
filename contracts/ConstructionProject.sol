@@ -28,6 +28,10 @@ contract ConstructionProject {
 
     address public generalContractor; // Rolle Generalunternehmer
     address public buildingContractor; // Rolle Bauherr
+
+    bytes32 public hash;
+    bytes32 public container;
+
     mapping(address => bool) public subContractors; // Rolle Subunternehmer
 
     mapping(bytes32 => BOQ) BOQs; // Leistungsverzeichnisse mit Referenz auf Work Items
@@ -43,8 +47,10 @@ contract ConstructionProject {
     /**
      * @dev Instantiates a Contract Manager factory with initial values
      */
-    constructor() public {
+    constructor(bytes32 _hash, bytes32 _container) public {
         generalContractor = msg.sender;
+        hash = _hash;
+        container = _container;
     }
 
     /**

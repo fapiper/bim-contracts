@@ -9,9 +9,11 @@ export default async ({ Vue }) => {
   initIPFSInstance().then(async (ipfs) => {
     const orbitdb = await OrbitDB.createInstance(ipfs);
     const projects = await orbitdb.docs('bim-contracts.projects', {
-      indexBy: 'address',
+      indexBy: 'hash',
     });
-    const container = await orbitdb.docs('bim-contracts.container'); // DIN SPEC 91350 in json
+    const container = await orbitdb.docs('bim-contracts.container', {
+      indexBy: 'hash',
+    }); // DIN SPEC 91350 in json
     const users = await orbitdb.docs('bim-contracts.users');
     Vue.prototype.$db = {
       $projects: projects,

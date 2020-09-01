@@ -57,7 +57,15 @@ module.exports = function (/* ctx */) {
       // extractCSS: false,
 
       // https://quasar.dev/quasar-cli/handling-webpack
-      extendWebpack(cfg) {},
+      extendWebpack(cfg) {
+        cfg.module.rules.push({
+          test: /\.(xml)$/,
+          loader: 'xml-loader',
+          options: {
+            explicitArray: false,
+          },
+        });
+      },
     },
 
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
@@ -178,9 +186,14 @@ module.exports = function (/* ctx */) {
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
 
-      extendWebpack(/* cfg */) {
-        // do something with Electron main process Webpack cfg
-        // chainWebpack also available besides this extendWebpack
+      extendWebpack(cfg) {
+        cfg.module.rules.push({
+          test: /\.(xml)$/,
+          loader: 'xml-loader',
+          options: {
+            explicitArray: false,
+          },
+        });
       },
     },
   };

@@ -17,7 +17,7 @@
     "quasar": "^1.0.0",
     "vuelidate": "^0.7.5",
     "web3": "^1.2.11",
-    "xml-js": "^1.6.11"
+    "xml-loader": "^1.2.1"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0"

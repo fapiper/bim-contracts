@@ -43,26 +43,27 @@
         </q-btn> </q-page-sticky
     ></template>
 
-    <q-dialog v-model="dialog" position="bottom">
-      <q-card style="width: 800px; max-width: 92vw;">
+    <q-dialog v-model="dialog" position="bottom" full-width>
+      <q-card>
         <q-form>
           <q-card-section class="row items-center q-pb-none">
             <div class="text-h6">Bauprojekt hinzufügen</div>
-            <q-space />
-            <q-btn icon="close" flat round dense v-close-popup />
-          </q-card-section>
-          <q-card-section class="q-pb-none">
             <q-btn
-              label="Demoprojekt hinzufügen"
+              label="Demoprojekt laden"
               color="primary"
+              outline
+              class="q-ml-sm"
               @click="useDemoProject"
             >
             </q-btn>
+            <q-space />
+            <q-btn icon="close" flat round dense v-close-popup />
           </q-card-section>
+          <q-card-section class="q-pb-none"> </q-card-section>
 
           <q-card-section>
             <q-stepper
-              v-model="stepper.step"
+              v-model="step"
               header-nav
               ref="stepper"
               color="primary"
@@ -73,39 +74,62 @@
                 :name="1"
                 title="BIM Contracts Container initialisieren"
                 icon="create_new_folder"
-                :done="project.boqs.length > 0"
+                :done="stepperDone.container"
               >
                 <div class="q-gutter-md q-mt-md">
                   <q-file
+                    ref="boqs"
                     filled
-                    bottom-slots
                     @input="readBoQs"
-                    v-model="boqs"
+                    :value="container.boqs"
                     multiple
-                    append
                     label="Leistungsverzeichnisse"
-                    counter
-                    use-chips
                   >
                     <template v-slot:before>
                       <q-icon name="assignment" />
                     </template>
-
+                    <template v-slot:file="{ index, file }">
+                      <q-chip
+                        removable
+                        size="sm"
+                        class="q-my-xs"
+                        @remove="container.boqs.splice(index + 1, 1)"
+                      >
+                        <div class="ellipsis relative-position">
+                          {{ file.GAEB.Award.BoQ.BoQInfo.Name }}
+                        </div>
+                      </q-chip>
+                    </template>
                     <template v-slot:append>
                       <q-btn round dense flat icon="add" @click.stop />
                     </template>
                   </q-file>
                   <q-file
                     filled
-                    bottom-slots
+                    ref="billingModel"
                     @input="readBillingModel"
-                    v-model="billingModel"
+                    :value="container.billingModel"
                     label="Abrechnungsplan"
-                    counter
-                    use-chips
                   >
                     <template v-slot:before>
                       <q-icon name="account_balance" />
+                    </template>
+                    <template v-slot:file="{ index, file }">
+                      <q-chip
+                        removable
+                        size="sm"
+                        class="q-my-xs"
+                        @remove="container.billingModel = null"
+                      >
+                        <div class="ellipsis relative-position">
+                          {{
+                            file.BillingModel.BillingUnit[0].ShortDescription
+                              .span
+                          }}
+                          und
+                          {{ file.BillingModel.BillingUnit.length - 1 }} weitere
+                        </div>
+                      </q-chip>
                     </template>
 
                     <template v-slot:append>
@@ -117,9 +141,10 @@
 
               <q-step
                 :name="2"
-                title="Name"
+                title="Projekt Informationen hinzufügen"
                 icon="settings"
-                :done="project.name !== ''"
+                :done="stepperDone.info"
+                :header-nav="stepperDone.container"
               >
                 <div class="q-gutter-md q-mt-md">
                   <q-input filled v-model="project.name" label="Name" />
@@ -141,7 +166,8 @@
                 title="Vertragsrelevante Dokumente hinterlegen"
                 caption="Optional"
                 icon="gavel"
-                :done="project.documents.length > 0"
+                :done="stepperDone.documents"
+                :header-nav="stepperDone.info"
               >
                 <q-file
                   class="q-mt-md"
@@ -185,18 +211,18 @@
 
           <q-separator />
 
-          <q-card-actions align="center">
+          <q-card-actions align="right" class="q-px-lg">
             <q-btn
-              :style="{ visibility: stepper.step > 1 ? 'visible' : 'hidden' }"
+              v-if="step > 1"
               flat
-              @click="stepper.step--"
+              @click="$refs.stepper.previous()"
               color="primary"
               label="Zurück"
-              class="q-ml-sm"
+              class="q-ml-lg"
             />
             <q-btn
-              :style="{ visibility: stepper.step < 4 ? 'visible' : 'hidden' }"
-              @click="stepper.step++"
+              v-if="step < 4"
+              @click="$refs.stepper.next()"
               color="primary"
               label="Weiter"
             />
@@ -208,7 +234,10 @@
 </template>
 
 <script>
-import { xml2js } from 'xml-js';
+import xml2js from 'xml2js';
+
+import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
+import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
 import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
 const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
@@ -227,6 +256,15 @@ export default {
     address() {
       return this.$auth.user().account.address;
     },
+    stepperDone() {
+      return {
+        container:
+          this.container.boqs.length > 0 &&
+          this.container.billingModel !== null,
+        info: this.project.name !== '',
+        documents: this.project.documents.length > 0,
+      };
+    },
   },
   data() {
     return {
@@ -237,19 +275,21 @@ export default {
         name: '',
         designation: '',
         description: '',
+        documents: [],
+      },
+      container: {
         boqs: [],
         billingModel: null,
-        documents: [],
       },
       contract: new this.$web3.eth.Contract(
         ProjectFactoryAbi,
         ProjectFactoryAddress
       ),
-      stepper: {
-        step: 1,
-      },
-      boqs: [],
-      billingModel: null,
+      step: 1,
+      parser: new xml2js.Parser({
+        explicitArray: false,
+        async: true,
+      }),
     };
   },
   methods: {
@@ -263,7 +303,8 @@ export default {
         .send({ from: this.address, gas: 2000000 });
       data.address =
         res.events.ConstructionProjectCreated.returnValues.contractAddress;
-      await this.$orbit.projectdb.put(data);
+      await this.$db.$projects.put(data);
+      await this.$db.$container.put(data);
     },
     async loadProjects() {
       this.loading = true;
@@ -294,24 +335,31 @@ export default {
       }
     },
     useDemoProject() {
-      console.log('demo is not supported');
+      this.container.billingModel = BillingModel;
+      this.container.boqs = [BoQ];
     },
     readBillingModel(file) {
+      this.$refs.billingModel.loading = true;
       const reader = new FileReader();
-      reader.onload = () => {
-        this.project.billingModel = xml2js(reader.result, {
-          compact: true,
-        });
+      reader.onload = async () => {
+        this.container.billingModel = await this.parser.parseStringPromise(
+          reader.result
+        );
+        this.parser.reset();
+        this.$refs.billingModel.loading = false;
       };
       reader.readAsText(file);
     },
     readBoQs(files) {
       const reader = new FileReader();
-      reader.onload = () => {
-        const boq = xml2js(reader.result, { compact: true });
-        this.project.boqs.push(boq);
-        this.project.name = boq.GAEB.PrjInfo.NamePrj._text;
-        this.project.designation = boq.GAEB.PrjInfo.LblPrj._text;
+      reader.onload = async () => {
+        this.$refs.boqs.loading = true;
+        const boq = await this.parser.parseStringPromise(reader.result);
+        this.parser.reset();
+        this.container.boqs.push(boq);
+        this.project.name = boq.GAEB.PrjInfo.NamePrj;
+        this.project.designation = boq.GAEB.PrjInfo.LblPrj;
+        this.$refs.boqs.loading = false;
       };
       Object.keys(files).forEach((i) => {
         reader.readAsText(files[i]);

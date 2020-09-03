@@ -1,61 +1,59 @@
-pragma solidity >=0.4.21;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.4.21 <0.7.1;
 
 /**
  * @title ConstructionProject
  * @dev Store & retreive value in a variable
  */
 contract ConstructionProject {
-    event WorkItemProgressChange(
-        bytes32 indexed workItemId,
-        WorkItemProgress workItemProgress
-    );
+    event BoQItemProgressChange(bytes32 hash, uint8 progress);
 
     // Leistungsverzeichnis
-    struct BOQ {
+    struct BoQ {
         bool exists;
-        bytes32[] items;
+        BillingBoQItem[] items;
     }
 
-    // Leistungsverzeichnis-Eintrag
-    struct WorkItem {
-        bytes32 id;
+    // Teilleistung
+    struct BoQItem {
+        bytes32 hash;
         bytes32 parent;
         bytes32[] items;
-        WorkItemProgress progress;
+        uint8 progress;
     }
 
-    enum WorkItemProgress {INITIALIZED, STARTED, FINISHED, APPROVED}
+    // Teilleistung mit Abrechnungseinheit
+    struct BillingBoQItem {
+        bytes32 boqItem;
+        bytes32 hash;
+        address assignee; // Für Leistung verantwortliches Gewerk (Subunternehmer)
+        bool approved; // Abnahme
+    }
 
     address public generalContractor; // Rolle Generalunternehmer
     address public buildingContractor; // Rolle Bauherr
 
     bytes32 public hash;
-    bytes32 public container;
 
     mapping(address => bool) public subContractors; // Rolle Subunternehmer
 
-    mapping(bytes32 => BOQ) BOQs; // Leistungsverzeichnisse mit Referenz auf Work Items
-
-    mapping(bytes32 => WorkItem) workItems; // Leistungsverzeichnis-Einträge
-    mapping(bytes32 => bytes32) billingItems; // Work Items Referenz auf Abrechnungseinheiten
+    mapping(bytes32 => BoQ) boqs; // Leistungsverzeichnisse
+    mapping(bytes32 => BoQItem) boqItems; // Teilleistungen
 
     modifier onlyGeneralContractor {
-        require(msg.sender == generalContractor, 'No permission.');
+        require(
+            msg.sender == generalContractor,
+            'No permission. Only general contractor.'
+        );
         _;
     }
 
     /**
-     * @dev Instantiates a Contract Manager factory with initial values
+     * @dev Instantiates a Bulding Project with initial values
      */
-    constructor() public {}
-
-    /**
-     * @dev Instantiates a Contract Manager factory with initial values
-     */
-    function init(bytes32 _hash, bytes32 _container) public {
+    function init(bytes32 _hash) public {
         generalContractor = msg.sender;
         hash = _hash;
-        container = _container;
     }
 
     /**
@@ -67,82 +65,79 @@ contract ConstructionProject {
 
     /**
      * @dev Adds a new Bill of Quantity
-     * @param _BOQ The hash of the BOQ
+     * @param _boq The hash of the BoQ
      */
-    function addBOQ(bytes32 _BOQ)
+    function addBoQ(bytes32 _boq)
         public
         onlyGeneralContractor
         returns (bool success)
     {
-        require(!BOQs[_BOQ].exists, 'BOQ already specified.');
-        BOQs[_BOQ].items = new bytes32[](0);
-        BOQs[_BOQ].exists = true;
+        require(!boqs[_boq].exists, 'BoQ already specified.');
+        // boqs[_boq].items = new bytes32[](0);
+        boqs[_boq].exists = true;
         return true;
     }
 
     /**
-     * @dev Pushes a new billing item to the stack
+     * @dev Pushes a new billing boq item to the stack
      * @param _billingItem The hash of the billing item
-     * @param _workItemId The hash of the work item which emits payment when ready
+     * @param _boqItem The hash of the boq item
      */
-    function addBillingItem(bytes32 _billingItem, bytes32 _workItemId)
-        public
-        onlyGeneralContractor
-        returns (bool success)
-    {
-        billingItems[_workItemId] = _billingItem;
+    function addBillingBoQItem(
+        bytes32 _boq,
+        bytes32 _billingItem,
+        bytes32 _boqItem
+    ) public onlyGeneralContractor returns (bool) {
+        boqItems[_boqItem] = BoQItem(_boqItem, _boq, new bytes32[](0), 0x0);
+        boqs[_boq].items.push(
+            BillingBoQItem(_boqItem, _billingItem, address(0), false)
+        );
         // emit BillingItemCreated(billingUnitHash);
         return true;
     }
 
     /**
-     * @dev Pushes a new billing unit to the stack
-     * @param _id The hash of the work item to be added
-     * @param _parent The parent work item
+     * @dev Creates a new boq item
+     * @param _boqItem The hash of the boq item to be added
+     * @param _parent The parent boq item
      */
-    function addWorkItem(bytes32 _id, bytes32 _parent)
+    function addBoQItem(bytes32 _boqItem, bytes32 _parent)
         public
         onlyGeneralContractor
-        returns (bool success)
+        returns (bool)
     {
+        require(boqItems[_parent].hash != 0x0, 'Parent is not specified.');
         require(
-            workItems[_parent].id != 0x0 || BOQs[_parent].exists,
-            'Parent is not specified.'
+            boqItems[_boqItem].hash == 0x0,
+            'BoQ item is already specified.'
         );
-        require(workItems[_id].id == 0x0, 'Work Item is already specified.'); // require(workItems[_id].progress < WorkItemProgress.INITIALIZED);
 
-        workItems[_id] = WorkItem({
-            id: _id,
-            parent: _parent,
-            items: new bytes32[](0),
-            progress: WorkItemProgress.INITIALIZED
-        });
-        if (BOQs[_parent].exists) {
-            BOQs[_parent].items.push(_id);
-        } else {
-            workItems[_parent].items.push(_id);
-        }
+        boqItems[_boqItem] = BoQItem(_boqItem, _parent, new bytes32[](0), 0x0);
+        boqItems[_parent].items.push(_boqItem);
         return true;
     }
 
     /**
-     * @dev Sets the progress of a work item and all of its subitems to a predefined state
-     * @param _id The hash of the work item to be updated
-     * @param _progress The state as uint to set the progress of the work item (0=INITIALIZED, 1=STARTED, 2=STOPPED, 3=FINISHED)
+     * @dev Sets the progress of a boq item and all of its items
+     * @param _boqItem The hash of the boq item to be updated
+     * @param _progress The progress number (1-100) to be set
      */
-    function setWorkItemProgress(bytes32 _id, uint256 _progress)
+    function setBoQItemProgress(bytes32 _boqItem, uint8 _progress)
         public
-        returns (bool success)
+        returns (bool)
     {
-        require(uint256(workItems[_id].progress) < _progress);
-        workItems[_id].progress = WorkItemProgress(_progress);
-        for (uint256 i = 0; i < workItems[_id].items.length; i++) {
-            bytes32 itemId = workItems[_id].items[i];
-            if (uint256(workItems[itemId].progress) < _progress) {
-                setWorkItemProgress(itemId, _progress);
+        require(
+            boqItems[_boqItem].progress < _progress,
+            'Invalid progress value'
+        );
+        boqItems[_boqItem].progress = _progress;
+        for (uint256 i = 0; i < boqItems[_boqItem].items.length; i++) {
+            bytes32 item = boqItems[_boqItem].items[i];
+            if (boqItems[item].progress < _progress) {
+                setBoQItemProgress(item, _progress);
             }
         }
-        emit WorkItemProgressChange(_id, WorkItemProgress(_progress));
+        emit BoQItemProgressChange(_boqItem, _progress);
         return true;
     }
 }

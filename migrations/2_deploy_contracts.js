@@ -6,5 +6,8 @@ const ConstructionProjectFactory = artifacts.require(
 
 module.exports = async function (deployer) {
   const constructionProject = await ConstructionProject.deployed();
-  deployer.deploy(ConstructionProjectFactory, constructionProject.address);
+  await deployer.deploy(
+    ConstructionProjectFactory,
+    constructionProject.address
+  );
 };

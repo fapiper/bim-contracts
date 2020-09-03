@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.21;
+pragma solidity >=0.4.21 <0.7.1;
 
 // import '@openzeppelin/contracts/access/Roles.sol';
 import './CloneFactory.sol';
@@ -9,9 +9,8 @@ import './ConstructionProject.sol';
  * @title ConstructionProjectFactory
  * @dev Store & retreive value in a variable
  */
-
 contract ConstructionProjectFactory is CloneFactory {
-    event ConstructionProjectCreated(address indexed contractAddress);
+    event ConstructionProjectCreated(address project);
 
     struct ProjectEntry {
         address contractAddress;
@@ -69,19 +68,16 @@ contract ConstructionProjectFactory is CloneFactory {
     /**
      * @dev Creates a new construction project
      */
-    function createConstructionProject(bytes32 _hash, bytes32 _container)
-        public
-        returns (bool)
-    {
+    function createConstructionProject(bytes32 _project) public returns (bool) {
         address clone = createClone(implementation);
-        ConstructionProject(clone).init(_hash, _container);
+        ConstructionProject(clone).init(_project);
         ProjectEntry memory constructionProject = ProjectEntry(
             clone,
             msg.sender
         );
         ownerProjectCount[msg.sender] += 1;
         projects.push(constructionProject);
-        emit ConstructionProjectCreated(constructionProject.contractAddress);
+        emit ConstructionProjectCreated(clone);
         return true;
     }
 }

@@ -63,7 +63,7 @@ const linksData = [
   {
     title: 'Mein Profil',
     icon: 'person',
-    link: '',
+    link: '/me',
   },
   {
     title: 'Einstellungen',

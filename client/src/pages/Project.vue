@@ -240,14 +240,15 @@ import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistu
 import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
 import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
-const ProjectFactoryAddress = '0x89BE8d0A09c24727060f09a8BC9DC784D008B3B6';
+const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
 export default {
   name: 'PageProjectIndex',
   mounted() {
     this.contract.events.ConstructionProjectCreated().on('data', (event) => {
+      console.log('created', event);
       this.projects.push({
-        address: event.returnValues.contractAddress,
+        address: event.returnValues.project,
       });
     });
     this.loadProjects();
@@ -314,19 +315,24 @@ export default {
       };
       await this.$db.$projects.put(project);
       await this.$db.$container.put(container);
-      console.log('created', project, container);
       await this.contract.methods
-        .createConstructionProject(projectHash, containerHash)
+        .createConstructionProject(projectHash)
         .send({ from: this.address, gas: 2000000 });
     },
     async loadProjects() {
       this.loading = true;
-      const projects = await this.contract.methods
-        .getProjectsByOwner(this.address)
-        .call();
-      this.projects = projects.map((p) => ({
-        address: p,
-      }));
+      console.log('address', this.address);
+      try {
+        const projects = await this.contract.methods
+          .getProjectsByOwner(this.address)
+          .call();
+        console.log('got projects by owner', projects);
+        this.projects = projects.map((p) => ({
+          address: p,
+        }));
+      } catch (error) {
+        console.error(error);
+      }
       this.loading = false;
     },
     async addProject() {

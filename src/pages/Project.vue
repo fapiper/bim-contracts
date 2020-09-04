@@ -246,7 +246,6 @@ export default {
   name: 'PageProjectIndex',
   mounted() {
     this.contract.events.ConstructionProjectCreated().on('data', (event) => {
-      console.log('created', event);
       this.projects.push({
         address: event.returnValues.project,
       });
@@ -297,36 +296,37 @@ export default {
     async send() {
       const created = new Date().toJSON();
       const projectHash = this.$web3.utils.sha3(this.project.name + created);
-      const containerHash = this.$web3.utils.sha3(projectHash + created);
 
       const project = {
         hash: projectHash,
-        containerHash,
-        ownerAddress: this.address,
+        building_contractor: {
+          name: 'Example Name',
+          address: '0x1234567890',
+        },
+        general_contractor: {
+          address: this.address,
+          name: this.$auth.user().name,
+        },
+        sub_contractors: [],
         ...this.project,
         created,
       };
-      const container = {
-        hash: containerHash,
-        projectHash,
-        ownerAddress: this.address,
-        ...this.container,
-        created,
-      };
       await this.$db.$projects.put(project);
-      await this.$db.$container.put(container);
       await this.contract.methods
         .createConstructionProject(projectHash)
         .send({ from: this.address, gas: 2000000 });
     },
     async loadProjects() {
       this.loading = true;
-      console.log('address', this.address);
       try {
+        const test = await this.$db.$projects.query(
+          (e) => e.general_contractor.address === this.address
+        );
+        console.log('test', test);
+
         const projects = await this.contract.methods
           .getProjectsByOwner(this.address)
           .call();
-        console.log('got projects by owner', projects);
         this.projects = projects.map((p) => ({
           address: p,
         }));

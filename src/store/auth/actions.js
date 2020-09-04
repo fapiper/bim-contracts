@@ -24,7 +24,6 @@ export async function register(state, data) {
 }
 
 export async function login(state, data) {
-  console.log('login', data);
   const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
     data.privateKey
   );

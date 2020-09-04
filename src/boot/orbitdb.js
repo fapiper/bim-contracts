@@ -11,13 +11,22 @@ export default async ({ Vue }) => {
     const projects = await orbitdb.docs('bim-contracts.projects', {
       indexBy: 'hash',
     });
-    const container = await orbitdb.docs('bim-contracts.container', {
-      indexBy: 'hash',
-    }); // DIN SPEC 91350 in json
+    await projects.load();
+
+    // Listen for updates from peers
+    projects.events.on('data', (dbname, event) => {
+      console.log('replicated projects', dbname, event);
+      // console.log(projects.iterator({ limit: -1 }).collect());
+    });
+
+    // projects.events.on('replicated', (address) => {
+    //   console.log('replicated projects', address);
+    //   console.log(projects.iterator({ limit: -1 }).collect());
+    // });
+
     const users = await orbitdb.docs('bim-contracts.users');
     Vue.prototype.$db = {
       $projects: projects,
-      $container: container,
       $users: users,
     };
   });

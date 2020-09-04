@@ -43,188 +43,119 @@
         </q-btn> </q-page-sticky
     ></template>
 
-    <q-dialog v-model="dialog" position="bottom" full-width>
-      <q-card>
+    <q-dialog v-model="dialog" position="bottom">
+      <q-card class="add-project-card">
         <q-form>
-          <q-card-section class="row items-center q-pb-none">
+          <q-card-section class="row items-center">
             <div class="text-h6">Bauprojekt hinzufügen</div>
+            <q-space />
+            <q-btn icon="close" flat round dense v-close-popup />
+          </q-card-section>
+          <q-card-section>
+            <div class="q-gutter-y-md">
+              <q-input filled v-model="project.name" label="Name" />
+              <q-input
+                filled
+                v-model="project.designation"
+                label="Bezeichnung"
+              />
+              <q-input
+                filled
+                v-model="project.decription"
+                label="Beschreibung"
+                type="textarea"
+              />
+              <q-file
+                ref="boqs"
+                filled
+                @input="readBoQs"
+                :value="container.boqs"
+                multiple
+                label="Leistungsverzeichnisse"
+              >
+                <template v-slot:before>
+                  <q-icon name="assignment" />
+                </template>
+                <template v-slot:file="{ index, file }">
+                  <q-chip
+                    removable
+                    size="sm"
+                    @remove="container.boqs.splice(index + 1, 1)"
+                  >
+                    <div class="ellipsis relative-position">
+                      {{ file.GAEB.Award.BoQ.BoQInfo.Name }}
+                    </div>
+                  </q-chip>
+                </template>
+                <template v-slot:append>
+                  <q-btn round dense flat icon="add" @click.stop />
+                </template>
+              </q-file>
+              <q-file
+                filled
+                ref="billingModel"
+                @input="readBillingModel"
+                :value="container.billingModel"
+                label="Abrechnungsplan"
+              >
+                <template v-slot:before>
+                  <q-icon name="account_balance" />
+                </template>
+                <template v-slot:file="{ index, file }">
+                  <q-chip
+                    removable
+                    size="sm"
+                    class="q-my-xs"
+                    @remove="container.billingModel = null"
+                  >
+                    <div class="ellipsis relative-position">
+                      {{
+                        file.BillingModel.BillingUnit[0].ShortDescription.span
+                      }}
+                      und
+                      {{ file.BillingModel.BillingUnit.length - 1 }} weitere
+                    </div>
+                  </q-chip>
+                </template>
+
+                <template v-slot:append>
+                  <q-btn round dense flat icon="add" @click.stop />
+                </template>
+              </q-file>
+              <q-file
+                class="q-mt-md"
+                filled
+                bottom-slots
+                v-model="project.documents"
+                multiple
+                append
+                label="Dateien hier ablegen"
+                use-chips
+              >
+                <template v-slot:before>
+                  <q-icon name="description" />
+                </template>
+
+                <template v-slot:append>
+                  <q-btn round dense flat icon="add" @click.stop />
+                </template>
+              </q-file>
+            </div>
+          </q-card-section>
+          <q-separator />
+          <q-card-actions align="right">
             <q-btn
               label="Demoprojekt laden"
               color="primary"
               outline
-              class="q-ml-sm"
+              class="q-mr-sm"
               @click="useDemoProject"
             >
             </q-btn>
-            <q-space />
-            <q-btn icon="close" flat round dense v-close-popup />
-          </q-card-section>
-          <q-card-section class="q-pb-none"> </q-card-section>
-
-          <q-card-section>
-            <q-stepper
-              v-model="step"
-              header-nav
-              ref="stepper"
-              color="primary"
-              flat
-              vertical
-            >
-              <q-step
-                :name="1"
-                title="BIM Contracts Container initialisieren"
-                icon="create_new_folder"
-                :done="stepperDone.container"
-              >
-                <div class="q-gutter-md q-mt-md">
-                  <q-file
-                    ref="boqs"
-                    filled
-                    @input="readBoQs"
-                    :value="container.boqs"
-                    multiple
-                    label="Leistungsverzeichnisse"
-                  >
-                    <template v-slot:before>
-                      <q-icon name="assignment" />
-                    </template>
-                    <template v-slot:file="{ index, file }">
-                      <q-chip
-                        removable
-                        size="sm"
-                        class="q-my-xs"
-                        @remove="container.boqs.splice(index + 1, 1)"
-                      >
-                        <div class="ellipsis relative-position">
-                          {{ file.GAEB.Award.BoQ.BoQInfo.Name }}
-                        </div>
-                      </q-chip>
-                    </template>
-                    <template v-slot:append>
-                      <q-btn round dense flat icon="add" @click.stop />
-                    </template>
-                  </q-file>
-                  <q-file
-                    filled
-                    ref="billingModel"
-                    @input="readBillingModel"
-                    :value="container.billingModel"
-                    label="Abrechnungsplan"
-                  >
-                    <template v-slot:before>
-                      <q-icon name="account_balance" />
-                    </template>
-                    <template v-slot:file="{ index, file }">
-                      <q-chip
-                        removable
-                        size="sm"
-                        class="q-my-xs"
-                        @remove="container.billingModel = null"
-                      >
-                        <div class="ellipsis relative-position">
-                          {{
-                            file.BillingModel.BillingUnit[0].ShortDescription
-                              .span
-                          }}
-                          und
-                          {{ file.BillingModel.BillingUnit.length - 1 }} weitere
-                        </div>
-                      </q-chip>
-                    </template>
-
-                    <template v-slot:append>
-                      <q-btn round dense flat icon="add" @click.stop />
-                    </template>
-                  </q-file>
-                </div>
-              </q-step>
-
-              <q-step
-                :name="2"
-                title="Projekt Informationen hinzufügen"
-                icon="settings"
-                :done="stepperDone.info"
-                :header-nav="stepperDone.container"
-              >
-                <div class="q-gutter-md q-mt-md">
-                  <q-input filled v-model="project.name" label="Name" />
-                  <q-input
-                    filled
-                    v-model="project.designation"
-                    label="Bezeichnung"
-                  />
-                  <q-input
-                    filled
-                    v-model="project.decription"
-                    label="Beschreibung"
-                    type="textarea"
-                  />
-                </div>
-              </q-step>
-              <q-step
-                :name="3"
-                title="Vertragsrelevante Dokumente hinterlegen"
-                caption="Optional"
-                icon="gavel"
-                :done="stepperDone.documents"
-                :header-nav="stepperDone.info"
-              >
-                <q-file
-                  class="q-mt-md"
-                  filled
-                  bottom-slots
-                  v-model="project.documents"
-                  multiple
-                  append
-                  label="Dateien hier ablegen"
-                  counter
-                  use-chips
-                >
-                  <template v-slot:before>
-                    <q-icon name="description" />
-                  </template>
-
-                  <template v-slot:append>
-                    <q-btn round dense flat icon="add" @click.stop />
-                  </template>
-                </q-file>
-              </q-step>
-              <q-step :name="4" title="Bauprojekt hinzufügen" icon="done_all">
-                <p>Folgendes Bauprojekt wird hinzugefügt:</p>
-                <q-field filled label="Name" stack-label readonly>
-                  <template v-slot:control>
-                    <div class="self-center full-width no-outline" tabindex="0">
-                      {{ project.name }}
-                    </div>
-                  </template>
-                </q-field>
-
-                <q-btn
-                  class="q-mt-md full-width"
-                  @click="addProject"
-                  color="primary"
-                  label="Bauprojekt hinzufügen"
-                />
-              </q-step>
-            </q-stepper>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions align="right" class="q-px-lg">
             <q-btn
-              v-if="step > 1"
-              flat
-              @click="$refs.stepper.previous()"
+              @click="addProject"
               color="primary"
-              label="Zurück"
-              class="q-ml-lg"
-            />
-            <q-btn
-              v-if="step < 4"
-              @click="$refs.stepper.next()"
-              color="primary"
-              label="Weiter"
+              label="Bauprojekt hinzufügen"
             />
           </q-card-actions>
         </q-form>
@@ -256,15 +187,6 @@ export default {
     address() {
       return this.$auth.user().account.address;
     },
-    stepperDone() {
-      return {
-        container:
-          this.container.boqs.length > 0 &&
-          this.container.billingModel !== null,
-        info: this.project.name !== '',
-        documents: this.project.documents.length > 0,
-      };
-    },
   },
   data() {
     return {
@@ -285,7 +207,6 @@ export default {
         ProjectFactoryAbi,
         ProjectFactoryAddress
       ),
-      step: 1,
       parser: new xml2js.Parser({
         explicitArray: false,
         async: true,
@@ -361,10 +282,13 @@ export default {
       this.$refs.billingModel.loading = true;
       const reader = new FileReader();
       reader.onload = async () => {
-        this.container.billingModel = await this.parser.parseStringPromise(
+        const parser = new xml2js.Parser({
+          explicitArray: false,
+          async: true,
+        });
+        this.container.billingModel = await parser.parseStringPromise(
           reader.result
         );
-        this.parser.reset();
         this.$refs.billingModel.loading = false;
       };
       reader.readAsText(file);
@@ -373,8 +297,11 @@ export default {
       const reader = new FileReader();
       reader.onload = async () => {
         this.$refs.boqs.loading = true;
-        const boq = await this.parser.parseStringPromise(reader.result);
-        this.parser.reset();
+        const parser = new xml2js.Parser({
+          explicitArray: false,
+          async: true,
+        });
+        const boq = await parser.parseStringPromise(reader.result);
         this.container.boqs.push(boq);
         this.project.name = boq.GAEB.PrjInfo.NamePrj;
         this.project.designation = boq.GAEB.PrjInfo.LblPrj;
@@ -392,5 +319,10 @@ export default {
   width: 100%;
   max-width: 420px;
   overflow: hidden;
+}
+
+.add-project-card {
+  width: 800px;
+  max-width: 100% !important;
 }
 </style>

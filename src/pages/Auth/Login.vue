@@ -2,9 +2,7 @@
   <q-page class="flex flex-center">
     <div class="login-card">
       <q-card-section>
-        <h1 class="text-h3 text-center">
-          Anmelden
-        </h1>
+        <h1 class="text-h3 text-center">Anmelden</h1>
       </q-card-section>
 
       <q-card-section>
@@ -42,9 +40,7 @@
         <div class="q-mt-md">
           <p>
             Noch keinen Account?
-            <router-link to="/auth/register">
-              Hier registrieren
-            </router-link>
+            <router-link to="/auth/register"> Hier registrieren </router-link>
           </p>
         </div>
       </q-card-section>
@@ -62,7 +58,7 @@ export default {
       data: {
         name: 'Max Mustermann',
         privateKey:
-          '80acab76550a5291e414f6cba8cba4f0163e628a8f65033f4d73cca8683248f3',
+          '6d7698a29a2893d7f879a5cec898389b7110d7a21bd7c6811a9d7d37131dc130',
         rememberMe: false,
       },
       loading: false,

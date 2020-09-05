@@ -14,7 +14,7 @@
       v-model="drawer"
       show-if-above
       :breakpoint="500"
-      content-class="bg-grey-1"
+      content-class="bg-grey-2"
     >
       <q-scroll-area class="fit">
         <q-list padding class="menu-list">

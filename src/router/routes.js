@@ -13,7 +13,16 @@ const routes = [
         path: '/projects/:project',
         component: () => import('layouts/ProjectLayout.vue'),
         children: [
-          { path: 'boqs', component: () => import('pages/Project/Boqs.vue') },
+          {
+            path: '',
+            component: () => import('pages/Project/Index.vue'),
+            meta: { label: 'Übersicht' },
+          },
+          {
+            path: 'boqs',
+            component: () => import('pages/Project/Boqs.vue'),
+            meta: { label: 'Leistungsverzeichnisse' },
+          },
         ],
       },
     ],

@@ -18,13 +18,15 @@
           v-for="(project, index) of projects"
           :key="index"
           class="project-card"
+          flat
+          bordered
         >
-          <q-card-section class="bg-grey-8 text-white">
+          <q-card-section>
             <div class="text-h5">{{ project.name }}</div>
             <div class="text-subtitle3">{{ project.designation }}</div>
           </q-card-section>
           <q-separator />
-          <q-card-actions align="left">
+          <q-card-actions align="left" class="bg-grey-2">
             <q-btn flat :to="'projects/' + project.hash + '/boqs'"
               >Auswählen</q-btn
             >
@@ -175,12 +177,8 @@ const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
 export default {
   name: 'PageProjectIndex',
-  mounted() {
-    this.contract.events.ConstructionProjectCreated().on('data', (event) => {
-      this.projects.push({
-        address: event.returnValues.project,
-      });
-    });
+  async mounted() {
+    this.projectdb = await this.$orbitdb.projectdb;
     this.loadProjects();
   },
   computed: {
@@ -207,6 +205,7 @@ export default {
         ProjectFactoryAbi,
         ProjectFactoryAddress
       ),
+      projectdb: null,
       parser: new xml2js.Parser({
         explicitArray: false,
         async: true,
@@ -217,7 +216,6 @@ export default {
     async send() {
       const created = new Date().toJSON();
       const projectHash = this.$web3.utils.sha3(this.project.name + created);
-
       const project = {
         hash: projectHash,
         building_contractor: {
@@ -232,8 +230,7 @@ export default {
         ...this.project,
         created,
       };
-      const orbitdb = await this.$orbitdb.load();
-      await orbitdb.$projectdb.put(project);
+      await this.projectdb.put(project);
       await this.contract.methods
         .createConstructionProject(projectHash)
         .send({ from: this.address, gas: 2000000 });
@@ -241,11 +238,10 @@ export default {
     },
     async loadProjects() {
       this.loading = true;
-      const orbitdb = await this.$orbitdb.load();
-      this.projects = await orbitdb.$projectdb.query(
+      await this.projectdb.load();
+      this.projects = await this.projectdb.query(
         (e) => e.general_contractor.address === this.address
       );
-      console.log('projects', this.projects);
       this.loading = false;
     },
     async addProject() {

@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import auth from './auth';
-import orbitdb from './orbitdb';
 
 Vue.use(Vuex);
 
@@ -18,7 +17,6 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       auth,
-      orbitdb,
     },
 
     // enable strict mode (adds overhead!)

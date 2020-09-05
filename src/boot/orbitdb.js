@@ -1,33 +1,36 @@
 import IPFS from 'ipfs';
 import OrbitDB from 'orbit-db';
 
-let orbitdb;
+const _orbitdb = {
+  _initialized: false,
+};
 
 export default async ({ Vue }) => {
-  try {
-    Vue.prototype.$orbitdb = async () => {
-      if (orbitdb) {
-        return orbitdb;
-      }
-      orbitdb = {};
-      const ipfs = await IPFS.create({ repo: './bim-contracts-ipfs' });
-      const instance = await OrbitDB.createInstance(ipfs);
+  const orbitdb = {};
 
-      const projectdb = await instance.docs('bim-contracts.projects', {
-        indexBy: 'hash',
-      });
-      projectdb.load();
+  orbitdb.load = async () => {
+    if (_orbitdb._initialized) {
+      return _orbitdb;
+    }
+    _orbitdb._initialized = true;
 
-      const userdb = await instance.docs('bim-contracts.users', {
-        indexBy: 'hash',
-      });
-      userdb.load();
+    const ipfs = await IPFS.create({ repo: './bim-contracts-ipfs' });
+    const instance = await OrbitDB.createInstance(ipfs);
 
-      orbitdb.$projectdb = projectdb;
-      orbitdb.$userdb = userdb;
-      return orbitdb;
-    };
-  } catch (e) {
-    console.log(e, 'Error installing orbit-db plugin', e);
-  }
+    const projectdb = await instance.docs('bim-contracts.projects', {
+      indexBy: 'hash',
+    });
+    projectdb.load();
+
+    const userdb = await instance.docs('bim-contracts.users', {
+      indexBy: 'hash',
+    });
+    userdb.load();
+
+    _orbitdb.$projectdb = projectdb;
+    _orbitdb.$userdb = userdb;
+    return _orbitdb;
+  };
+
+  Vue.prototype.$orbitdb = orbitdb;
 };

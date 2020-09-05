@@ -20,12 +20,12 @@
           class="project-card"
         >
           <q-card-section class="bg-grey-8 text-white">
-            <div class="text-h5">Projekt {{ index + 1 }}</div>
-            <div class="text-subtitle3">{{ project.address }}</div>
+            <div class="text-h5">{{ project.name }}</div>
+            <div class="text-subtitle3">{{ project.designation }}</div>
           </q-card-section>
           <q-separator />
           <q-card-actions align="left">
-            <q-btn flat :to="'projects/' + project.address + '/boqs'"
+            <q-btn flat :to="'projects/' + project.hash + '/boqs'"
               >Auswählen</q-btn
             >
           </q-card-actions>
@@ -232,17 +232,20 @@ export default {
         ...this.project,
         created,
       };
-      await this.projectdb.put(project);
+      const orbitdb = await this.$orbitdb.load();
+      await orbitdb.$projectdb.put(project);
       await this.contract.methods
         .createConstructionProject(projectHash)
         .send({ from: this.address, gas: 2000000 });
+      this.projects.push(project);
     },
     async loadProjects() {
       this.loading = true;
-      const orbitdb = await this.$orbitdb();
+      const orbitdb = await this.$orbitdb.load();
       this.projects = await orbitdb.$projectdb.query(
         (e) => e.general_contractor.address === this.address
       );
+      console.log('projects', this.projects);
       this.loading = false;
     },
     async addProject() {

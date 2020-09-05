@@ -1,33 +1,33 @@
 import IPFS from 'ipfs';
 import OrbitDB from 'orbit-db';
 
+let orbitdb;
+
 export default async ({ Vue }) => {
-  const initIPFSInstance = async () => {
-    return await IPFS.create({ repo: './bim-contracts-ipfs' });
-  };
+  try {
+    Vue.prototype.$orbitdb = async () => {
+      if (orbitdb) {
+        return orbitdb;
+      }
+      orbitdb = {};
+      const ipfs = await IPFS.create({ repo: './bim-contracts-ipfs' });
+      const instance = await OrbitDB.createInstance(ipfs);
 
-  initIPFSInstance().then(async (ipfs) => {
-    const orbitdb = await OrbitDB.createInstance(ipfs);
-    const projects = await orbitdb.docs('bim-contracts.projects', {
-      indexBy: 'hash',
-    });
-    await projects.load();
+      const projectdb = await instance.docs('bim-contracts.projects', {
+        indexBy: 'hash',
+      });
+      projectdb.load();
 
-    // Listen for updates from peers
-    projects.events.on('data', (dbname, event) => {
-      console.log('replicated projects', dbname, event);
-      // console.log(projects.iterator({ limit: -1 }).collect());
-    });
+      const userdb = await instance.docs('bim-contracts.users', {
+        indexBy: 'hash',
+      });
+      userdb.load();
 
-    // projects.events.on('replicated', (address) => {
-    //   console.log('replicated projects', address);
-    //   console.log(projects.iterator({ limit: -1 }).collect());
-    // });
-
-    const users = await orbitdb.docs('bim-contracts.users');
-    Vue.prototype.$db = {
-      $projects: projects,
-      $users: users,
+      orbitdb.$projectdb = projectdb;
+      orbitdb.$userdb = userdb;
+      return orbitdb;
     };
-  });
+  } catch (e) {
+    console.log(e, 'Error installing orbit-db plugin', e);
+  }
 };

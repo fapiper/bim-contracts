@@ -232,28 +232,17 @@ export default {
         ...this.project,
         created,
       };
-      await this.$db.$projects.put(project);
+      await this.projectdb.put(project);
       await this.contract.methods
         .createConstructionProject(projectHash)
         .send({ from: this.address, gas: 2000000 });
     },
     async loadProjects() {
       this.loading = true;
-      try {
-        const test = await this.$db.$projects.query(
-          (e) => e.general_contractor.address === this.address
-        );
-        console.log('test', test);
-
-        const projects = await this.contract.methods
-          .getProjectsByOwner(this.address)
-          .call();
-        this.projects = projects.map((p) => ({
-          address: p,
-        }));
-      } catch (error) {
-        console.error(error);
-      }
+      const orbitdb = await this.$orbitdb();
+      this.projects = await orbitdb.$projectdb.query(
+        (e) => e.general_contractor.address === this.address
+      );
       this.loading = false;
     },
     async addProject() {

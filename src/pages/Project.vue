@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h1 class="text-h3">Projektauswahl</h1>
+    <h1 class="text-h3">Bauvorhaben</h1>
     <template v-if="loading">
       <div class="row justify-center">
         <q-spinner color="grey-6" size="3em" />
@@ -35,7 +35,6 @@
       </div>
       <q-page-sticky position="bottom" :offset="[18, 18]">
         <q-btn
-          glossy
           label="Neues Bauprojekt hinzufügen"
           fab-mini
           color="primary"
@@ -70,24 +69,15 @@
               <q-file
                 ref="boqs"
                 filled
-                @input="readBoQs"
-                :value="container.boqs"
+                use-chips
+                counter
+                append
+                v-model="container.boqs"
                 multiple
                 label="Leistungsverzeichnisse"
               >
                 <template v-slot:before>
                   <q-icon name="assignment" />
-                </template>
-                <template v-slot:file="{ index, file }">
-                  <q-chip
-                    removable
-                    size="sm"
-                    @remove="container.boqs.splice(index + 1, 1)"
-                  >
-                    <div class="ellipsis relative-position">
-                      {{ file.GAEB.Award.BoQ.BoQInfo.Name }}
-                    </div>
-                  </q-chip>
                 </template>
                 <template v-slot:append>
                   <q-btn round dense flat icon="add" @click.stop />
@@ -96,30 +86,14 @@
               <q-file
                 filled
                 ref="billingModel"
-                @input="readBillingModel"
-                :value="container.billingModel"
+                v-model="container.billingModel"
                 label="Abrechnungsplan"
+                use-chips
+                counter
               >
                 <template v-slot:before>
                   <q-icon name="account_balance" />
                 </template>
-                <template v-slot:file="{ index, file }">
-                  <q-chip
-                    removable
-                    size="sm"
-                    class="q-my-xs"
-                    @remove="container.billingModel = null"
-                  >
-                    <div class="ellipsis relative-position">
-                      {{
-                        file.BillingModel.BillingUnit[0].ShortDescription.span
-                      }}
-                      und
-                      {{ file.BillingModel.BillingUnit.length - 1 }} weitere
-                    </div>
-                  </q-chip>
-                </template>
-
                 <template v-slot:append>
                   <q-btn round dense flat icon="add" @click.stop />
                 </template>
@@ -127,12 +101,12 @@
               <q-file
                 class="q-mt-md"
                 filled
-                bottom-slots
                 v-model="project.documents"
                 multiple
                 append
                 label="Dateien hier ablegen"
                 use-chips
+                ref="documents"
               >
                 <template v-slot:before>
                   <q-icon name="description" />
@@ -175,6 +149,22 @@ import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documen
 import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
 const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
 
+// transform all attribute and tag names and values to uppercase
+const nameProcessor = (name) =>
+  name
+    .match(
+      /BoQ|[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
+    )
+    .map((x) => x.toLowerCase())
+    .join('_');
+
+const parserOptions = {
+  tagNameProcessors: [nameProcessor],
+  attrNameProcessors: [nameProcessor],
+  explicitArray: false,
+  async: true,
+};
+
 export default {
   name: 'PageProjectIndex',
   async mounted() {
@@ -206,35 +196,34 @@ export default {
         ProjectFactoryAddress
       ),
       projectdb: null,
-      parser: new xml2js.Parser({
-        explicitArray: false,
-        async: true,
-      }),
     };
   },
   methods: {
     async send() {
-      const created = new Date().toJSON();
-      const projectHash = this.$web3.utils.sha3(this.project.name + created);
-      const project = {
-        hash: projectHash,
-        building_contractor: {
-          name: 'Example Name',
-          address: '0x1234567890',
-        },
-        general_contractor: {
-          address: this.address,
-          name: this.$auth.user().name,
-        },
-        sub_contractors: [],
-        ...this.project,
-        created,
-      };
-      await this.projectdb.put(project);
-      await this.contract.methods
-        .createConstructionProject(projectHash)
-        .send({ from: this.address, gas: 2000000 });
-      this.projects.push(project);
+      const billing = await this.getBillingModel();
+      const boqs = await this.getBoQs();
+      console.log('parsed billing and boqs', billing, boqs);
+      // const created = new Date().toJSON();
+      // const projectHash = this.$web3.utils.sha3(this.project.name + created);
+      // const project = {
+      //   hash: projectHash,
+      //   building_contractor: {
+      //     name: 'Example Name',
+      //     address: '0x1234567890',
+      //   },
+      //   general_contractor: {
+      //     address: this.address,
+      //     name: this.$auth.user().name,
+      //   },
+      //   sub_contractors: [],
+      //   ...this.project,
+      //   created,
+      // };
+      // await this.projectdb.put(project);
+      // await this.contract.methods
+      //   .createConstructionProject(projectHash)
+      //   .send({ from: this.address, gas: 2000000 });
+      // this.projects.push(project);
     },
     async loadProjects() {
       this.loading = true;
@@ -263,40 +252,41 @@ export default {
       }
     },
     useDemoProject() {
-      this.container.billingModel = BillingModel;
-      this.container.boqs = [BoQ];
+      this.container.boqs = [new File([BoQ], 'Demo-Leistungsverzeichnis.xml')];
+      this.container.billingModel = new File(
+        [BillingModel],
+        'Demo-BillingModel.xml'
+      );
     },
-    readBillingModel(file) {
-      this.$refs.billingModel.loading = true;
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const parser = new xml2js.Parser({
-          explicitArray: false,
-          async: true,
-        });
-        this.container.billingModel = await parser.parseStringPromise(
-          reader.result
-        );
-        this.$refs.billingModel.loading = false;
-      };
-      reader.readAsText(file);
+    async getBillingModel() {
+      const raw = await this.read(this.container.billingModel);
+      const parser = new xml2js.Parser(parserOptions);
+      const json = await parser.parseStringPromise(raw);
+      return json.billing_model.billing_unit.map((u) => ({
+        ...u,
+        id: u.$.id,
+      }));
     },
-    readBoQs(files) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        this.$refs.boqs.loading = true;
-        const parser = new xml2js.Parser({
-          explicitArray: false,
-          async: true,
-        });
-        const boq = await parser.parseStringPromise(reader.result);
-        this.container.boqs.push(boq);
-        this.project.name = boq.GAEB.PrjInfo.NamePrj;
-        this.project.designation = boq.GAEB.PrjInfo.LblPrj;
-        this.$refs.boqs.loading = false;
+    async getBoQs() {
+      const parse = async (boq, i) => {
+        const raw = await this.read(boq);
+        const parser = new xml2js.Parser(parserOptions);
+        const json = await parser.parseStringPromise(raw);
+        boq = json.gaeb.award.boq;
+        return {
+          id: boq.$.id,
+          ...boq,
+        };
       };
-      Object.keys(files).forEach((i) => {
-        reader.readAsText(files[i]);
+      return Promise.all(this.container.boqs.map(parse));
+    },
+    read(file) {
+      const reader = new FileReader();
+      return new Promise(function (resolve) {
+        reader.onload = async () => {
+          resolve(reader.result);
+        };
+        reader.readAsText(file);
       });
     },
   },

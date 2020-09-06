@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <q-header>
+    <q-header elevated>
       <q-toolbar>
         <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
         <q-toolbar-title>BIMContracts</q-toolbar-title>
@@ -13,6 +13,7 @@
     <q-drawer
       v-model="drawer"
       show-if-above
+      bordered
       :breakpoint="500"
       content-class="bg-grey-2"
     >
@@ -51,7 +52,7 @@ const linksData = [
     link: '/dashboard',
   },
   {
-    title: 'Projekte',
+    title: 'Bauvorhaben',
     icon: 'assignment',
     link: '/projects',
   },

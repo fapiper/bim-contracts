@@ -60,10 +60,7 @@ module.exports = function (/* ctx */) {
       extendWebpack(cfg) {
         cfg.module.rules.push({
           test: /\.(xml)$/,
-          loader: 'xml-loader',
-          options: {
-            explicitArray: false,
-          },
+          loader: 'raw-loader',
         });
       },
     },
@@ -189,10 +186,7 @@ module.exports = function (/* ctx */) {
       extendWebpack(cfg) {
         cfg.module.rules.push({
           test: /\.(xml)$/,
-          loader: 'xml-loader',
-          options: {
-            explicitArray: false,
-          },
+          loader: 'raw-loader',
         });
       },
     },

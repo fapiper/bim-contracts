@@ -43,36 +43,32 @@ const parserOptions = {
 
 class BoQ {
   static fromJson(json) {
-    const parseCtgy = (ctgy, parent = 0) => {
+    const parseCtgy = (ctgy, parent = -1) => {
       ctgy.id = ctgy.$.id;
       ctgy.hash = Web3.utils.sha3(ctgy.id);
       ctgy.parent = parent;
       delete ctgy.$;
-      if (!ctgy.boq_body) {
-        return ctgy;
-      } else {
+      if (ctgy.boq_body) {
         if (ctgy.boq_body.boq_ctgy) {
           ctgy.children = ctgy.boq_body.boq_ctgy;
+          const newNode = _.omit(ctgy, 'boq_body');
+          return _.flatten(
+            _.map(newNode.children, (res) => parseCtgy(res, newNode.hash)),
+            []
+          );
         } else {
-          ctgy.children = Array.from(ctgy.boq_body.itemlist.item);
+          if (ctgy.boq_body.itemlist) {
+            ctgy.children = ctgy.boq_body.itemlist.item;
+            const newNode = _.omit(ctgy, 'boq_body');
+            if (!Array.isArray(newNode.children)) {
+              return parseCtgy(newNode.children, newNode.hash);
+            }
+            newNode.children.forEach((res) => parseCtgy(res, newNode.hash));
+            return newNode;
+          }
         }
-        const newNode = _.omit(ctgy, 'boq_body');
-        return _.flattenDeep(
-          _.map(newNode.children, (res) => parseCtgy(res, newNode.hash)),
-          []
-        );
-        // ctgy.children.forEach(parseCtgy);
-        // return ctgy;
-        // if (!ctgy.boq_body.boq_ctgy) {
-        //   // special case: second to last in tree has itemlist
-        //   const children = Array.from(ctgy.boq_body.itemlist.item).forEach(parseCtgy);
-        //   return {...ctgy, children}
-        // } else {
-        //   return ctgy.boq_body.boq_ctgy.forEach(parseCtgy);
-        //   const children = Array.from(ctgy.boq_body.itemlist.item).forEach(parseCtgy);
-        //   return {...ctgy, children}
-        // }
       }
+      return ctgy;
     };
     const boq = json.gaeb.award.boq;
     console.log('boq', boq);

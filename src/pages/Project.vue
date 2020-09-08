@@ -183,11 +183,8 @@ export default {
   },
   methods: {
     async send() {
-      const billing = await IcddParser.parseBillingModelFile(
-        this.container.billingModel
-      );
-      const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
-      console.log('parsed billing and boqs', billing, boqs);
+      await IcddParser.parseBillingModelFile(this.container.billingModel);
+      await IcddParser.parseBoQFiles(this.container.boqs);
       // const created = new Date().toJSON();
       // const projectHash = this.$web3.utils.sha3(this.project.name + created);
       // const project = {

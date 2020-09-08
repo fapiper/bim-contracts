@@ -18,70 +18,69 @@ const parserOptions = {
   async: true,
 };
 
-// function flatten(tree) {
-//   function recurse(nodes, path) {
-//     console.log('recurse nodes', nodes);
-//     return _.map(nodes.boq_body.boq_ctgy, function (node) {
-//       console.log('map node', node);
-//       node.id = node.$.id;
-//       node.hash = Web3.utils.sha3(node.id);
-//       delete node.$;
-//       const newPath = _.union(path, [node.name]);
-//       const newNode = [
-//         _.assign(
-//           { pathname: newPath.join(' > '), level: path.length },
-//           _.omit(node, 'children')
-//         ),
-//         recurse(node.children, newPath),
-//       ];
-//       console.log('new node', newNode);
-//       return newNode;
-//     });
-//   }
-//   return _.flattenDeep(recurse(tree.boq_body.boq_ctgy, []));
-// }
-
 class BoQ {
-  static fromJson(json) {
-    const parseCtgy = (ctgy, parent = -1) => {
-      ctgy.id = ctgy.$.id;
-      ctgy.hash = Web3.utils.sha3(ctgy.id);
-      ctgy.parent = parent;
-      delete ctgy.$;
-      if (ctgy.boq_body) {
-        if (ctgy.boq_body.boq_ctgy) {
-          ctgy.children = ctgy.boq_body.boq_ctgy;
-          const newNode = _.omit(ctgy, 'boq_body');
-          return _.flatten(
-            _.map(newNode.children, (res) => parseCtgy(res, newNode.hash)),
-            []
-          );
-        } else {
-          if (ctgy.boq_body.itemlist) {
-            ctgy.children = ctgy.boq_body.itemlist.item;
-            const newNode = _.omit(ctgy, 'boq_body');
-            if (!Array.isArray(newNode.children)) {
-              return parseCtgy(newNode.children, newNode.hash);
-            }
-            newNode.children.forEach((res) => parseCtgy(res, newNode.hash));
-            return newNode;
-          }
-        }
+  static build(json) {
+    const parse = (node, parent) => {
+      node.id = node.$.id;
+      node.hash = Web3.utils.sha3(node.id);
+      if (parent) node.parent = parent;
+      delete node.$;
+      if (!node.boq_body) {
+        // no body -> no children. End of recursion returns node
+        return;
       }
-      return ctgy;
+      if (node.boq_body.boq_ctgy) {
+        node.children = node.boq_body.boq_ctgy;
+        delete node.boq_body.boq_ctgy;
+        node.children.forEach((ctgy) => parse(ctgy, node.hash));
+      } else {
+        if (Array.isArray(node.boq_body.itemlist.item)) {
+          node.children = node.boq_body.itemlist.item;
+          node.children.forEach((ctgy) => parse(ctgy, node.hash));
+        } else {
+          node.children = [parse(node.boq_body.itemlist.item, node.hash)];
+        }
+        delete node.boq_body.itemlist;
+        return node;
+      }
     };
     const boq = json.gaeb.award.boq;
-    console.log('boq', boq);
-    const flat = parseCtgy(boq);
-    // parseCtgy(boq);
-    console.log('boq flat', flat);
+    parse(boq, 0);
     return boq;
   }
 }
 
 class BillingModel {
-  static fromJson(json) {
-    return json;
+  static build(json) {
+    const parse = (node, parent) => {
+      node.id = node.$.id;
+      node.hash = Web3.utils.sha3(node.id);
+      if (parent) node.parent = parent;
+      delete node.$;
+      if (node.items) {
+        if (Array.isArray(node.items.item)) {
+          node.children = node.items.item;
+          node.children.forEach((i) => parse(i, node.hash));
+        } else {
+          node.children = [parse(node.items.item, node.hash)];
+        }
+        delete node.items.item;
+      } else if (node.sub_items && node.sub_items.item) {
+        if (Array.isArray(node.sub_items.item)) {
+          node.children = node.sub_items.item;
+          node.children.forEach((i) => parse(i, node.hash));
+        } else {
+          node.children = [parse(node.sub_items.item, node.hash)];
+        }
+        delete node.sub_items.item;
+        return node;
+      }
+    };
+    const billingModel = {};
+    billingModel.billing_units = json.billing_model.billing_unit;
+    billingModel.billing_units.forEach((unit) => parse(unit));
+    billingModel.hash = Web3.utils.sha3(billingModel.billing_units);
+    return billingModel;
   }
 }
 
@@ -103,14 +102,14 @@ class IcddParser {
   }
 
   static async parseBillingModelFile(billingModel) {
-    const json = await this._parseFromFile(billingModel);
-    return BillingModel.fromJson(json);
+    const parsed = await this._parseFromFile(billingModel);
+    return BillingModel.build(parsed);
   }
 
   static parseBoQFiles(boqs) {
     const parse = async (boq, i) => {
-      const json = await this._parseFromFile(boq);
-      return BoQ.fromJson(json);
+      const parsed = await this._parseFromFile(boq);
+      return BoQ.build(parsed);
     };
     return Promise.all(boqs.map(parse.bind(this)));
   }

@@ -183,29 +183,37 @@ export default {
   },
   methods: {
     async send() {
-      await IcddParser.parseBillingModelFile(this.container.billingModel);
-      await IcddParser.parseBoQFiles(this.container.boqs);
-      // const created = new Date().toJSON();
-      // const projectHash = this.$web3.utils.sha3(this.project.name + created);
-      // const project = {
-      //   hash: projectHash,
-      //   building_contractor: {
-      //     name: 'Example Name',
-      //     address: '0x1234567890',
-      //   },
-      //   general_contractor: {
-      //     address: this.address,
-      //     name: this.$auth.user().name,
-      //   },
-      //   sub_contractors: [],
-      //   ...this.project,
-      //   created,
-      // };
-      // await this.projectdb.put(project);
-      // await this.contract.methods
-      //   .createConstructionProject(projectHash)
-      //   .send({ from: this.address, gas: 2000000 });
-      // this.projects.push(project);
+      const created = new Date().toJSON();
+      const projectHash = this.$web3.utils.sha3(this.project.name + created);
+      const project = {
+        hash: projectHash,
+        building_contractor: {
+          name: 'Example Name',
+          address: '0x1234567890',
+        },
+        general_contractor: {
+          address: this.address,
+          name: this.$auth.user().name,
+        },
+        sub_contractors: [],
+        ...this.project,
+        created,
+      };
+
+      const billingModel = await IcddParser.parseBillingModelFile(
+        this.container.billingModel
+      );
+      billingModel.project_hash = project.hash;
+      billingModel.created = created;
+      const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
+      await this.$orbitdb.billingdb.put(billingModel);
+      await boqs.forEach(async (boq) => {
+        boq.created = created;
+        boq.project_hash = project.hash;
+        await this.$orbitdb.boqdb.put(boq);
+      });
+      await this.projectdb.put(project);
+      this.projects.push(project);
     },
     async loadProjects() {
       this.loading = true;

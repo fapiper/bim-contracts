@@ -199,14 +199,13 @@ export default {
         ...this.project,
         created,
       };
-
-      const billingModel = await IcddParser.parseBillingModelFile(
+      const billing = await IcddParser.parseBillingModelFile(
         this.container.billingModel
       );
-      billingModel.project_hash = project.hash;
-      billingModel.created = created;
+      billing.project_hash = project.hash;
+      billing.created = created;
       const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
-      await this.$orbitdb.billingdb.put(billingModel);
+      await this.$orbitdb.billingdb.put(billing);
       await boqs.forEach(async (boq) => {
         boq.created = created;
         boq.project_hash = project.hash;

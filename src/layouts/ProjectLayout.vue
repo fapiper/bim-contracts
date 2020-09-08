@@ -55,9 +55,8 @@ export default {
   watch: {
     $route: 'loadProject',
   },
-
   methods: {
-    async loadProject(hash) {
+    async loadProject() {
       const projectdb = await this.$orbitdb.projectdb;
       await projectdb.load();
       const projects = await projectdb.get(this.$route.params.project);

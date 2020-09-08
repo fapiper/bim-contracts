@@ -141,29 +141,12 @@
 </template>
 
 <script>
-import xml2js from 'xml2js';
-
+import IcddParser from 'src/utils/icdd-parser.js';
 import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
 import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
 const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
-
-// transform all attribute and tag names and values to uppercase
-const nameProcessor = (name) =>
-  name
-    .match(
-      /BoQ|[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g
-    )
-    .map((x) => x.toLowerCase())
-    .join('_');
-
-const parserOptions = {
-  tagNameProcessors: [nameProcessor],
-  attrNameProcessors: [nameProcessor],
-  explicitArray: false,
-  async: true,
-};
 
 export default {
   name: 'PageProjectIndex',
@@ -200,8 +183,10 @@ export default {
   },
   methods: {
     async send() {
-      const billing = await this.getBillingModel();
-      const boqs = await this.getBoQs();
+      const billing = await IcddParser.parseBillingModelFile(
+        this.container.billingModel
+      );
+      const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
       console.log('parsed billing and boqs', billing, boqs);
       // const created = new Date().toJSON();
       // const projectHash = this.$web3.utils.sha3(this.project.name + created);
@@ -257,37 +242,6 @@ export default {
         [BillingModel],
         'Demo-BillingModel.xml'
       );
-    },
-    async getBillingModel() {
-      const raw = await this.read(this.container.billingModel);
-      const parser = new xml2js.Parser(parserOptions);
-      const json = await parser.parseStringPromise(raw);
-      return json.billing_model.billing_unit.map((u) => ({
-        ...u,
-        id: u.$.id,
-      }));
-    },
-    async getBoQs() {
-      const parse = async (boq, i) => {
-        const raw = await this.read(boq);
-        const parser = new xml2js.Parser(parserOptions);
-        const json = await parser.parseStringPromise(raw);
-        boq = json.gaeb.award.boq;
-        return {
-          id: boq.$.id,
-          ...boq,
-        };
-      };
-      return Promise.all(this.container.boqs.map(parse));
-    },
-    read(file) {
-      const reader = new FileReader();
-      return new Promise(function (resolve) {
-        reader.onload = async () => {
-          resolve(reader.result);
-        };
-        reader.readAsText(file);
-      });
     },
   },
 };

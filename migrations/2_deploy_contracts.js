@@ -1,13 +1,6 @@
 /* eslint-disable no-undef */
-const ConstructionProject = artifacts.require('ConstructionProject');
-const ConstructionProjectFactory = artifacts.require(
-  'ConstructionProjectFactory'
-);
+const ServiceFactory = artifacts.require('ServiceFactory');
 
-module.exports = async function (deployer) {
-  const constructionProject = await ConstructionProject.deployed();
-  await deployer.deploy(
-    ConstructionProjectFactory,
-    constructionProject.address
-  );
+module.exports = function (deployer) {
+  deployer.deploy(ServiceFactory);
 };

@@ -5,11 +5,14 @@
         title="Leistungsverzeichnis"
         :data="data"
         :columns="columns"
-        row-key="name"
+        row-key="id"
         :rows-per-page-options="[0]"
+        selection="single"
+        :selected.sync="selected"
       >
         <template v-slot:header="props">
           <q-tr :props="props">
+            <q-th auto-width />
             <q-th auto-width />
 
             <q-th v-for="col in props.cols" :key="col.name" :props="props">
@@ -21,11 +24,16 @@
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td auto-width>
-              <q-toggle
-                v-model="props.expand"
-                checked-icon="add"
-                unchecked-icon="remove"
+              <q-btn
+                flat
+                @click="props.expand = !props.expand"
+                round
+                dense
+                :icon="props.expand ? 'expand_less' : 'expand_more'"
               />
+            </q-td>
+            <q-td auto-width>
+              <q-checkbox size="xs" v-model="selected" :val="props.row" />
             </q-td>
 
             <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -34,16 +42,7 @@
           </q-tr>
           <q-tr v-show="props.expand" :props="props" no-hover>
             <q-td colspan="100%" style="padding: 0">
-              <q-table
-                hide-header
-                hide-bottom
-                flat
-                :data="props.row.children"
-                :columns="columns"
-                row-key="name"
-                :rows-per-page-options="[0]"
-              >
-              </q-table>
+              <bc-tree-table :data="props.row.children" />
             </q-td>
           </q-tr>
         </template>
@@ -76,6 +75,7 @@ export default {
 
   data() {
     return {
+      selected: [],
       boqs: [],
       data: [],
       columns: [

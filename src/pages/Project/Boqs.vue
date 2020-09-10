@@ -7,20 +7,16 @@
         :columns="columns"
         row-key="id"
         :rows-per-page-options="[0]"
-        selection="single"
-        :selected.sync="selected"
       >
         <template v-slot:header="props">
           <q-tr :props="props">
             <q-th auto-width />
-            <q-th auto-width />
-
             <q-th v-for="col in props.cols" :key="col.name" :props="props">
               {{ col.label }}
             </q-th>
+            <q-th auto-width />
           </q-tr>
         </template>
-
         <template v-slot:body="props">
           <q-tr :props="props">
             <q-td auto-width>
@@ -32,22 +28,73 @@
                 :icon="props.expand ? 'expand_less' : 'expand_more'"
               />
             </q-td>
-            <q-td auto-width>
-              <q-checkbox size="xs" v-model="selected" :val="props.row" />
-            </q-td>
-
             <q-td v-for="col in props.cols" :key="col.name" :props="props">
               {{ col.value }}
+            </q-td>
+            <q-td auto-width>
+              <q-btn flat round dense color="grey" icon="more_horiz">
+                <q-menu>
+                  <q-list style="min-width: 100px">
+                    <q-item
+                      clickable
+                      v-close-popup
+                      @click="showDialog(props.row)"
+                    >
+                      <q-item-section>
+                        <q-item-label>Auftrag vergeben</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-menu>
+              </q-btn>
             </q-td>
           </q-tr>
           <q-tr v-show="props.expand" :props="props" no-hover>
             <q-td colspan="100%" style="padding: 0">
-              <bc-tree-table :data="props.row.children" />
+              <bc-tree-table :data="props.row.children" @assign="showDialog" />
             </q-td>
           </q-tr>
         </template>
       </q-table>
     </div>
+    <q-dialog v-model="prompt">
+      <q-card style="min-width: 450px">
+        <q-card-section class="row items-center">
+          <div class="text-h6">Auftragsvergabe</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <p>
+            Geben Sie zur Auftragsvergabe von
+            <span class="text-weight-bold">{{
+              selected && selected.lbl_tx.p.span
+            }}</span>
+            bitte den gewünschten Auftragnehmer an:
+          </p>
+          <q-input
+            filled
+            dense
+            placeholder="Adresse"
+            hint="Blockchain Identität"
+            v-model="address"
+            autofocus
+            @keyup.enter="prompt = false"
+          />
+        </q-card-section>
+
+        <q-card-actions align="center">
+          <q-btn
+            unelevated
+            class="full-width"
+            color="primary"
+            label="Auftrag vergeben"
+            @click="assign"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -69,13 +116,22 @@ export default {
       );
       this.boqs = boqs;
       this.data = this.boqs[0].children;
-      console.log('boqs', boqs);
+    },
+    showDialog(service) {
+      this.selected = service;
+      this.prompt = true;
+    },
+    assign() {
+      console.log('assign', this.selected, this.address);
+      this.prompt = false;
     },
   },
 
   data() {
     return {
-      selected: [],
+      selected: null,
+      prompt: false,
+      address: '',
       boqs: [],
       data: [],
       columns: [

@@ -7,8 +7,6 @@
     :columns="columns"
     row-key="id"
     :rows-per-page-options="[0]"
-    selection="single"
-    :selected.sync="selected"
   >
     <template v-slot:body="props">
       <q-tr :props="props">
@@ -23,16 +21,26 @@
             v-if="hasChildren"
           />
         </q-td>
-        <q-td auto-width>
-          <q-checkbox size="xs" v-model="selected" :val="props.row" />
-        </q-td>
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
           {{ col.value }}
+        </q-td>
+        <q-td auto-width>
+          <q-btn flat round dense color="grey" icon="more_horiz">
+            <q-menu>
+              <q-list style="min-width: 100px">
+                <q-item clickable v-close-popup @click="assign(props.row)">
+                  <q-item-section>
+                    <q-item-label>Auftrag vergeben</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+          </q-btn>
         </q-td>
       </q-tr>
       <q-tr v-if="hasChildren" v-show="props.expand" :props="props" no-hover>
         <q-td colspan="100%" style="padding: 0">
-          <bc-tree-table :data="props.row.children" />
+          <bc-tree-table @assign="assign" :data="props.row.children" />
         </q-td>
       </q-tr>
     </template>
@@ -46,17 +54,21 @@ export default {
     data: Array,
   },
   mounted() {
-    console.log('data', this.data);
+    // console.log('data', this.data);
+  },
+  methods: {
+    assign(service) {
+      this.$emit('assign', service);
+    },
   },
   computed: {
     hasChildren: function () {
-      return true;
+      return this.data && Array.isArray(this.data.children);
       // props.row.children && props.row.children.length;
     },
   },
   data() {
     return {
-      selected: [],
       columns: [
         {
           name: 'id',

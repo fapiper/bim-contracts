@@ -1,6 +1,7 @@
+/* eslint-disable camelcase */
 import xml2js from 'xml2js';
-import * as _ from 'lodash';
 import Web3 from 'web3';
+import BoQ from 'src/models/boq-model.js';
 
 // transform all attribute and tag names and values to uppercase
 const nameProcessor = (name) =>
@@ -17,38 +18,6 @@ const parserOptions = {
   explicitArray: false,
   async: true,
 };
-
-class BoQ {
-  static build(json) {
-    const parse = (node, parent) => {
-      node.id = node.$.id;
-      node.hash = Web3.utils.sha3(node.id);
-      if (parent) node.parent = parent;
-      delete node.$;
-      if (!node.boq_body) {
-        // no body -> no children. End of recursion returns node
-        return;
-      }
-      if (node.boq_body.boq_ctgy) {
-        node.children = node.boq_body.boq_ctgy;
-        delete node.boq_body.boq_ctgy;
-        node.children.forEach((ctgy) => parse(ctgy, node.hash));
-      } else {
-        if (Array.isArray(node.boq_body.itemlist.item)) {
-          node.children = node.boq_body.itemlist.item;
-          node.children.forEach((ctgy) => parse(ctgy, node.hash));
-        } else {
-          node.children = [parse(node.boq_body.itemlist.item, node.hash)];
-        }
-        delete node.boq_body.itemlist;
-        return node;
-      }
-    };
-    const boq = json.gaeb.award.boq;
-    parse(boq, 0);
-    return boq;
-  }
-}
 
 class BillingModel {
   static build(json) {
@@ -109,7 +78,7 @@ class IcddParser {
   static parseBoQFiles(boqs) {
     const parse = async (boq, i) => {
       const parsed = await this._parseFromFile(boq);
-      return BoQ.build(parsed);
+      return BoQ.fromGAEB(parsed);
     };
     return Promise.all(boqs.map(parse.bind(this)));
   }

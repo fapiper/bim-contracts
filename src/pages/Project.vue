@@ -183,36 +183,37 @@ export default {
   },
   methods: {
     async send() {
-      const created = new Date().toJSON();
-      const projectHash = this.$web3.utils.sha3(this.project.name + created);
-      const project = {
-        hash: projectHash,
-        building_contractor: {
-          name: 'Example Name',
-          address: '0x1234567890',
-        },
-        general_contractor: {
-          address: this.address,
-          name: this.$auth.user().name,
-        },
-        sub_contractors: [],
-        ...this.project,
-        created,
-      };
-      const billing = await IcddParser.parseBillingModelFile(
-        this.container.billingModel
-      );
-      billing.project_hash = project.hash;
-      billing.created = created;
+      // const created = new Date().toJSON();
+      // const projectHash = this.$web3.utils.sha3(this.project.name + created);
+      // const project = {
+      //   hash: projectHash,
+      //   building_contractor: {
+      //     name: 'Example Name',
+      //     address: '0x1234567890',
+      //   },
+      //   general_contractor: {
+      //     address: this.address,
+      //     name: this.$auth.user().name,
+      //   },
+      //   sub_contractors: [],
+      //   ...this.project,
+      //   created,
+      // };
+      // const billing = await IcddParser.parseBillingModelFile(
+      //   this.container.billingModel
+      // );
+      // billing.project_hash = project.hash;
+      // billing.created = created;
       const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
-      await this.$orbitdb.billingdb.put(billing);
-      await boqs.forEach(async (boq) => {
-        boq.created = created;
-        boq.project_hash = project.hash;
-        await this.$orbitdb.boqdb.put(boq);
-      });
-      await this.projectdb.put(project);
-      this.projects.push(project);
+      console.log('boqs', boqs);
+      // await this.$orbitdb.billingdb.put(billing);
+      // await boqs.forEach(async (boq) => {
+      //   boq.created = created;
+      //   boq.project_hash = project.hash;
+      //   await this.$orbitdb.boqdb.put(boq);
+      // });
+      // await this.projectdb.put(project);
+      // this.projects.push(project);
     },
     async loadProjects() {
       this.loading = true;

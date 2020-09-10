@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
-const ServiceFactory = artifacts.require('ServiceFactory');
+const ServiceAgreement = artifacts.require('ServiceAgreement');
+const ServiceAgreementFactory = artifacts.require('ServiceAgreementFactory');
 
-module.exports = function (deployer) {
-  deployer.deploy(ServiceFactory);
+module.exports = async function (deployer) {
+  const serviceAgreement = await ServiceAgreement.deployed();
+  await deployer.deploy(ServiceAgreementFactory, serviceAgreement.address);
 };

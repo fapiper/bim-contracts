@@ -1,36 +1,44 @@
-import { flatten } from 'src/utils/tree.js';
-
 /* eslint-disable camelcase */
-class BoQ {
+import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
+import Web3 from 'web3';
+
+class BoQ extends FlatTree {
   constructor(id, name, label, date, items) {
+    super();
     this.id = id;
     this.name = name;
     this.label = label;
     this.date = date;
     this.items = items;
+    this.hash = Web3.utils.sha3(JSON.stringify(this));
   }
 
   static fromGAEB(boq) {
-    const items = flatten(boq.gaeb.award.boq, [], {
-      'boq_body.itemlist.item': BoQItem.fromGAEB,
-      'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
-    });
+    const items = super.build(
+      boq.gaeb.award.boq,
+      {},
+      {
+        'boq_body.itemlist.item': BoQItem.fromGAEB,
+        'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
+      }
+    );
     const info = boq.gaeb.award.boq.boq_info;
     return new BoQ(
       boq.gaeb.award.boq.$.id,
       info.name,
       info.lbl_boq,
-      Date.parse(info.date),
+      new Date(info.date),
       items
     );
   }
 }
 
-class BoQCtgy {
-  constructor(id, name, children) {
+class BoQCtgy extends FlatNode {
+  constructor(id, name) {
+    super();
     this.id = id;
     this.name = name;
-    // this.children = children;
+    this.hash = Web3.utils.sha3(JSON.stringify(this));
   }
 
   static fromGAEB(ctgy) {
@@ -43,14 +51,16 @@ class BoQCtgy {
   }
 }
 
-class BoQItem {
+class BoQItem extends FlatNode {
   constructor(id, r_no_part, short_desc, long_desc, qty, qty_unit) {
+    super();
     this.id = id;
     this.r_no_part = r_no_part;
     this.short_desc = short_desc;
     this.long_desc = long_desc;
     this.qty = qty;
     this.qty_unit = qty_unit;
+    this.hash = Web3.utils.sha3(JSON.stringify(this));
   }
 
   static fromGAEB(item) {

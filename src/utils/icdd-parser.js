@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
 import xml2js from 'xml2js';
-import Web3 from 'web3';
 import BoQ from 'src/models/boq-model.js';
+import BillingModel from 'src/models/billing-model.js';
 
-// transform all attribute and tag names and values to uppercase
 const nameProcessor = (name) =>
   name
     .match(
@@ -18,40 +17,6 @@ const parserOptions = {
   explicitArray: false,
   async: true,
 };
-
-class BillingModel {
-  static build(json) {
-    const parse = (node, parent) => {
-      node.id = node.$.id;
-      node.hash = Web3.utils.sha3(node.id);
-      if (parent) node.parent = parent;
-      delete node.$;
-      if (node.items) {
-        if (Array.isArray(node.items.item)) {
-          node.children = node.items.item;
-          node.children.forEach((i) => parse(i, node.hash));
-        } else {
-          node.children = [parse(node.items.item, node.hash)];
-        }
-        delete node.items.item;
-      } else if (node.sub_items && node.sub_items.item) {
-        if (Array.isArray(node.sub_items.item)) {
-          node.children = node.sub_items.item;
-          node.children.forEach((i) => parse(i, node.hash));
-        } else {
-          node.children = [parse(node.sub_items.item, node.hash)];
-        }
-        delete node.sub_items.item;
-        return node;
-      }
-    };
-    const billingModel = {};
-    billingModel.billing_units = json.billing_model.billing_unit;
-    billingModel.billing_units.forEach((unit) => parse(unit));
-    billingModel.hash = Web3.utils.sha3(billingModel.billing_units);
-    return billingModel;
-  }
-}
 
 class IcddParser {
   static _read(file) {
@@ -72,7 +37,7 @@ class IcddParser {
 
   static async parseBillingModelFile(billingModel) {
     const parsed = await this._parseFromFile(billingModel);
-    return BillingModel.build(parsed);
+    return BillingModel.fromXml(parsed);
   }
 
   static parseBoQFiles(boqs) {

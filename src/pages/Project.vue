@@ -204,6 +204,10 @@ export default {
       // );
       // billing.project_hash = project.hash;
       // billing.created = created;
+      const billing = await IcddParser.parseBillingModelFile(
+        this.container.billingModel
+      );
+      console.log('billing', billing);
       const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
       console.log('boqs', boqs);
       // await this.$orbitdb.billingdb.put(billing);

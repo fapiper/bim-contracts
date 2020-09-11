@@ -3,13 +3,14 @@ import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
 import Web3 from 'web3';
 
 class BoQ extends FlatTree {
-  constructor(id, name, label, date, items) {
+  constructor(id, name, label, date, items, children) {
     super();
     this.id = id;
     this.name = name;
     this.label = label;
     this.date = date;
     this.items = items;
+    this.children = children;
     this.hash = Web3.utils.sha3(id);
     this.project_hash = null;
     this.created = new Date().toJSON();
@@ -25,14 +26,19 @@ class BoQ extends FlatTree {
       'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
     };
 
-    const items = super.build(boq.gaeb.award.boq, {}, { builders, billing });
+    const { items, children } = super.build(
+      boq.gaeb.award.boq,
+      {},
+      { builders, billing }
+    );
     const info = boq.gaeb.award.boq.boq_info;
     return new BoQ(
       boq.gaeb.award.boq.$.id,
       info.name,
       info.lbl_boq,
       new Date(info.date).toJSON(),
-      items
+      items,
+      children
     );
   }
 }

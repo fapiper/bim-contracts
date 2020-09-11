@@ -3,6 +3,7 @@ const reduce = (keys, object) =>
 
 class FlatTree {
   static build(tree, collection, { builders, parent, billing }) {
+    const children = [];
     for (const key in builders) {
       const _nodes = reduce(key, tree);
       if (_nodes) {
@@ -13,6 +14,8 @@ class FlatTree {
           if (parent) {
             node.addParent(parent);
             collection[parent].children.push(node.hash);
+          } else {
+            children.push(node.hash); // No parent exists. Node is root.
           }
           if (billing) {
             const item = billing.items[node.hash];
@@ -26,7 +29,7 @@ class FlatTree {
         }
       }
     }
-    return collection;
+    return { children, items: collection };
   }
 }
 

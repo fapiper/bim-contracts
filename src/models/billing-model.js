@@ -9,7 +9,7 @@ class BillingModel extends FlatTree {
     this.items = items;
     this.hash = Web3.utils.sha3(JSON.stringify(this));
     this.project_hash = null;
-    this.created = new Date();
+    this.created = new Date().toJSON();
   }
 
   assignProject(project) {

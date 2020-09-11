@@ -16,7 +16,7 @@ class Project {
     this.building_contractor = building_contractor;
     this.general_contractor = general_contractor;
     this.sub_contractors = sub_contractors;
-    this.created = new Date();
+    this.created = new Date().toJSON();
     this.hash = Web3.utils.sha3(this.name + this.created);
   }
 }

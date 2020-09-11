@@ -3,7 +3,7 @@
     <q-toolbar class="bg-grey-2">
       <q-toolbar-title v-if="project"> {{ project.name }} </q-toolbar-title>
       <q-space />
-      <q-tabs shrink>
+      <q-tabs shrink v-if="project">
         <q-route-tab
           label="Leistungsverzeichnisse"
           :to="'/projects/' + project.hash + '/boqs'"

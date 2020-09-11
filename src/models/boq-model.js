@@ -12,7 +12,7 @@ class BoQ extends FlatTree {
     this.items = items;
     this.hash = Web3.utils.sha3(id);
     this.project_hash = null;
-    this.created = new Date();
+    this.created = new Date().toJSON();
   }
 
   assignProject(project) {
@@ -31,7 +31,7 @@ class BoQ extends FlatTree {
       boq.gaeb.award.boq.$.id,
       info.name,
       info.lbl_boq,
-      new Date(info.date),
+      new Date(info.date).toJSON(),
       items
     );
   }

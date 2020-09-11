@@ -10,18 +10,22 @@ class BoQ extends FlatTree {
     this.label = label;
     this.date = date;
     this.items = items;
-    this.hash = Web3.utils.sha3(JSON.stringify(this));
+    this.hash = Web3.utils.sha3(id);
+    this.project_hash = null;
+    this.created = new Date();
   }
 
-  static fromGAEB(boq) {
-    const items = super.build(
-      boq.gaeb.award.boq,
-      {},
-      {
-        'boq_body.itemlist.item': BoQItem.fromGAEB,
-        'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
-      }
-    );
+  assignProject(project) {
+    this.project_hash = project.hash;
+  }
+
+  static fromGAEB(boq, billing) {
+    const builders = {
+      'boq_body.itemlist.item': BoQItem.fromGAEB,
+      'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
+    };
+
+    const items = super.build(boq.gaeb.award.boq, {}, { builders, billing });
     const info = boq.gaeb.award.boq.boq_info;
     return new BoQ(
       boq.gaeb.award.boq.$.id,
@@ -38,15 +42,11 @@ class BoQCtgy extends FlatNode {
     super();
     this.id = id;
     this.name = name;
-    this.hash = Web3.utils.sha3(JSON.stringify(this));
+    this.hash = Web3.utils.sha3(id);
+    this.billing_item = null;
   }
 
   static fromGAEB(ctgy) {
-    // TODO move this to icdd parser
-    // const children = (ctgy.boq_body
-    //   ? ctgy.boq_body.boq_ctgy
-    //   : ctgy.itemlist.item
-    // ).map((i) => i.$.id);
     return new BoQCtgy(ctgy.$.id, ctgy.lbl_tx.p.span);
   }
 }
@@ -60,7 +60,8 @@ class BoQItem extends FlatNode {
     this.long_desc = long_desc;
     this.qty = qty;
     this.qty_unit = qty_unit;
-    this.hash = Web3.utils.sha3(JSON.stringify(this));
+    this.hash = Web3.utils.sha3(id);
+    this.billing_item = null;
   }
 
   static fromGAEB(item) {

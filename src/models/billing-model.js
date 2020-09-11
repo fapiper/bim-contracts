@@ -8,18 +8,21 @@ class BillingModel extends FlatTree {
     this.currency = currency;
     this.items = items;
     this.hash = Web3.utils.sha3(JSON.stringify(this));
+    this.project_hash = null;
+    this.created = new Date();
+  }
+
+  assignProject(project) {
+    this.project_hash = project.hash;
   }
 
   static fromXml(billing) {
-    const items = super.build(
-      billing.billing_model,
-      {},
-      {
-        billing_unit: BillingUnit.fromXml,
-        'items.item': BillingItem.fromXml,
-        'sub_items.item': BillingItem.fromXml,
-      }
-    );
+    const builders = {
+      billing_unit: BillingUnit.fromXml,
+      'items.item': BillingItem.fromXml,
+      'sub_items.item': BillingItem.fromXml,
+    };
+    const items = super.build(billing.billing_model, {}, { builders });
     return new BillingModel(billing.billing_model.bm_info.currency, items);
   }
 }
@@ -42,7 +45,7 @@ class BillingUnit extends FlatNode {
     this.unit = unit;
     this.total_price = total_price;
     this.completion_date = completion_date;
-    this.hash = Web3.utils.sha3(JSON.stringify(this));
+    this.hash = Web3.utils.sha3(id);
   }
 
   static fromXml(unit) {
@@ -67,7 +70,7 @@ class BillingItem extends FlatNode {
     this.price = price;
     this.r_no_part_qty_split = r_no_part_qty_split;
     this.short_desc = short_desc;
-    this.hash = Web3.utils.sha3(JSON.stringify(this));
+    this.hash = Web3.utils.sha3(id);
   }
 
   static fromXml(item) {

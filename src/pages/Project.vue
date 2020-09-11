@@ -98,24 +98,6 @@
                   <q-btn round dense flat icon="add" @click.stop />
                 </template>
               </q-file>
-              <q-file
-                class="q-mt-md"
-                filled
-                v-model="project.documents"
-                multiple
-                append
-                label="Dateien hier ablegen"
-                use-chips
-                ref="documents"
-              >
-                <template v-slot:before>
-                  <q-icon name="description" />
-                </template>
-
-                <template v-slot:append>
-                  <q-btn round dense flat icon="add" @click.stop />
-                </template>
-              </q-file>
             </div>
           </q-card-section>
           <q-separator />
@@ -142,6 +124,8 @@
 
 <script>
 import IcddParser from 'src/utils/icdd-parser.js';
+import Project from 'src/models/project-model.js';
+
 import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
@@ -168,7 +152,6 @@ export default {
         name: '',
         designation: '',
         description: '',
-        documents: [],
       },
       container: {
         boqs: [],
@@ -183,41 +166,32 @@ export default {
   },
   methods: {
     async send() {
-      // const created = new Date().toJSON();
-      // const projectHash = this.$web3.utils.sha3(this.project.name + created);
-      // const project = {
-      //   hash: projectHash,
-      //   building_contractor: {
-      //     name: 'Example Name',
-      //     address: '0x1234567890',
-      //   },
-      //   general_contractor: {
-      //     address: this.address,
-      //     name: this.$auth.user().name,
-      //   },
-      //   sub_contractors: [],
-      //   ...this.project,
-      //   created,
-      // };
-      // const billing = await IcddParser.parseBillingModelFile(
-      //   this.container.billingModel
-      // );
-      // billing.project_hash = project.hash;
-      // billing.created = created;
-      const billing = await IcddParser.parseBillingModelFile(
-        this.container.billingModel
+      const project = new Project(
+        this.project.name,
+        this.project.designation,
+        this.project.description,
+        {
+          name: 'Muster Bauherr',
+          address: 0x0,
+        },
+        {
+          name: 'Muster Generalunternehmer',
+          address: this.address,
+        },
+        []
       );
-      console.log('billing', billing);
-      const boqs = await IcddParser.parseBoQFiles(this.container.boqs);
-      console.log('boqs', boqs);
-      // await this.$orbitdb.billingdb.put(billing);
-      // await boqs.forEach(async (boq) => {
-      //   boq.created = created;
-      //   boq.project_hash = project.hash;
-      //   await this.$orbitdb.boqdb.put(boq);
-      // });
-      // await this.projectdb.put(project);
-      // this.projects.push(project);
+      const { billing, boqs } = await IcddParser.parseFromFiles(
+        this.container.billingModel,
+        this.container.boqs
+      );
+      billing.assignProject(project);
+      await this.$orbitdb.billingdb.put(billing);
+      boqs.forEach(async (boq) => {
+        boq.assignProject(project);
+        await this.$orbitdb.boqdb.put(boq);
+      });
+      await this.projectdb.put(project);
+      this.projects.push(project);
     },
     async loadProjects() {
       this.loading = true;
@@ -228,6 +202,7 @@ export default {
       this.loading = false;
     },
     async addProject() {
+      this.$q.loading.show();
       try {
         await this.send();
         this.dialog = false;
@@ -244,6 +219,7 @@ export default {
           position: 'bottom-right',
         });
       }
+      this.$q.loading.hide();
     },
     useDemoProject() {
       this.container.boqs = [new File([BoQ], 'Demo-Leistungsverzeichnis.xml')];

@@ -1,18 +1,28 @@
+const reduce = (keys, object) =>
+  keys.split('.').reduce((props, key) => props && props[key], object);
+
 class FlatTree {
-  static build(_tree, collection, builders, parent) {
-    for (const props in builders) {
-      const keys = props.split('.');
-      let children = keys.reduce((tree, key) => tree && tree[key], _tree);
-      if (children) {
-        if (!Array.isArray(children)) children = [children]; // Fix: xml2js parser transforms arrays with one entry to object
-        for (let i = 0; i < children.length; i++) {
-          const child = builders[props](children[i]);
-          collection[child.hash] = child;
+  static build(tree, collection, { builders, parent, billing }) {
+    for (const key in builders) {
+      const _nodes = reduce(key, tree);
+      if (_nodes) {
+        const nodes = Array.isArray(_nodes) ? _nodes : Array.of(_nodes); // Fix: xml2js parser transforms arrays with one entry to object
+        for (let i = 0; i < nodes.length; i++) {
+          const node = builders[key](nodes[i]);
+          collection[node.hash] = node;
           if (parent) {
-            child.addParent(parent);
-            collection[parent].children.push(child.hash);
+            node.addParent(parent);
+            collection[parent].children.push(node.hash);
           }
-          this.build(children[i], collection, builders, child.hash);
+          if (billing) {
+            const item = billing.items[node.hash];
+            item && (node.billing_item = item);
+          }
+          this.build(nodes[i], collection, {
+            builders,
+            parent: node.hash,
+            billing,
+          });
         }
       }
     }

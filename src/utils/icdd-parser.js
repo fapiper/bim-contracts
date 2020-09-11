@@ -35,17 +35,23 @@ class IcddParser {
     return parser.parseStringPromise(raw);
   }
 
-  static async parseBillingModelFile(billingModel) {
+  static async parseBillingFile(billingModel) {
     const parsed = await this._parseFromFile(billingModel);
     return BillingModel.fromXml(parsed);
   }
 
-  static parseBoQFiles(boqs) {
+  static parseBoQFiles(boqs, billing) {
     const parse = async (boq, i) => {
       const parsed = await this._parseFromFile(boq);
-      return BoQ.fromGAEB(parsed);
+      return BoQ.fromGAEB(parsed, billing);
     };
     return Promise.all(boqs.map(parse.bind(this)));
+  }
+
+  static async parseFromFiles(billingRaw, boqsRaw) {
+    const billing = await this.parseBillingFile(billingRaw);
+    const boqs = await this.parseBoQFiles(boqsRaw, billing);
+    return { billing, boqs };
   }
 }
 

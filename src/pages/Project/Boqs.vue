@@ -1,61 +1,15 @@
 <template>
   <q-page padding>
     <div class="q-pa-md">
-      <q-table
+      <bc-tree-table
         title="Leistungsverzeichnis"
-        :data="data"
+        @assign="showDialog"
         :columns="columns"
-        row-key="id"
-        :rows-per-page-options="[0]"
-      >
-        <template v-slot:header="props">
-          <q-tr :props="props">
-            <q-th auto-width />
-            <q-th v-for="col in props.cols" :key="col.name" :props="props">
-              {{ col.label }}
-            </q-th>
-            <q-th auto-width />
-          </q-tr>
-        </template>
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td auto-width>
-              <q-btn
-                flat
-                @click="props.expand = !props.expand"
-                round
-                dense
-                :icon="props.expand ? 'expand_less' : 'expand_more'"
-              />
-            </q-td>
-            <q-td v-for="col in props.cols" :key="col.name" :props="props">
-              {{ col.value }}
-            </q-td>
-            <q-td auto-width>
-              <q-btn flat round dense color="grey" icon="more_horiz">
-                <q-menu>
-                  <q-list style="min-width: 100px">
-                    <q-item
-                      clickable
-                      v-close-popup
-                      @click="showDialog(props.row)"
-                    >
-                      <q-item-section>
-                        <q-item-label>Auftrag vergeben</q-item-label>
-                      </q-item-section>
-                    </q-item>
-                  </q-list>
-                </q-menu>
-              </q-btn>
-            </q-td>
-          </q-tr>
-          <q-tr v-show="props.expand" :props="props" no-hover>
-            <q-td colspan="100%" style="padding: 0">
-              <bc-tree-table :data="props.row.children" @assign="showDialog" />
-            </q-td>
-          </q-tr>
-        </template>
-      </q-table>
+        :data="data"
+        :items="items"
+        :loading="loading"
+        is-root
+      />
     </div>
     <q-dialog v-model="prompt">
       <q-card style="min-width: 450px">
@@ -67,9 +21,9 @@
 
         <q-card-section class="q-pt-none">
           <p>
-            Geben Sie zur Auftragsvergabe von
+            Geben Sie zur Auftragsvergabe
             <span class="text-weight-bold">{{
-              selected && selected.lbl_tx.p.span
+              selected && (selected.short_desc || selected.name)
             }}</span>
             bitte den gewünschten Auftragnehmer an:
           </p>
@@ -109,13 +63,16 @@ export default {
   },
   methods: {
     async loadBoqs(hash) {
+      this.loading = true;
       const boqdb = await this.$orbitdb.boqdb;
       await boqdb.load();
       const boqs = await boqdb.query(
         (boq) => boq.project_hash === this.$route.params.project
       );
       this.boqs = boqs;
-      this.data = this.boqs[0].children;
+      this.items = this.boqs[0].items;
+      this.data = this.boqs[0].children.map((item) => this.items[item]);
+      this.loading = false;
     },
     showDialog(service) {
       this.selected = service;
@@ -126,50 +83,52 @@ export default {
       this.prompt = false;
     },
   },
-
   data() {
     return {
       selected: null,
       prompt: false,
-      address: '',
+      address: '0x3c63d95ad664e6ef6006f6affdd8b77eae8a8bc8',
       boqs: [],
       data: [],
+      items: [],
+      loading: true,
       columns: [
         {
-          name: 'id',
+          name: 'r_no_part',
           required: true,
-          label: 'ID',
+          label: 'Index',
           align: 'left',
-          field: (row) => row.id,
-          format: (val) => `${val}`,
-          children: (row) => row.children,
+          field: (row) => row.r_no_part,
         },
         {
-          name: 'label',
+          name: 'short_desc',
           required: true,
-          label: 'Label',
+          label: 'Bezeichnung',
           align: 'left',
-          field: (row) => row.lbl_tx.p.span,
-          format: (val) => `${val}`,
-          children: (row) => row.children,
+          field: (row) => row.short_desc,
         },
         {
-          name: 'amount',
+          name: 'long_desc',
+          required: true,
+          label: 'Beschreibung',
+          align: 'left',
+          field: (row) => row.long_desc,
+        },
+        {
+          name: 'qty',
           required: true,
           label: 'Menge',
           align: 'left',
-          field: (row) => row.totals.total,
-          format: (val) => `${val} ME`,
-          children: (row) => row.children,
+          field: (row) => row.qty,
+          format: (val) => `${val}`,
         },
-
-        // { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-        // { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-        // { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-        // { name: 'protein', label: 'Protein (g)', field: 'protein' },
-        // { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-        // { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-        // { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
+        {
+          name: 'qty_unit',
+          required: true,
+          label: 'Einheit',
+          align: 'left',
+          field: (row) => row.qty_unit,
+        },
       ],
     };
   },

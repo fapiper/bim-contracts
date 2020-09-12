@@ -30,6 +30,12 @@
             <q-btn flat :to="'projects/' + project.hash + '/boqs'"
               >Auswählen</q-btn
             >
+            <q-btn
+              flat
+              color="negative"
+              icon="delete"
+              @click="removeProject(project)"
+            />
           </q-card-actions>
         </q-card>
       </div>
@@ -62,7 +68,7 @@
               />
               <q-input
                 filled
-                v-model="project.decription"
+                v-model="project.description"
                 label="Beschreibung"
                 type="textarea"
               />
@@ -129,13 +135,12 @@ import Project from 'src/models/project-model.js';
 import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
-import { abi as ProjectFactoryAbi } from '../contracts/ConstructionProjectFactory.json';
-const ProjectFactoryAddress = '0x852543528aF03b706b2785dFd3103898Ed256eaD';
-
 export default {
   name: 'PageProjectIndex',
   async mounted() {
     this.projectdb = await this.$orbitdb.projectdb;
+    await this.projectdb.load();
+    this.projectdb.events.on('replicated', console.log);
     this.loadProjects();
   },
   computed: {
@@ -157,10 +162,6 @@ export default {
         boqs: [],
         billingModel: null,
       },
-      contract: new this.$web3.eth.Contract(
-        ProjectFactoryAbi,
-        ProjectFactoryAddress
-      ),
       projectdb: null,
     };
   },
@@ -201,6 +202,22 @@ export default {
       );
       this.loading = false;
     },
+    async removeProject(project) {
+      await this.projectdb.del(project.hash);
+      await this.$orbitdb.billingdb.load();
+      const billings = this.$orbitdb.billingdb.query(
+        (doc) => doc.project_hash === project.hash
+      );
+      await billings.map(
+        async (doc) => await this.$orbitdb.billingdb.del(doc.hash)
+      );
+      await this.$orbitdb.boqdb.load();
+      const boqs = this.$orbitdb.boqdb.query(
+        (doc) => doc.project_hash === project.hash
+      );
+      await boqs.map(async (doc) => await this.$orbitdb.boqdb.del(doc.hash));
+      this.loadProjects();
+    },
     async addProject() {
       this.$q.loading.show();
       try {
@@ -222,7 +239,11 @@ export default {
       this.$q.loading.hide();
     },
     useDemoProject() {
-      this.container.boqs = [new File([BoQ], 'Demo-Leistungsverzeichnis.xml')];
+      this.project.name = 'Demoprojekt';
+      this.project.designation = 'Beispielvorhaben 1.0';
+      this.project.description =
+        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.';
+      this.container.boqs = [new File([BoQ], 'Demo-Leistungsverzeichnis.x83')];
       this.container.billingModel = new File(
         [BillingModel],
         'Demo-BillingModel.xml'

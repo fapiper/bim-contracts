@@ -1,12 +1,10 @@
 <template>
   <q-page padding>
     <div class="q-pa-md">
-      <bc-tree-table
+      <bc-boq-table
         title="Leistungsverzeichnis"
         @assign="showDialog"
-        :columns="columns"
         :data="data"
-        :items="items"
         :loading="loading"
         is-root
       />
@@ -53,10 +51,22 @@
 </template>
 
 <script>
+import { abi as ServiceAgreementFactoryAbi } from 'src/contracts/ServiceAgreementFactory.json';
+import { FlatTree } from 'src/utils/flat-tree.js';
+const ServiceAgreementFactoryAddress =
+  '0x852543528aF03b706b2785dFd3103898Ed256eaD';
+
 export default {
   name: 'PageProjectBoqs',
   created() {
     this.loadBoqs();
+  },
+  mounted() {
+    this.factoryContract.events
+      .ServiceAgreementCreated()
+      .on('data', (event) => {
+        console.log(event);
+      });
   },
   watch: {
     $route: 'loadProject',
@@ -69,22 +79,39 @@ export default {
       const boqs = await boqdb.query(
         (boq) => boq.project_hash === this.$route.params.project
       );
-      this.boqs = boqs;
-      this.items = this.boqs[0].items;
-      this.data = this.boqs[0].children.map((item) => this.items[item]);
+      this.boqs = boqs.map((boq) => FlatTree.from(boq.children, boq.items));
+      this.data = this.boqs[0];
       this.loading = false;
     },
     showDialog(service) {
       this.selected = service;
       this.prompt = true;
     },
-    assign() {
+    async assign() {
       console.log('assign', this.selected, this.address);
+      const res = await this.factoryContract.methods
+        .createServiceAgreement(
+          this.selected.hash,
+          this.selected.parent,
+          this.$auth.user().account.address,
+          this.address,
+          [],
+          [],
+          [],
+          []
+        )
+        .send({ from: this.$auth.user().account.address, gas: 2000000 });
+      console.log('assigned', res);
+
       this.prompt = false;
     },
   },
   data() {
     return {
+      factoryContract: new this.$web3.eth.Contract(
+        ServiceAgreementFactoryAbi,
+        ServiceAgreementFactoryAddress
+      ),
       selected: null,
       prompt: false,
       address: '0x3c63d95ad664e6ef6006f6affdd8b77eae8a8bc8',
@@ -92,44 +119,6 @@ export default {
       data: [],
       items: [],
       loading: true,
-      columns: [
-        {
-          name: 'r_no_part',
-          required: true,
-          label: 'Index',
-          align: 'left',
-          field: (row) => row.r_no_part,
-        },
-        {
-          name: 'short_desc',
-          required: true,
-          label: 'Bezeichnung',
-          align: 'left',
-          field: (row) => row.short_desc,
-        },
-        {
-          name: 'long_desc',
-          required: true,
-          label: 'Beschreibung',
-          align: 'left',
-          field: (row) => row.long_desc,
-        },
-        {
-          name: 'qty',
-          required: true,
-          label: 'Menge',
-          align: 'left',
-          field: (row) => row.qty,
-          format: (val) => `${val}`,
-        },
-        {
-          name: 'qty_unit',
-          required: true,
-          label: 'Einheit',
-          align: 'left',
-          field: (row) => row.qty_unit,
-        },
-      ],
     };
   },
 };

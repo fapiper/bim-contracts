@@ -2,13 +2,12 @@
 pragma solidity >=0.4.21 <0.7.1;
 
 import './ServiceAgreementFactory.sol';
-import '@openzeppelin/upgrades/contracts/Initializable.sol';
 
 /**
  * @title ServiceAgreement
  * @dev Store & retreive value in a variable
  */
-contract ServiceAgreement is Initializable {
+contract ServiceAgreement {
     event ServiceTransition(bytes32 service, uint8 stage);
     event Payment(bytes32 service);
 
@@ -58,7 +57,7 @@ contract ServiceAgreement is Initializable {
      * @param _billables Determines if the service node on index of _hashes has an associated billing unit
      * @param _documents The hashes of contract documents of the service agreement
      */
-    function initialize(
+    function init(
         bytes32 _service,
         bytes32 _parent,
         address _client,
@@ -67,7 +66,7 @@ contract ServiceAgreement is Initializable {
         bytes32[] memory _parents,
         bool[] memory _billables,
         bytes32[] memory _documents
-    ) internal {
+    ) public {
         services[_service] = ServiceNode(
             Stages.INITIALIZED,
             _parent,

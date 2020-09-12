@@ -2,6 +2,16 @@ const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
 class FlatTree {
+  static from(tree, collection) {
+    return tree.map((hash) => {
+      collection[hash].children = FlatTree.from(
+        collection[hash].children,
+        collection
+      );
+      return collection[hash];
+    });
+  }
+
   static build(tree, collection, { builders, parent, billing }) {
     const children = [];
     for (const key in builders) {

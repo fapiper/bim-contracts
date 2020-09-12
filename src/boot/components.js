@@ -1,5 +1,5 @@
-import TreeTable from 'components/TreeTable.vue';
+import BoqTable from 'components/BoqTable.vue';
 
 export default async ({ Vue }) => {
-  Vue.component('bc-tree-table', TreeTable);
+  Vue.component('bc-boq-table', BoqTable);
 };

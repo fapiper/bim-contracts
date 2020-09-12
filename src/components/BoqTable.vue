@@ -1,15 +1,19 @@
 <template>
   <q-table
     :hide-header="!isRoot"
-    :hide-bottom="!isRoot"
+    hide-bottom
     :title="title"
     flat
+    :dense="!isRoot"
+    :bordered="isRoot"
     :data="data"
     :columns="columns"
     row-key="hash"
     :rows-per-page-options="[0]"
     :loading="loading"
-    separator="cell"
+    :table-colspan="5"
+    separator="none"
+    table-class="bc-boq-table"
   >
     <template v-if="isRoot" v-slot:header="props">
       <q-tr :props="props">
@@ -30,17 +34,15 @@
             round
             dense
             :icon="props.expand ? 'expand_less' : 'expand_more'"
-            v-if="hasChildren(props)"
+            :class="{ invisible: !hasChildren(props) }"
           />
         </q-td>
-        <template v-if="isCtgy">
+        <template>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            <b v-if="col.name === 'short_desc'">{{ props.row.name }}</b>
-          </q-td>
-        </template>
-        <template v-else>
-          <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            {{ col.value }}
+            <template v-if="isCtgy"
+              ><b>{{ col.value }}</b></template
+            >
+            <template v-else>{{ col.value }}</template>
           </q-td>
         </template>
         <q-td auto-width>
@@ -50,10 +52,10 @@
             dense
             color="grey"
             icon="more_horiz"
-            v-if="props.row.billing_item"
+            :class="{ invisible: !props.row.billing_item }"
           >
             <q-menu>
-              <q-list style="min-width: 100px">
+              <q-list style="min-width: 200px">
                 <q-item clickable v-close-popup @click="assign(props.row)">
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
@@ -71,12 +73,7 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-tree-table
-            @assign="assign"
-            :items="items"
-            :data="getChildren(props)"
-            :columns="columns"
-          />
+          <bc-boq-table @assign="assign" :data="props.row.children" />
         </q-td>
       </q-tr>
     </template>
@@ -85,13 +82,12 @@
 
 <script>
 export default {
-  name: 'ComponentTreeTable',
+  name: 'ComponentBoqTable',
   props: {
     isRoot: Boolean,
     items: Object,
     data: Array,
     title: String,
-    columns: Array,
     loading: Boolean,
   },
   mounted() {
@@ -113,10 +109,44 @@ export default {
       return this.data && this.data.some((entry) => !entry.qty);
     },
   },
+  data() {
+    return {
+      columns: [
+        {
+          name: 'id',
+          required: true,
+          label: 'Id',
+          align: 'center',
+          field: (row) => row.id,
+          style: 'width:10%',
+        },
+        {
+          name: 'short_desc',
+          required: true,
+          label: 'Bezeichner',
+          align: 'left',
+          field: (row) => row.short_desc || row.name,
+          style: 'width:50%',
+        },
+        {
+          name: 'qty',
+          required: true,
+          label: 'Menge',
+          align: 'center',
+          field: (row) => row.qty,
+          format: (val, row) => (val ? `${val} ${row.qty_unit}` : ''),
+          style: 'width:20%',
+        },
+      ],
+    };
+  },
 };
 </script>
-<style lang="scss" scoped>
-td:first-child {
-  // width: 10%;
+<style lang="scss">
+.bc-boq-table {
+  table-layout: fixed;
+  .bc-boq-table tr td:first-child {
+    padding-left: 32px;
+  }
 }
 </style>

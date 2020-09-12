@@ -44,16 +44,17 @@ class BoQ extends FlatTree {
 }
 
 class BoQCtgy extends FlatNode {
-  constructor(id, name) {
+  constructor(id, r_no_part, name) {
     super();
     this.id = id;
+    this.r_no_part = r_no_part;
     this.name = name;
     this.hash = Web3.utils.sha3(id);
     this.billing_item = null;
   }
 
   static fromGAEB(ctgy) {
-    return new BoQCtgy(ctgy.$.id, ctgy.lbl_tx.p.span);
+    return new BoQCtgy(ctgy.$.id, ctgy.$.r_no_part, ctgy.lbl_tx.p.span);
   }
 }
 

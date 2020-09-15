@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
 import Web3 from 'web3';
 
@@ -51,6 +50,7 @@ class BoQCtgy extends FlatNode {
     this.name = name;
     this.hash = Web3.utils.sha3(id);
     this.billing_item = null;
+    this.status = 0;
   }
 
   static fromGAEB(ctgy) {
@@ -69,6 +69,7 @@ class BoQItem extends FlatNode {
     this.qty_unit = qty_unit;
     this.hash = Web3.utils.sha3(id);
     this.billing_item = null;
+    this.status = 0;
   }
 
   static fromGAEB(item) {

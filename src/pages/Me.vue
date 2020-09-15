@@ -11,9 +11,7 @@
 export default {
   name: 'PageMe',
   async mounted() {
-    const balance = await this.$web3.eth.getBalance(
-      this.$auth.user().account.address
-    );
+    const balance = await this.$web3.eth.getBalance(this.$auth.user().address);
     this.user.balance = this.$web3.utils.fromWei(balance);
   },
   computed: {},

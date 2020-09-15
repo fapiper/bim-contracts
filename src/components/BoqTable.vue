@@ -3,9 +3,6 @@
     :hide-header="!isRoot"
     hide-bottom
     :title="title"
-    flat
-    :dense="!isRoot"
-    :bordered="isRoot"
     :data="data"
     :columns="columns"
     row-key="hash"
@@ -14,6 +11,8 @@
     :table-colspan="5"
     separator="none"
     table-class="bc-boq-table"
+    flat
+    :bordered="isRoot"
   >
     <template v-if="isRoot" v-slot:header="props">
       <q-tr :props="props">
@@ -39,10 +38,15 @@
         </q-td>
         <template>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            <template v-if="isCtgy"
-              ><b>{{ col.value }}</b></template
-            >
-            <template v-else>{{ col.value }}</template>
+            <template v-if="col.name === 'status'">
+              <q-chip
+                dense
+                :color="status[col.value].color"
+                :text-color="status[col.value].textColor"
+                >{{ status[col.value].text }}</q-chip
+              >
+            </template>
+            <template v-else> {{ col.value }} </template>
           </q-td>
         </template>
         <q-td auto-width>
@@ -56,9 +60,19 @@
           >
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item clickable v-close-popup @click="assign(props.row)">
+                <q-item
+                  v-if="props.row.status < 1"
+                  clickable
+                  v-close-popup
+                  @click="assign(props.row)"
+                >
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup @click="showDetails(props.row)">
+                  <q-item-section>
+                    <q-item-label>Auftragsdetails einsehen</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -81,6 +95,31 @@
 </template>
 
 <script>
+const STATUS = {
+  0: { text: 'Nicht vergeben' },
+  1: {
+    text: 'Vergeben',
+    color: 'primary',
+    textColor: 'white',
+  },
+  2: { text: 'Gestartet', color: 'teal', textColor: 'white' },
+  3: {
+    text: 'Beendet',
+    color: 'dark',
+    textColor: 'white',
+  },
+  4: {
+    text: 'Abgenommen',
+    color: 'accent',
+    textColor: 'white',
+  },
+  5: {
+    text: 'Abgelehnt',
+    color: 'negative',
+    textColor: 'white',
+  },
+};
+
 export default {
   name: 'ComponentBoqTable',
   props: {
@@ -111,14 +150,14 @@ export default {
   },
   data() {
     return {
+      status: STATUS,
       columns: [
         {
           name: 'id',
           required: true,
           label: 'Id',
-          align: 'center',
+          align: 'left',
           field: (row) => row.id,
-          style: 'width:10%',
         },
         {
           name: 'short_desc',
@@ -126,16 +165,24 @@ export default {
           label: 'Bezeichner',
           align: 'left',
           field: (row) => row.short_desc || row.name,
-          style: 'width:50%',
         },
         {
           name: 'qty',
           required: true,
           label: 'Menge',
-          align: 'center',
+          align: 'left',
           field: (row) => row.qty,
           format: (val, row) => (val ? `${val} ${row.qty_unit}` : ''),
-          style: 'width:20%',
+          style: 'width:200px',
+        },
+        {
+          name: 'status',
+          required: true,
+          label: 'Status',
+          align: 'center',
+          field: (row) => row.status,
+          format: (val) => val,
+          style: 'width:200px',
         },
       ],
     };

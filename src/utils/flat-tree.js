@@ -4,11 +4,9 @@ const reduce = (keys, object) =>
 class FlatTree {
   static from(tree, collection) {
     return tree.map((hash) => {
-      collection[hash].children = FlatTree.from(
-        collection[hash].children,
-        collection
-      );
-      return collection[hash];
+      const node = collection[hash];
+      const children = FlatTree.from(node.children, collection);
+      return { ...node, children };
     });
   }
 

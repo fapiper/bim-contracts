@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
 import Web3 from 'web3';
 

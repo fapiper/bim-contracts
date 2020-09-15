@@ -1,41 +1,40 @@
 import { Cookies, Notify } from 'quasar';
+import { User } from 'src/models/user-model';
+import Config from 'app/bim-contracts.config';
 
-const roles = {
-  CLIENT: 0,
-  GENERAL_CONTRACTOR: 1,
-  SUB_CONTRACTOR: 2,
-};
+const useMockData = true;
 
 export async function register(state, data) {
-  const account = await this._vm.$web3.eth.accounts.create();
+  const account = useMockData
+    ? await this._vm.$web3.eth.accounts.privateKeyToAccount(Config.privateKey)
+    : await this._vm.$web3.eth.accounts.create();
   const wallet = await this._vm.$web3.eth.accounts.wallet.add(account);
-  console.log('REGISTER', 'wallet', wallet, 'account', account);
-  const user = {
-    name: data.name,
-    role: roles[data.role.id],
-    account,
-  };
-  state.dispatch('setToken', {
-    user: user,
+  const user = new User(
+    account.address,
+    wallet.address,
+    data.name,
+    data.role,
+    data.iban
+  );
+  await this._vm.$orbitdb.userdb.put(user.address, user);
+  const privateKey = account.privateKey;
+  state.commit('setUser', { privateKey, user });
+  state.dispatch('setKey', {
+    privateKey,
     rememberMe: data.rememberMe,
   });
-  state.commit('setUser', user);
   return true;
 }
 
-export async function login(state, data) {
+export async function login(state, { privateKey, rememberMe }) {
   const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
-    data.privateKey
+    privateKey
   );
-  const user = {
-    name: 'Max Mustermann',
-    role: roles.GENERAL_CONTRACTOR,
-    account,
-  };
-  state.commit('setUser', user);
-  state.dispatch('setToken', {
-    user,
-    rememberMe: data.rememberMe,
+  const user = await this._vm.$orbitdb.userdb.get(account.address);
+  state.commit('setUser', { user, privateKey });
+  state.dispatch('setKey', {
+    privateKey,
+    rememberMe,
   });
   Notify.create({
     message: 'Erfolgreich eingeloggt',
@@ -43,26 +42,26 @@ export async function login(state, data) {
   return true;
 }
 
-export function setToken(state, data) {
-  if (data.rememberMe) {
-    Cookies.set('authorization_key', data.user.account.privateKey, {
+export function setKey(state, { rememberMe, privateKey }) {
+  if (rememberMe) {
+    Cookies.set('authorization_key', privateKey, {
       expires: 365,
     });
   } else {
-    Cookies.set('authorization_key', data.user.account.privateKey);
+    Cookies.set('authorization_key', privateKey);
   }
 }
 
 export async function fetch(state) {
   const privateKey = Cookies.get('authorization_key');
   if (privateKey) {
-    const account = this._vm.$web3.eth.accounts.privateKeyToAccount(privateKey);
-    const user = {
-      name: 'Max Mustermann',
-      role: roles.GENERAL_CONTRACTOR,
-      account,
-    };
-    state.commit('setUser', user);
+    const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
+      privateKey
+    );
+    await this._vm.$orbitdb.userdb.load();
+    const user = await this._vm.$orbitdb.userdb.get(account.address);
+    state.commit('setUser', { user, privateKey });
+    return user;
   }
 }
 

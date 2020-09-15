@@ -10,10 +10,10 @@ export default ({ app, router, store, Vue }) => {
   /**
    * Register route authentication guard
    */
-  router.beforeEach((to, from, next) => {
+  router.beforeEach(async (to, from, next) => {
     const record = to.matched.find((record) => record.meta.auth);
     if (record) {
-      store.dispatch('auth/fetch');
+      await store.dispatch('auth/fetch');
       if (!store.getters['auth/loggedIn']) {
         console.log('Not logged in');
         next('/auth/login');

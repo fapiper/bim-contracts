@@ -140,12 +140,11 @@ export default {
   async mounted() {
     this.projectdb = await this.$orbitdb.projectdb;
     await this.projectdb.load();
-    this.projectdb.events.on('replicated', console.log);
     this.loadProjects();
   },
   computed: {
     address() {
-      return this.$auth.user().account.address;
+      return this.$auth.user().address;
     },
   },
   data() {

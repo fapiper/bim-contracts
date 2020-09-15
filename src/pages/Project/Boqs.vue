@@ -58,18 +58,13 @@ const ServiceAgreementFactoryAddress =
 
 export default {
   name: 'PageProjectBoqs',
-  created() {
-    this.loadBoqs();
-  },
   mounted() {
+    this.loadBoqs();
     this.factoryContract.events
       .ServiceAgreementCreated()
       .on('data', (event) => {
         console.log(event);
       });
-  },
-  watch: {
-    $route: 'loadProject',
   },
   methods: {
     async loadBoqs(hash) {
@@ -79,6 +74,7 @@ export default {
       const boqs = await boqdb.query(
         (boq) => boq.project_hash === this.$route.params.project
       );
+      console.log('got boqs', boqs);
       this.boqs = boqs.map((boq) => FlatTree.from(boq.children, boq.items));
       this.data = this.boqs[0];
       this.loading = false;
@@ -88,22 +84,36 @@ export default {
       this.prompt = true;
     },
     async assign() {
-      console.log('assign', this.selected, this.address);
-      const res = await this.factoryContract.methods
-        .createServiceAgreement(
-          this.selected.hash,
-          this.selected.parent,
-          this.$auth.user().account.address,
-          this.address,
-          [],
-          [],
-          [],
-          []
-        )
-        .send({ from: this.$auth.user().account.address, gas: 2000000 });
-      console.log('assigned', res);
-
+      // this.$q.loading.show();
+      this.selected.status = 1;
+      const getChildren = (nodes) =>
+        nodes.flatMap((node) => {
+          node.status = 1;
+          return getChildren(node.children);
+        });
+      const nodes = getChildren(this.selected.children);
+      // const children = nodes.map((c) => c.hash);
+      // const parents = nodes.map((c) => c.parent);
+      // const billings = nodes.map((c) => c.billing_item !== null);
+      // const res = await this.factoryContract.methods
+      //   .createServiceAgreement(
+      //     this.selected.hash,
+      //     this.selected.parent,
+      //     this.$auth.user().account.address,
+      //     this.address,
+      //     children,
+      //     parents,
+      //     billings,
+      //     []
+      //   )
+      //   .send({ from: this.$auth.user().account.address, gas: 2000000 });
       this.prompt = false;
+      console.log('asigned', nodes);
+      this.$q.notify({
+        type: 'positive',
+        message: `Der Auftrag wurde erfolgreich vergeben`,
+        position: 'bottom-right',
+      });
     },
   },
   data() {
@@ -117,7 +127,6 @@ export default {
       address: '0x3c63d95ad664e6ef6006f6affdd8b77eae8a8bc8',
       boqs: [],
       data: [],
-      items: [],
       loading: true,
     };
   },

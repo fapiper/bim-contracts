@@ -5,7 +5,12 @@ module.exports = {
     es6: true,
     node: true,
   },
-  extends: ['standard', 'prettier', 'prettier/standard', 'plugin:vue/essential'],
+  extends: [
+    'standard',
+    'prettier',
+    'prettier/standard',
+    'plugin:vue/essential',
+  ],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
@@ -18,5 +23,6 @@ module.exports = {
   plugins: ['vue', 'prettier'],
   rules: {
     'prettier/prettier': 'error',
+    camelcase: 'off',
   },
 };

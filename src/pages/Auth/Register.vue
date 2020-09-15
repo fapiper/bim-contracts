@@ -2,21 +2,21 @@
   <q-page class="flex flex-center">
     <div class="register-card">
       <q-card-section>
-        <h1 class="text-h3 text-center">
-          Registrieren
-        </h1>
+        <h1 class="text-h3 text-center">Registrieren</h1>
       </q-card-section>
 
       <q-card-section>
         <q-form @submit.prevent="register" class="q-gutter-md">
+          <q-input filled v-model="data.name" label="Name" />
           <q-select
             filled
             v-model="data.role"
             :options="options"
             label="Rolle"
-            option-value="id"
-            option-label="desc"
+            :option-value="(key) => key"
+            :option-label="(key) => roles[key]"
           />
+          <q-input filled v-model="data.iban" :options="options" label="Iban" />
 
           <q-checkbox
             id="rememberMe"
@@ -37,9 +37,7 @@
         <div class="q-mt-md">
           <p>
             Account bereits vorhanden?
-            <router-link to="/auth/login">
-              Hier anmelden
-            </router-link>
+            <router-link to="/auth/login"> Hier anmelden </router-link>
           </p>
         </div>
       </q-card-section>
@@ -48,20 +46,18 @@
 </template>
 
 <script>
-// import { required } from 'vuelidate/lib/validators';
+import { Roles } from 'src/models/user-model';
 
 export default {
   name: 'PageRegister',
   data() {
     return {
-      options: [
-        { desc: 'Bauherr', id: 0 },
-        { desc: 'Generalunternehmer', id: 1 },
-        { desc: 'Subunternehmer', id: 2 },
-      ],
+      roles: Roles,
+      options: Object.keys(Roles),
       data: {
         name: 'Max Mustermann',
-        role: { desc: 'Bauherr', id: 0 },
+        role: 'CLIENT',
+        iban: '1234567890',
         rememberMe: false,
       },
       loading: false,

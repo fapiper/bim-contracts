@@ -186,10 +186,15 @@ export default {
       );
       billing.assignProject(project);
       await this.$orbitdb.billingdb.put(billing);
-      boqs.forEach(async (boq) => {
-        boq.assignProject(project);
-        await this.$orbitdb.boqdb.put(boq);
+      await boqs.forEach(async (boq) => {
+        await Object.keys(boq.items).map(async (key) => {
+          boq.items[key].project_hash = project.hash;
+          boq.items[key].boq_hash = boq.hash;
+          console.log('PUT boq_item', boq.items[key]);
+          return await this.$orbitdb.boqdb.put(boq.items[key]);
+        });
       });
+      project.boq_hashes = boqs.map((boq) => boq.hash);
       await this.projectdb.put(project);
       this.projects.push(project);
     },

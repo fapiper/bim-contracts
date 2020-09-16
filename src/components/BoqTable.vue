@@ -29,7 +29,7 @@
         <q-td auto-width>
           <q-btn
             flat
-            @click="props.expand = !props.expand"
+            @click="loadChildren(props)"
             round
             dense
             :icon="props.expand ? 'expand_less' : 'expand_more'"
@@ -87,7 +87,7 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-boq-table @assign="assign" :data="props.row.children" />
+          <bc-boq-table @assign="assign" :data="children" />
         </q-td>
       </q-tr>
     </template>
@@ -142,6 +142,15 @@ export default {
     getChildren(props) {
       return props.row.children.map((prop) => this.items[prop]);
     },
+    async loadChildren(props) {
+      if (!this.childrenLoaded) {
+        this.childrenLoaded = true;
+        this.children = await this.$orbitdb.boqdb.query(
+          (item) => item.parent === props.row.hash
+        );
+      }
+      props.expand = !props.expand;
+    },
   },
   computed: {
     isCtgy: function () {
@@ -150,6 +159,8 @@ export default {
   },
   data() {
     return {
+      children: [],
+      childrenLoaded: false,
       status: STATUS,
       columns: [
         {

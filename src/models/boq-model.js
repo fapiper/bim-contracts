@@ -25,20 +25,16 @@ class BoQ extends FlatTree {
       'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
     };
 
-    const { items, children } = super.build(
+    const { items } = super.build(
       boq.gaeb.award.boq,
       {},
       { builders, billing }
     );
-    const info = boq.gaeb.award.boq.boq_info;
-    return new BoQ(
-      boq.gaeb.award.boq.$.id,
-      info.name,
-      info.lbl_boq,
-      new Date(info.date).toJSON(),
+    const hash = Web3.utils.sha3(boq.gaeb.award.boq.$.id + new Date().toJSON());
+    return {
       items,
-      children
-    );
+      hash,
+    };
   }
 }
 

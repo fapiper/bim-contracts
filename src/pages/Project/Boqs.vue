@@ -58,12 +58,17 @@ const ServiceAgreementFactoryAddress =
 
 export default {
   name: 'PageProjectBoqs',
+  computed: {
+    project() {
+      return this.$store.getters['project/project'];
+    },
+  },
   mounted() {
     this.loadBoqs();
     this.factoryContract.events
       .ServiceAgreementCreated()
       .on('data', (event) => {
-        console.log(event);
+        console.log('created agreement', event);
       });
   },
   methods: {
@@ -72,11 +77,11 @@ export default {
       const boqdb = await this.$orbitdb.boqdb;
       await boqdb.load();
       const boqs = await boqdb.query(
-        (boq) => boq.project_hash === this.$route.params.project
+        (boq) => boq.project_hash === this.$route.params.project && !boq.parent
       );
       console.log('got boqs', boqs);
-      this.boqs = boqs.map((boq) => FlatTree.from(boq.children, boq.items));
-      this.data = this.boqs[0];
+      this.boqs = boqs;
+      this.data = boqs;
       this.loading = false;
     },
     showDialog(service) {
@@ -86,29 +91,41 @@ export default {
     async assign() {
       // this.$q.loading.show();
       this.selected.status = 1;
+      const service = {
+        client: this.$auth.user().address,
+        contractor: this.address,
+        ...this.selected,
+      };
       const getChildren = (nodes) =>
         nodes.flatMap((node) => {
           node.status = 1;
           return getChildren(node.children);
         });
       const nodes = getChildren(this.selected.children);
-      // const children = nodes.map((c) => c.hash);
-      // const parents = nodes.map((c) => c.parent);
-      // const billings = nodes.map((c) => c.billing_item !== null);
-      // const res = await this.factoryContract.methods
-      //   .createServiceAgreement(
-      //     this.selected.hash,
-      //     this.selected.parent,
-      //     this.$auth.user().account.address,
-      //     this.address,
-      //     children,
-      //     parents,
-      //     billings,
-      //     []
-      //   )
-      //   .send({ from: this.$auth.user().account.address, gas: 2000000 });
+      const children = nodes.map((c) => c.hash);
+      const parents = nodes.map((c) => c.parent);
+      const billings = nodes.map((c) => c.billing_item !== null);
+      await this.factoryContract.methods
+        .createServiceAgreement(
+          this.selected.hash,
+          this.selected.parent,
+          this.$auth.user().address,
+          this.address,
+          children,
+          parents,
+          billings,
+          []
+        )
+        .send({ from: this.$auth.user().address, gas: 2000000 });
+      const servicedb = await this.$orbitdb.open(
+        `${this.$route.params.project}/services`,
+        'keyvalue'
+      );
+      console.log('service', service);
+      await servicedb.put(service.hash, service);
       this.prompt = false;
-      console.log('asigned', nodes);
+      console.log('');
+      console.log('assigned service', await servicedb.get(service.hash));
       this.$q.notify({
         type: 'positive',
         message: `Der Auftrag wurde erfolgreich vergeben`,

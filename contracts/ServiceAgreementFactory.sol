@@ -10,9 +10,10 @@ import './CloneFactory.sol';
  */
 contract ServiceAgreementFactory is CloneFactory {
     event ServiceAgreementCreated(
-        address indexed _from,
+        address _client,
+        address _contractor,
         address indexed _address,
-        bytes32 indexed _service
+        bytes32 indexed _hash
     );
 
     address public implementation;
@@ -56,7 +57,7 @@ contract ServiceAgreementFactory is CloneFactory {
             _documents
         );
         agreements[_service] = clone;
-        emit ServiceAgreementCreated(msg.sender, clone, _service);
+        emit ServiceAgreementCreated(_client, _contractor, clone, _service);
         return true;
     }
 

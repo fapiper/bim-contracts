@@ -31,19 +31,19 @@ export default async ({ Vue }) => {
     config: {
       Addresses: {
         Swarm: [
-          // '/dns4/ws-star.discovery.libp2p.io/tcp/443/wss/p2p-websocket-star',
+          '/dns4/wrtc-star1.par.dwebops.pub/tcp/443/wss/p2p-webrtc-star/',
         ],
       },
     },
   });
   const orbitdb = await OrbitDB.createInstance(ipfs);
   const openDb = async ({ uri, type, indexBy }) => {
-    const db = await orbitdb.open(`${options.namespace}/${uri}`, {
+    const db = await orbitdb.open(`${options.namespace}.${uri}`, {
       type,
       indexBy,
       ...options.config,
     });
-    db.events.on('replicated', console.log);
+    db.events.on('replicated', (args) => console.log('replicated db', ...args));
     return db;
   };
   const helper = {};
@@ -52,7 +52,10 @@ export default async ({ Vue }) => {
       Object.keys(dbs).forEach((db, i) => (helper[db] = opened[i]));
     }
   );
+  helper.open = (uri, type = 'docstore', indexBy = 'hash') => {
+    return openDb({ uri, type, indexBy });
+  };
   Vue.prototype.$orbitdb = helper;
-  await Promise.all(Object.keys(helper).map((db) => helper[db].load()));
+  await Promise.all(Object.keys(dbs).map((db) => helper[db].load()));
   return true;
 };

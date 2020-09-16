@@ -44,24 +44,17 @@
 <script>
 export default {
   name: 'LayoutProject',
-  data() {
-    return {
-      project: null,
-    };
+  computed: {
+    project() {
+      return this.$store.getters['project/project'];
+    },
   },
   created() {
-    this.loadProject();
+    this.$store.dispatch('project/loadProject', this.$route.params.project);
   },
   watch: {
     $route: 'loadProject',
   },
-  methods: {
-    async loadProject() {
-      const projectdb = await this.$orbitdb.projectdb;
-      await projectdb.load();
-      const projects = await projectdb.get(this.$route.params.project);
-      this.project = projects[0];
-    },
-  },
+  methods: {},
 };
 </script>

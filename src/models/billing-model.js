@@ -2,18 +2,22 @@ import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
 import Web3 from 'web3';
 
 class BillingModel extends FlatTree {
-  constructor(currency, items, children) {
+  constructor(currency, roots, nodes) {
     super();
     this.currency = currency;
-    this.items = items;
-    this.children = children;
+    this.roots = roots;
+    this.nodes = nodes;
     this.hash = Web3.utils.sha3(JSON.stringify(this));
-    this.project_hash = null;
     this.created = new Date().toJSON();
   }
 
-  assignProject(project) {
-    this.project_hash = project.hash;
+  static toStore(billing) {
+    return {
+      currency: billing.currency,
+      roots: billing.roots,
+      created: billing.created,
+      hash: billing.hash,
+    };
   }
 
   static fromXml(billing) {
@@ -22,15 +26,15 @@ class BillingModel extends FlatTree {
       'items.item': BillingItem.fromXml,
       'sub_items.item': BillingItem.fromXml,
     };
-    const { items, children } = super.build(
+    const { roots, nodes } = super.build(
       billing.billing_model,
       {},
       { builders }
     );
     return new BillingModel(
       billing.billing_model.bm_info.currency,
-      items,
-      children
+      roots,
+      nodes
     );
   }
 }

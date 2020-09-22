@@ -1,5 +1,6 @@
 import { Cookies, Notify } from 'quasar';
 import { User } from 'src/models/user-model';
+import UserService from 'src/services/user-service.js';
 import Config from 'app/bim-contracts.config';
 
 const useMockData = true;
@@ -16,7 +17,7 @@ export async function register(state, data) {
     data.role,
     data.iban
   );
-  await this._vm.$orbitdb.userdb.put(user.address, user);
+  await this._vm.$services.user.put(user);
   const privateKey = account.privateKey;
   state.commit('setUser', { privateKey, user });
   state.dispatch('setKey', {
@@ -30,7 +31,7 @@ export async function login(state, { privateKey, rememberMe }) {
   const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
     privateKey
   );
-  const user = await this._vm.$orbitdb.userdb.get(account.address);
+  const user = await this._vm.$services.user.get(account.address);
   state.commit('setUser', { user, privateKey });
   state.dispatch('setKey', {
     privateKey,
@@ -58,8 +59,7 @@ export async function fetch(state) {
     const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
       privateKey
     );
-    await this._vm.$orbitdb.userdb.load();
-    const user = await this._vm.$orbitdb.userdb.get(account.address);
+    const user = await this._vm.$services.user.get(account.address);
     state.commit('setUser', { user, privateKey });
     return user;
   }

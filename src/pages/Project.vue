@@ -132,14 +132,12 @@
 import IcddParser from 'src/utils/icdd-parser.js';
 import Project from 'src/models/project-model.js';
 
-import BoQ from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
-import BillingModel from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
+import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
+import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
 export default {
   name: 'PageProjectIndex',
   async mounted() {
-    this.projectdb = await this.$orbitdb.projectdb;
-    await this.projectdb.load();
     this.loadProjects();
   },
   computed: {
@@ -165,67 +163,61 @@ export default {
     };
   },
   methods: {
-    async send() {
-      const project = new Project(
-        this.project.name,
-        this.project.designation,
-        this.project.description,
-        {
-          name: 'Muster Bauherr',
-          address: 0x0,
-        },
-        {
-          name: 'Muster Generalunternehmer',
-          address: this.address,
-        },
-        []
+    useDemoProject() {
+      this.project.name = 'Demoprojekt';
+      this.project.designation = 'Beispielvorhaben 1.0';
+      this.project.description =
+        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.';
+      this.container.boqs = [
+        new File([BoQFile], 'Demo-Leistungsverzeichnis.x83'),
+      ];
+      this.container.billingModel = new File(
+        [BillingModelFile],
+        'Demo-BillingModel.xml'
       );
-      const { billing, boqs } = await IcddParser.parseFromFiles(
-        this.container.billingModel,
-        this.container.boqs
-      );
-      billing.assignProject(project);
-      await this.$orbitdb.billingdb.put(billing);
-      await boqs.forEach(async (boq) => {
-        await Object.keys(boq.items).map(async (key) => {
-          boq.items[key].project_hash = project.hash;
-          boq.items[key].boq_hash = boq.hash;
-          console.log('PUT boq_item', boq.items[key]);
-          return await this.$orbitdb.boqdb.put(boq.items[key]);
-        });
-      });
-      project.boq_hashes = boqs.map((boq) => boq.hash);
-      await this.projectdb.put(project);
-      this.projects.push(project);
     },
     async loadProjects() {
       this.loading = true;
-      await this.projectdb.load();
-      this.projects = await this.projectdb.query(
+      this.projects = await this.$services.project.query(
         (e) => e.general_contractor.address === this.address
       );
       this.loading = false;
     },
-    async removeProject(project) {
-      await this.projectdb.del(project.hash);
-      await this.$orbitdb.billingdb.load();
-      const billings = this.$orbitdb.billingdb.query(
-        (doc) => doc.project_hash === project.hash
-      );
-      await billings.map(
-        async (doc) => await this.$orbitdb.billingdb.del(doc.hash)
-      );
-      await this.$orbitdb.boqdb.load();
-      const boqs = this.$orbitdb.boqdb.query(
-        (doc) => doc.project_hash === project.hash
-      );
-      await boqs.map(async (doc) => await this.$orbitdb.boqdb.del(doc.hash));
-      this.loadProjects();
+    async removeProject({ hash }) {
+      this.$q.loading.show();
+      try {
+        await this.$services.project.remove(hash);
+        this.projects = this.projects.filter((p) => p.hash !== hash);
+        this.$q.notify({
+          type: 'positive',
+          message: `Das Bauprojekt wurde erfolgreich entfernt`,
+          position: 'bottom-right',
+        });
+      } catch (error) {
+        console.error(error);
+        this.$q.notify({
+          type: 'negative',
+          message: `Beim Entfernen des Bauprojektes ist ein Fehler aufgetreten`,
+          position: 'bottom-right',
+        });
+      }
+      this.$q.loading.hide();
     },
     async addProject() {
       this.$q.loading.show();
       try {
-        await this.send();
+        const { billing, boqs } = await IcddParser.parseFromFiles(
+          this.container.billingModel,
+          this.container.boqs
+        );
+        const project = Project.fromView(
+          this.project,
+          billing,
+          boqs,
+          this.address
+        );
+        const res = await this.$services.project.put(project);
+        this.projects.push(res);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',
@@ -241,17 +233,6 @@ export default {
         });
       }
       this.$q.loading.hide();
-    },
-    useDemoProject() {
-      this.project.name = 'Demoprojekt';
-      this.project.designation = 'Beispielvorhaben 1.0';
-      this.project.description =
-        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.';
-      this.container.boqs = [new File([BoQ], 'Demo-Leistungsverzeichnis.x83')];
-      this.container.billingModel = new File(
-        [BillingModel],
-        'Demo-BillingModel.xml'
-      );
     },
   },
 };

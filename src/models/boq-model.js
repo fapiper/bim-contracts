@@ -2,21 +2,32 @@ import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
 import Web3 from 'web3';
 
 class BoQ extends FlatTree {
-  constructor(id, name, label, date, items, children) {
+  constructor(id, name, label, date, roots, nodes) {
     super();
     this.id = id;
     this.name = name;
     this.label = label;
     this.date = date;
-    this.items = items;
-    this.children = children;
-    this.hash = Web3.utils.sha3(id);
-    this.project_hash = null;
+    this.roots = roots;
+    this.nodes = nodes;
     this.created = new Date().toJSON();
+    this.hash = Web3.utils.sha3(this.id + this.created);
   }
 
   assignProject(project) {
     this.project_hash = project.hash;
+  }
+
+  static toStore(boq) {
+    return {
+      id: boq.id,
+      name: boq.name,
+      label: boq.label,
+      date: boq.date,
+      roots: boq.roots,
+      created: boq.created,
+      hash: boq.hash,
+    };
   }
 
   static fromGAEB(boq, billing) {
@@ -25,16 +36,20 @@ class BoQ extends FlatTree {
       'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
     };
 
-    const { items } = super.build(
+    const { roots, nodes } = super.build(
       boq.gaeb.award.boq,
       {},
       { builders, billing }
     );
-    const hash = Web3.utils.sha3(boq.gaeb.award.boq.$.id + new Date().toJSON());
-    return {
-      items,
-      hash,
-    };
+    const info = boq.gaeb.award.boq.boq_info;
+    return new BoQ(
+      boq.gaeb.award.boq.$.id,
+      info.name,
+      info.lbl_boq,
+      new Date(info.date).toJSON(),
+      roots,
+      nodes
+    );
   }
 }
 

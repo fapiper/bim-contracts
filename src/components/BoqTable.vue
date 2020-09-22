@@ -40,7 +40,7 @@
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
             <template v-if="col.name === 'status'">
               <q-chip
-                dense
+                size="sm"
                 :color="status[col.value].color"
                 :text-color="status[col.value].textColor"
                 >{{ status[col.value].text }}</q-chip

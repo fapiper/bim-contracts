@@ -2,34 +2,26 @@ const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
 class FlatTree {
-  static from(tree, collection) {
-    return tree.map((hash) => {
-      const node = collection[hash];
-      const children = FlatTree.from(node.children, collection);
-      return { ...node, children };
-    });
-  }
-
   static build(tree, collection, { builders, parent, billing }) {
-    const children = [];
+    const roots = [];
     for (const key in builders) {
-      const _nodes = reduce(key, tree);
-      if (_nodes) {
-        const nodes = Array.isArray(_nodes) ? _nodes : Array.of(_nodes); // Fix: xml2js parser transforms arrays with one entry to object
-        for (let i = 0; i < nodes.length; i++) {
-          const node = builders[key](nodes[i]);
+      const _desc = reduce(key, tree);
+      if (_desc) {
+        const desc = Array.isArray(_desc) ? _desc : Array.of(_desc); // Fix: xml2js parser transforms arrays with one entry to object
+        for (let i = 0; i < desc.length; i++) {
+          const node = builders[key](desc[i]);
           collection[node.hash] = node;
           if (parent) {
             node.addParent(parent);
             collection[parent].children.push(node.hash);
           } else {
-            children.push(node.hash); // No parent exists. Node is root.
+            roots.push(node.hash); // No parent exists. Node is root.
           }
           if (billing) {
-            const item = billing.items[node.hash];
+            const item = billing.nodes[node.hash];
             item && (node.billing_item = item);
           }
-          this.build(nodes[i], collection, {
+          this.build(desc[i], collection, {
             builders,
             parent: node.hash,
             billing,
@@ -37,7 +29,7 @@ class FlatTree {
         }
       }
     }
-    return { children, items: collection };
+    return { roots, nodes: collection };
   }
 }
 

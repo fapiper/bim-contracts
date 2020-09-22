@@ -3263,8 +3263,7 @@
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-09-16T10:19:49.308Z",
-  "networkType": "ethereum",
+  "updatedAt": "2020-09-21T14:41:59.186Z",
   "devdoc": {
     "details": "Store & retreive value in a variable",
     "methods": {

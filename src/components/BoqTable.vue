@@ -87,7 +87,7 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-boq-table @assign="assign" :data="children" />
+          <bc-boq-table @assign="assign" :data="children" :project="project" />
         </q-td>
       </q-tr>
     </template>
@@ -127,6 +127,7 @@ export default {
     items: Object,
     data: Array,
     title: String,
+    project: String,
     loading: Boolean,
   },
   mounted() {
@@ -145,7 +146,8 @@ export default {
     async loadChildren(props) {
       if (!this.childrenLoaded) {
         this.childrenLoaded = true;
-        this.children = await this.$orbitdb.boqdb.query(
+        this.children = await this.$services.boq.query(
+          this.project,
           (item) => item.parent === props.row.hash
         );
       }

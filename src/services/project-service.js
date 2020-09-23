@@ -1,12 +1,13 @@
 import Project from 'src/models/project-model.js';
 
 class ProjectService {
-  constructor(orbitdb, projectdb) {
+  constructor(boqService, orbitdb, projectdb) {
+    this.boqService = boqService;
     this.orbitdb = orbitdb;
     this.projectdb = projectdb;
   }
 
-  static async init(orbitdb) {
+  static async init(boqService, orbitdb) {
     const projectdb = await orbitdb.docs('projects', {
       indexBy: 'hash',
       create: true,
@@ -15,7 +16,7 @@ class ProjectService {
       },
     });
     await projectdb.load();
-    return new ProjectService(orbitdb, projectdb);
+    return new ProjectService(boqService, orbitdb, projectdb);
   }
 
   async get(hash) {
@@ -30,13 +31,9 @@ class ProjectService {
     const billingdb = await this.orbitdb.keyvalue(
       `projects.${project.hash}.billings`
     );
-    const boqdb = await this.orbitdb.keyvalue(`projects.${project.hash}.boqs`);
     await billingdb.put(project.billing);
     await project.boqs.forEach(
-      async (boq) =>
-        await Object.keys(boq.nodes).forEach(
-          async (item) => await boqdb.put(item.hash, item)
-        )
+      async (boq) => await this.boqService.putAll(project.hash, boq.nodes)
     );
     const res = Project.toStore(project);
     await this.projectdb.put(res);
@@ -52,8 +49,9 @@ class ProjectService {
       );
       await db.drop();
     };
+    await this.boqService.removeAll(hash);
     await drop('billings');
-    await drop('boqs');
+    // await this.boqService.drop(hash);
     const project = await this.projectdb.del(hash);
     return project;
   }

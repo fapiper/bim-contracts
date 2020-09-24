@@ -11,23 +11,44 @@
           </q-avatar>
 
           <q-menu>
-            <div class="row no-wrap q-pa-md">
+            <div class="row no-wrap items-center q-pa-md">
               <div class="column">
-                <div class="text-h6 q-mb-md">Account</div>
-                <q-input
-                  filled
-                  v-model="$auth.user().address"
-                  hint="Adresse"
-                  dense
-                  readonly
-                />
-                <q-input
-                  filled
-                  v-model="balance"
-                  hint="Balance"
-                  dense
-                  readonly
-                />
+                <q-form class="q-gutter-sm">
+                  <q-input
+                    filled
+                    v-model="$auth.user().address"
+                    hint="Adresse"
+                    dense
+                    readonly
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="fingerprint" />
+                    </template>
+                  </q-input>
+                  <q-input
+                    filled
+                    v-model="$auth.user().privateKey"
+                    hint="Private Key"
+                    dense
+                    readonly
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="vpn_key" />
+                    </template>
+                  </q-input>
+
+                  <q-input
+                    filled
+                    v-model="balance"
+                    hint="Balance"
+                    dense
+                    readonly
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="monetization_on" />
+                    </template>
+                  </q-input>
+                </q-form>
               </div>
 
               <q-separator vertical inset class="q-mx-lg" />
@@ -129,7 +150,7 @@ export default {
     },
   },
   async mounted() {
-    this.balance = await this.getBalance();
+    this.balance = (await this.getBalance()) + ' ETH';
   },
   data() {
     return {

@@ -28,7 +28,11 @@ export default async ({ Vue }) => {
   services.user = await UserService.init(orbitdb);
   services.boq = new BoQService(orbitdb);
   services.project = await ProjectService.init(services.boq, orbitdb);
-  services.assignment = new AssignmentService(services.boq);
+  services.assignment = new AssignmentService(
+    orbitdb,
+    services.boq,
+    Vue.prototype.$web3
+  );
   Vue.prototype.$services = services;
   return true;
 };

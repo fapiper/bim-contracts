@@ -52,10 +52,6 @@
 </template>
 
 <script>
-import { abi as ServiceAgreementFactoryAbi } from 'src/contracts/ServiceAgreementFactory.json';
-const ServiceAgreementFactoryAddress =
-  '0x852543528aF03b706b2785dFd3103898Ed256eaD';
-
 export default {
   name: 'PageProjectBoqs',
   computed: {
@@ -65,7 +61,7 @@ export default {
   },
   mounted() {
     this.loadBoqs();
-    this.factoryContract.events
+    this.$services.assignment.factoryContract.events
       .ServiceAgreementCreated()
       .on('data', (event) => {
         console.log('created agreement', event);
@@ -84,46 +80,39 @@ export default {
       this.prompt = true;
     },
     async assign() {
-      // this.$q.loading.show();
+      this.$q.loading.show();
+      this.prompt = false;
       // const service = {
       //   client: this.$auth.user().address,
       //   contractor: this.address,
       //   ...this.selected,
       // };
-      const nodes = await this.$services.assignment.assign(
-        this.project.hash,
-        this.selected
-      );
-      console.log('assigned', nodes);
-      // const children = nodes.map((c) => c.hash);
-      // const parents = nodes.map((c) => c.parent);
-      // const billings = nodes.map((c) => c.billing_item !== null);
-      // await this.factoryContract.methods
-      //   .createServiceAgreement(
-      //     this.selected.hash,
-      //     this.selected.parent,
-      //     this.$auth.user().address,
-      //     this.address,
-      //     children,
-      //     parents,
-      //     billings,
-      //     []
-      //   )
-      //   .send({ from: this.$auth.user().address, gas: 2000000 });
-      this.prompt = false;
-      this.$q.notify({
-        type: 'positive',
-        message: `Der Auftrag wurde erfolgreich vergeben`,
-        position: 'bottom-right',
-      });
+      try {
+        const nodes = await this.$services.assignment.assign(
+          this.project.hash,
+          this.selected,
+          this.$auth.user(),
+          { address: this.address }
+        );
+        console.log('assigned', nodes);
+        this.$q.notify({
+          type: 'positive',
+          message: `Der Auftrag wurde erfolgreich vergeben.`,
+          position: 'bottom-right',
+        });
+      } catch (error) {
+        console.error(error);
+        this.$q.notify({
+          type: 'negative',
+          message: `Bei der Auftragsvergabe ist ein Fehler aufgetreten.`,
+          position: 'bottom-right',
+        });
+      }
+      this.$q.loading.hide();
     },
   },
   data() {
     return {
-      factoryContract: new this.$web3.eth.Contract(
-        ServiceAgreementFactoryAbi,
-        ServiceAgreementFactoryAddress
-      ),
       selected: null,
       prompt: false,
       address: '0x3c63d95ad664e6ef6006f6affdd8b77eae8a8bc8',

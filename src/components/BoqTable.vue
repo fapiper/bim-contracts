@@ -60,12 +60,9 @@
           >
             <q-menu>
               <q-list style="min-width: 200px">
-                <q-item
-                  v-if="props.row.status < 1"
-                  clickable
-                  v-close-popup
-                  @click="assign(props.row)"
-                >
+                <!-- v-if="props.row.status < 1" -->
+
+                <q-item clickable v-close-popup @click="assign(props.row)">
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
                   </q-item-section>

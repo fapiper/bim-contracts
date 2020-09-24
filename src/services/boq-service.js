@@ -51,11 +51,17 @@ class BoQService {
   }
 
   async removeAll(project_hash) {
-    console.log('remove all boqs from project', project_hash);
     const all = await this.getAll(project_hash);
     const boqs = await all.map(async (item) => await this.boqdb.del(item.hash));
     await this.boqdb.drop();
     return boqs;
+  }
+
+  async assign(project_hash, node) {
+    const nodes = await this.boqService.get(project_hash, node);
+    const assigned = nodes[0];
+    assigned.status = 1;
+    return assigned;
   }
 }
 

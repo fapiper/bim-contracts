@@ -4,6 +4,7 @@ import OrbitDB from 'orbit-db';
 import UserService from 'src/services/user-service.js';
 import ProjectService from 'src/services/project-service.js';
 import BoQService from 'src/services/boq-service.js';
+import AssignmentService from 'src/services/assignment-service.js';
 
 // types = [ 'counter', 'eventlog', 'feed', 'docstore', 'keyvalue']
 
@@ -25,12 +26,9 @@ export default async ({ Vue }) => {
   Vue.prototype.$orbitdb = orbitdb;
   const services = {};
   services.user = await UserService.init(orbitdb);
-  services.project = await ProjectService.init(
-    new BoQService(orbitdb),
-    orbitdb
-  );
   services.boq = new BoQService(orbitdb);
-
+  services.project = await ProjectService.init(services.boq, orbitdb);
+  services.assignment = new AssignmentService(services.boq);
   Vue.prototype.$services = services;
   return true;
 };

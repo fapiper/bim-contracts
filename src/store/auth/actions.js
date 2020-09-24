@@ -1,21 +1,25 @@
 import { Cookies, Notify } from 'quasar';
 import { User } from 'src/models/user-model';
-import UserService from 'src/services/user-service.js';
-import Config from 'app/bim-contracts.config';
-
-const useMockData = true;
 
 export async function register(state, data) {
-  const account = useMockData
-    ? await this._vm.$web3.eth.accounts.privateKeyToAccount(Config.privateKey)
-    : await this._vm.$web3.eth.accounts.create();
+  const account = await this._vm.$web3.eth.accounts.create();
   const wallet = await this._vm.$web3.eth.accounts.wallet.add(account);
+
   const user = new User(
     account.address,
     wallet.address,
     data.name,
     data.role,
     data.iban
+  );
+  const accounts = await this._vm.$web3.eth.getAccounts();
+  await this._vm.$web3.eth.sendTransaction(
+    {
+      from: accounts[0],
+      to: account.address,
+      value: this._vm.$web3.utils.toWei('10', 'ether'),
+    },
+    '51ef5561cc067561eda5544865c796257ce66bc43b461cce97569c571e1d6c36'
   );
   await this._vm.$services.user.put(user);
   const privateKey = account.privateKey;
@@ -67,7 +71,7 @@ export async function fetch(state) {
 
 export function logout(state) {
   Cookies.remove('authorization_key');
-  state.commit('setUser', null);
+  state.commit('setUser', { user: null });
 }
 
 export function verify(state, token) {

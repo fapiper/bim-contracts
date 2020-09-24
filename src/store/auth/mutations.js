@@ -1,5 +1,8 @@
 export function setUser(state, { user, privateKey }) {
-  console.log('set user mutation', user, privateKey);
-  user.privateKey = privateKey;
-  state.user = user;
+  if (user) {
+    user.privateKey = privateKey;
+    state.user = user;
+  } else {
+    state.user = null;
+  }
 }

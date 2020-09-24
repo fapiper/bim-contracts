@@ -1,8 +1,16 @@
 <template>
   <q-page padding>
-    <h1 class="text-h3">Benutzerprofil</h1>
+    <h2 class="text-h5">Benutzer</h2>
     <q-form class="q-gutter-md">
-      <q-input filled v-model="user.balance" readonly label="Balance" />
+      <q-input filled v-model="user.name" readonly label="Name" />
+      <q-input filled v-model="user.role" readonly label="Rolle" />
+      <q-input filled v-model="user.iban" readonly label="IBAN" />
+      <q-input filled v-model="user.privateKey" readonly label="Private Key" />
+    </q-form>
+    <h2 class="text-h5">Account</h2>
+    <q-form class="q-gutter-md">
+      <q-input filled v-model="user.address" readonly label="Addresse" />
+      <q-input filled v-model="account.balance" readonly label="Balance" />
     </q-form>
   </q-page>
 </template>
@@ -12,12 +20,16 @@ export default {
   name: 'PageMe',
   async mounted() {
     const balance = await this.$web3.eth.getBalance(this.$auth.user().address);
-    this.user.balance = this.$web3.utils.fromWei(balance);
+    this.account.balance = this.$web3.utils.fromWei(balance);
   },
-  computed: {},
+  computed: {
+    user() {
+      return this.$auth.user();
+    },
+  },
   data() {
     return {
-      user: {
+      account: {
         balance: 0,
       },
     };

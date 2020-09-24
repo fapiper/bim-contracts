@@ -44,8 +44,8 @@ class BoQService {
 
   async putAll(project_hash, nodes) {
     await this.loadDb(project_hash);
-    const boq = await Object.keys(nodes).map(
-      async (key) => await this.boqdb.put(nodes[key])
+    const boq = await Promise.all(
+      Object.keys(nodes).map((key) => this.boqdb.put(nodes[key]))
     );
     return boq;
   }

@@ -1,6 +1,7 @@
 module.exports = {
   host: '127.0.0.1',
   port: 8545,
+  defaultBalance: 10, // in ETH
   privateKey:
     'a36b50eb284f5164bf8d20bc52decd461d33e35d28628be489bd1246bc862f43',
   contracts: {

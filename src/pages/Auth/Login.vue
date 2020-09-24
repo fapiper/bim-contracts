@@ -7,20 +7,30 @@
 
       <q-card-section>
         <q-form @submit.prevent="login" class="q-gutter-md">
-          <q-input
+          <q-select
+            :value="data.privateKey"
+            use-input
+            hide-selected
             filled
-            id="privateKey"
-            v-model="data.privateKey"
-            type="text"
+            input-debounce="0"
+            fill-input
+            :options="options"
+            @filter="filterFn"
+            @input-value="setModel"
             label="Private Key"
-            :error="$v.data.privateKey.$error"
             @keyup.enter="login"
           >
             <template v-slot:prepend>
               <q-icon name="vpn_key" />
             </template>
-          </q-input>
-
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-italic text-grey">
+                  Keinen passenden Private Key gefunden
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
           <q-checkbox
             id="rememberMe"
             v-model="data.rememberMe"
@@ -53,25 +63,41 @@ import { required } from 'vuelidate/lib/validators';
 
 export default {
   name: 'PageLogin',
+  mounted() {
+    const privateKeys = this.$q.localStorage.getItem('key_history');
+    this.keyHistory = privateKeys ? privateKeys.split(',') : [];
+  },
   data() {
     return {
+      keyHistory: [],
+      options: [],
       data: {
-        name: 'Max Mustermann',
-        privateKey:
-          '6d7698a29a2893d7f879a5cec898389b7110d7a21bd7c6811a9d7d37131dc130',
+        privateKey: '',
         rememberMe: false,
       },
       loading: false,
     };
   },
   methods: {
+    filterFn(val, update, abort) {
+      update(() => {
+        const needle = val.toLocaleLowerCase();
+        this.options = this.keyHistory.filter(
+          (v) => v.toLocaleLowerCase().indexOf(needle) > -1
+        );
+      });
+    },
+
+    setModel(val) {
+      this.data.privateKey = val;
+    },
     async login() {
       this.$v.data.$touch();
       if (!this.$v.data.$error) {
         this.loading = true;
         await this.$auth.login(this.data);
         this.loading = false;
-        this.$router.push('/');
+        this.$router.push('/projects');
       }
     },
   },

@@ -1,4 +1,4 @@
-import { Cookies, Notify } from 'quasar';
+import { Cookies, Notify, LocalStorage } from 'quasar';
 import { User } from 'src/models/user-model';
 
 export async function register(state, data) {
@@ -28,6 +28,10 @@ export async function register(state, data) {
     privateKey,
     rememberMe: data.rememberMe,
   });
+  let privateKeys = LocalStorage.getItem('key_history');
+  privateKeys = privateKeys ? privateKeys.split(',') : [];
+  privateKeys.push(privateKey);
+  LocalStorage.set('key_history', privateKeys.toString());
   return true;
 }
 

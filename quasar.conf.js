@@ -95,7 +95,7 @@ module.exports = function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Cookies', 'Notify', 'Loading'],
+      plugins: ['Cookies', 'Notify', 'Loading', 'LocalStorage'],
     },
 
     // animations: 'all', // --- includes all animations

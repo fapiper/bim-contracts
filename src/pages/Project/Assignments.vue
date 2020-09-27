@@ -34,12 +34,16 @@ export default {
   methods: {
     async loadAssignments() {
       this.loading = true;
-      const project_hash = this.$route.params.project;
-      const user_address = this.$auth.user().address;
-      await this.$store.dispatch('project/loadAssignments', {
-        project_hash,
-        user_address,
-      });
+      // const project_hash = this.$route.params.project;
+      // const user_address = this.$auth.user().address;
+      // await this.$store.dispatch('project/loadAssignments', {
+      //   project_hash,
+      //   user_address,
+      // });
+      const assignments = await this.$services.assignment.getAll(
+        this.$auth.user().address
+      );
+      console.log('got assignments', assignments);
       this.loading = false;
     },
   },

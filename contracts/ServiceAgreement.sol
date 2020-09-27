@@ -11,7 +11,7 @@ contract ServiceAgreement {
     event ServiceTransition(bytes32 service, uint8 stage);
     event Payment(bytes32 service);
 
-    enum Stages {INITIALIZED, STARTED, FINISHED, APPROVED}
+    enum Stages {INITIALIZED, STARTED, FINISHED, APPROVED, REJECTED, PAYED}
 
     struct ServiceNode {
         Stages stage;

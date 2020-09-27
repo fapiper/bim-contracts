@@ -23,6 +23,7 @@ contract ServiceAgreementFactory is CloneFactory {
     }
 
     mapping(bytes32 => address) public agreements;
+    mapping(address => address[]) public agreementsByActor;
 
     /**
      * @dev Creates a new service agreement and adds it to mapping
@@ -57,8 +58,18 @@ contract ServiceAgreementFactory is CloneFactory {
             _documents
         );
         agreements[_service] = clone;
+        agreementsByActor[_client].push(clone);
+        agreementsByActor[_contractor].push(clone);
         emit ServiceAgreementCreated(_client, _contractor, clone, _service);
         return true;
+    }
+
+    function getAgreementsByActor(address actor)
+        public
+        view
+        returns (address[] memory)
+    {
+        return agreementsByActor[actor];
     }
 
     /**

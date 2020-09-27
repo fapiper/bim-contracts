@@ -121,7 +121,6 @@ export default {
   name: 'ComponentBoqTable',
   props: {
     isRoot: Boolean,
-    items: Object,
     data: Array,
     title: String,
     project: String,
@@ -137,12 +136,10 @@ export default {
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },
-    getChildren(props) {
-      return props.row.children.map((prop) => this.items[prop]);
-    },
     async loadChildren(props) {
-      if (!this.childrenLoaded) {
-        this.childrenLoaded = true;
+      if (!this.childrenLoaded[props.row.hash]) {
+        console.log('this row ', props.row);
+        this.childrenLoaded[props.row.hash] = true;
         this.children = await this.$services.boq.query(
           this.project,
           (item) => item.parent === props.row.hash
@@ -159,7 +156,7 @@ export default {
   data() {
     return {
       children: [],
-      childrenLoaded: false,
+      childrenLoaded: {},
       status: STATUS,
       columns: [
         {

@@ -23,6 +23,19 @@ const routes = [
             component: () => import('pages/Project/Boqs.vue'),
             meta: { label: 'Leistungsverzeichnisse' },
           },
+          {
+            path: 'assignments',
+            component: () => import('pages/Project/Assignments.vue'),
+            meta: {
+              label: 'Aufträge',
+              // auth: [Roles.SUB_CONTRACTOR, Roles.GENERAL_CONTRACTOR],
+            },
+          },
+          {
+            path: 'contact',
+            component: () => import('pages/Project/Contact.vue'),
+            meta: { label: 'Kontakte' },
+          },
         ],
       },
     ],

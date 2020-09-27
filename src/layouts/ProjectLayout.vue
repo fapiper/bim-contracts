@@ -9,27 +9,31 @@
       <q-toolbar class="bg-grey-2">
         <q-toolbar-title> {{ project.name }} </q-toolbar-title>
         <q-space />
-        <q-tabs shrink v-if="project">
+        <q-tabs shrink>
+          <q-route-tab
+            label="Übersicht"
+            :to="'/projects/' + project.hash"
+            exact
+          />
           <q-route-tab
             label="Leistungsverzeichnisse"
             :to="'/projects/' + project.hash + '/boqs'"
             exact
           />
           <q-route-tab
-            label="Abrechnungen"
-            :to="'/projects/' + project.hash + '/billing'"
+            label="Aufträge"
+            :to="'/projects/' + project.hash + '/assignments'"
             exact
-          />
+          >
+            <q-badge color="red" floating>{{ newAssignments.length }}</q-badge>
+          </q-route-tab>
           <q-route-tab
-            label="Fortschritt"
-            :to="'/projects/' + project.hash + '/progress'"
+            label="Akteure"
+            :to="'/projects/' + project.hash + '/contact'"
             exact
           />
-          <q-route-tab
-            label="Dokumente"
-            :to="'/projects/' + project.hash + '/documents'"
-            exact
-          />
+
+          <!-- v-if="$auth.check([Roles.GENERAL_CONTRACTOR, Roles.SUB_CONTRACTOR])" -->
         </q-tabs>
       </q-toolbar>
       <div class="q-pa-md q-gutter-sm">
@@ -48,6 +52,8 @@
 </template>
 
 <script>
+// import { Roles } from 'src/models/user-model';
+
 export default {
   name: 'LayoutProject',
   data() {
@@ -56,24 +62,36 @@ export default {
     };
   },
   computed: {
+    newAssignments() {
+      return this.$store.getters['project/newAssignments'];
+    },
     project() {
       return this.$store.getters['project/project'];
     },
   },
-  async created() {
-    this.loadProject();
-  },
-  watch: {
-    $route: 'loadProject',
+  async mounted() {
+    this.loading = true;
+    const project_hash = this.$route.params.project;
+    const user_address = this.$auth.user().address;
+    await Promise.all([
+      this.loadProject(project_hash),
+      this.loadAssignments(project_hash, user_address),
+    ]);
+    console.log('loaded', this.project, this.newAssignments);
+    this.loading = false;
   },
   methods: {
-    async loadProject() {
-      this.loading = true;
-      const project = this.$route.params.project;
-      await this.$store.dispatch('project/loadProject', project);
-      // Init boqdb to load only project specific boqs
-      await this.$services.boq.loadDb(project);
-      this.loading = false;
+    async loadAssignments(project_hash, user_address) {
+      return this.$store.dispatch('project/loadAssignments', {
+        project_hash,
+        user_address,
+      });
+    },
+    async loadProject(project_hash) {
+      return Promise.all([
+        this.$store.dispatch('project/loadProject', project_hash),
+        this.$services.boq.loadDb(project_hash),
+      ]);
     },
   },
 };

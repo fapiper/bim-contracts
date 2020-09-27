@@ -15,22 +15,28 @@
               <div class="column">
                 <q-form class="q-gutter-sm">
                   <q-input
+                    class="cursor-pointer"
+                    input-class="cursor-pointer"
                     filled
                     v-model="$auth.user().address"
                     hint="Adresse"
                     dense
                     readonly
+                    @click="copy($event, 'Adresse')"
                   >
                     <template v-slot:prepend>
                       <q-icon name="fingerprint" />
                     </template>
                   </q-input>
                   <q-input
+                    class="cursor-pointer"
+                    input-class="cursor-pointer"
                     filled
                     v-model="$auth.user().privateKey"
                     hint="Private Key"
                     dense
                     readonly
+                    @click="copy($event, 'Private Key')"
                   >
                     <template v-slot:prepend>
                       <q-icon name="vpn_key" />
@@ -38,11 +44,14 @@
                   </q-input>
 
                   <q-input
+                    class="cursor-pointer"
+                    input-class="cursor-pointer"
                     filled
                     v-model="balance"
                     hint="Balance"
                     dense
                     readonly
+                    @click="copy($event, 'Balance')"
                   >
                     <template v-slot:prepend>
                       <q-icon name="monetization_on" />
@@ -112,6 +121,8 @@
 </template>
 
 <script>
+import { copyToClipboard } from 'quasar';
+
 const linksData = [
   {
     title: 'Dashboard',
@@ -160,6 +171,17 @@ export default {
     };
   },
   methods: {
+    copy(e, label) {
+      console.log('label', label);
+      copyToClipboard(e.target.value).then(() => {
+        this.$q.notify({
+          message: `${label} in die Zwischenablage kopiert.`,
+          color: 'white',
+          textColor: 'primary',
+          position: 'bottom-right',
+        });
+      });
+    },
     async getBalance() {
       // eslint-disable-next-line vue/no-async-in-computed-properties
       const balance = await this.$web3.eth.getBalance(

@@ -82,11 +82,6 @@ export default {
     async assign() {
       this.$q.loading.show();
       this.prompt = false;
-      // const service = {
-      //   client: this.$auth.user().address,
-      //   contractor: this.address,
-      //   ...this.selected,
-      // };
       try {
         const nodes = await this.$services.assignment.assign(
           this.project.hash,

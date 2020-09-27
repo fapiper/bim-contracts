@@ -77,14 +77,3 @@ export function logout(state) {
   Cookies.remove('authorization_key');
   state.commit('setUser', { user: null });
 }
-
-export function verify(state, token) {
-  return true;
-}
-export function passwordForgot(state, data) {
-  return true;
-}
-
-export function passwordReset(state, { token, data }) {
-  return true;
-}

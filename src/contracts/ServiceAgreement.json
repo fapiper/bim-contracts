@@ -8380,7 +8380,7 @@
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-09-24T09:28:36.667Z",
+  "updatedAt": "2020-09-25T09:27:24.478Z",
   "devdoc": {
     "details": "Store & retreive value in a variable",
     "methods": {

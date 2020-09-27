@@ -17,7 +17,6 @@ class BoQService {
       await boqdb.load();
       this._assigned = project_hash;
       this.boqdb = boqdb;
-      console.log('loaded db from loadDb', this.boqdb);
     }
     return this.boqdb;
   }

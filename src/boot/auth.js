@@ -57,14 +57,11 @@ export default ({ app, router, store, Vue }) => {
   helper.login = (data) => {
     return store.dispatch('auth/login', data);
   };
-  helper.setToken = (user) => {
-    return store.dispatch('auth/setToken', user);
+  helper.setKey = (user) => {
+    return store.dispatch('auth/setKey', user);
   };
   helper.logout = () => {
     return store.dispatch('auth/logout');
-  };
-  helper.verify = (user) => {
-    return store.dispatch('auth/verify', user);
   };
   helper.fetch = () => {
     return store.dispatch('auth/fetch');

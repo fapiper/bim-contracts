@@ -21,7 +21,9 @@ contract ServiceAgreement {
     }
 
     bytes32 service;
-    mapping(bytes32 => ServiceNode) services;
+
+    mapping(bytes32 => uint256) index;
+    ServiceNode[] services;
 
     address client;
     address contractor;
@@ -41,10 +43,27 @@ contract ServiceAgreement {
 
     modifier atStage(bytes32 _service, Stages _stage) {
         require(
-            services[_service].stage == _stage,
+            _getServiceNodeByHash(_service).stage == _stage,
             'Function cannot be called at this stage.'
         );
         _;
+    }
+
+    function _addServiceNodeByHash(bytes32 _service, ServiceNode memory _node)
+        internal
+        returns (ServiceNode memory)
+    {
+        index[_service] = services.length;
+        services[index[_service]] = _node;
+        return services[index[_service]];
+    }
+
+    function _getServiceNodeByHash(bytes32 _service)
+        internal
+        view
+        returns (ServiceNode storage)
+    {
+        return services[index[_service]];
     }
 
     /**
@@ -68,13 +87,10 @@ contract ServiceAgreement {
         bool[] memory _billables,
         bytes32[] memory _documents
     ) public {
-        service = _service;
-        services[_service] = ServiceNode(
-            Stages.INITIALIZED,
-            _parent,
-            new bytes32[](0),
-            true
-        ); // root service
+        _addServiceNodeByHash(
+            _service,
+            ServiceNode(Stages.INITIALIZED, _parent, new bytes32[](0), true)
+        );
         client = _client;
         contractor = _contractor;
         factory = msg.sender;
@@ -95,16 +111,14 @@ contract ServiceAgreement {
         bool _billable
     ) internal returns (bool) {
         require(
-            services[_parent].stage < Stages.INITIALIZED,
+            _getServiceNodeByHash(_parent).stage < Stages.INITIALIZED,
             'Parent service node not found.'
         );
-        services[_service] = ServiceNode(
-            Stages.INITIALIZED,
-            0,
-            new bytes32[](0),
-            _billable
+        _addServiceNodeByHash(
+            _service,
+            ServiceNode(Stages.INITIALIZED, 0, new bytes32[](0), _billable)
         );
-        services[_parent].children.push(_service);
+        _getServiceNodeByHash(_parent).children.push(_service);
         return true;
     }
 
@@ -112,8 +126,17 @@ contract ServiceAgreement {
      * @dev Retrieves the current stage of a service node
      * @param _service The hash of the service to get the current stage from
      */
-    function getServiceStage(bytes32 _service) public view returns (uint8) {
-        return uint8(services[_service].stage);
+    function getServiceStages(bytes32 _service) public view returns (uint8) {
+            bytes32[] memory _services = bytes32[](0);
+                        uint8[] memory _stages = uint8[](0);
+
+      for (uint i = 0; i < services.length; i++) {
+          Trip storage trrip = trips[i];
+          _services[i] = services[i].;
+      }
+      return trrips;
+
+        return uint8(_getServiceNodeByHash(_service).stage);
     }
 
     /**
@@ -123,19 +146,26 @@ contract ServiceAgreement {
      */
     function setStage(bytes32 _service, uint8 _stage) public returns (bool) {
         require(_stage > 0 && _stage <= uint8(Stages.APPROVED));
-        for (uint256 i = 0; i < services[_service].children.length; i++) {
-            setStage(services[_service].children[i], _stage);
+        for (
+            uint256 i = 0;
+            i < _getServiceNodeByHash(_service).children.length;
+            i++
+        ) {
+            setStage(_getServiceNodeByHash(_service).children[i], _stage);
         }
-        services[_service].stage = Stages(_stage);
-        if (services[services[_service].parent].stage < Stages.INITIALIZED) {
+        _getServiceNodeByHash(_service).stage = Stages(_stage);
+        if (
+            _getServiceNodeByHash(_getServiceNodeByHash(_service).parent)
+                .stage < Stages.INITIALIZED
+        ) {
             // Service parent resides in another service agreement. We have to update the stage via ServiceAgreementFactory.
             ServiceAgreementFactory(factory).setServiceStage(
-                services[_service].parent,
+                _getServiceNodeByHash(_service).parent,
                 _stage
             );
         }
         emit ServiceTransition(_service, _stage);
-        if (services[_service].billable) {
+        if (_getServiceNodeByHash(_service).billable) {
             emit Payment(_service);
         }
         return true;

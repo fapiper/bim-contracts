@@ -1,38 +1,62 @@
 import Web3 from 'web3';
-import { Utils } from 'quasar';
+import BoQ from 'src/models/boq-model.js';
+import Billing from 'src/models/billing-model.js';
 
 class Project {
-  constructor(_id, name, actors, created) {
-    this._id = _id;
+  constructor(
+    name,
+    designation,
+    description,
+    building_contractor,
+    general_contractor,
+    sub_contractors,
+    billing,
+    boqs
+  ) {
     this.name = name;
-    this.actors = actors;
-    this.created = created;
-  }
-
-  get hash() {
-    return Web3.utils.sha3(JSON.stringify(this));
+    this.designation = designation;
+    this.description = description;
+    this.building_contractor = building_contractor;
+    this.general_contractor = general_contractor;
+    this.sub_contractors = sub_contractors;
+    this.created = new Date().toJSON();
+    this.hash = Web3.utils.sha3(this.name + this.created);
+    this.billing = billing;
+    this.boqs = boqs;
   }
 
   static toStore(project) {
     return {
-      _id: project._id,
+      hash: project.hash,
       name: project.name,
-      actors: project.actors,
+      designation: project.designation,
+      description: project.description,
+      building_contractor: project.building_contractor,
+      general_contractor: project.general_contractor,
+      sub_contractors: project.sub_contractors,
       created: project.created,
+      billing: Billing.toStore(project.billing),
+      boqs: project.boqs.map(BoQ.toStore),
     };
   }
 
-  static fromStore(project) {
+  static fromView(project, billing, boqs, address) {
     return new Project(
       project.name,
-      project._id,
-      project.actors,
-      project.created
+      project.designation,
+      project.description,
+      {
+        name: 'Muster Bauherr',
+        address: 0x0,
+      },
+      {
+        name: 'Muster Generalunternehmer',
+        address: address,
+      },
+      [],
+      billing,
+      boqs
     );
-  }
-
-  static build(name, actors) {
-    return new Project(Utils.uid(), name, actors, new Date().toJSON());
   }
 }
 

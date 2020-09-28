@@ -1,15 +1,12 @@
 import { abi as ServiceAgreementFactoryAbi } from 'src/contracts/ServiceAgreementFactory.json';
 import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json';
 
-// import Assignment from 'src/models/assignment-model';
+import Assignment from 'src/models/assignment-model';
+
 const ServiceAgreementFactoryAddress =
   '0x3AA550487A462473B282cbDFf6b1Dd53ed4034A8';
 
-// TODO Remove for production
-const onlyUnique = (value, index, self) => {
-  return self.indexOf(value) === index;
-};
-
+const null32bytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
 const flatHandle = async (node, handleFn) => {
   const children = await handleFn(node);
   return children.length > 0
@@ -31,10 +28,10 @@ class AssignmentService {
     );
   }
 
-  async loadDb(user_address) {
-    if (this._assigned !== user_address) {
+  async loadDb(project_hash) {
+    if (this._assigned !== project_hash) {
       const assignmentdb = await this.orbitdb.docstore(
-        `user.${user_address}.assignments`,
+        `projects.${project_hash}.assignments`,
         {
           indexBy: 'hash',
           create: true,
@@ -44,77 +41,69 @@ class AssignmentService {
         }
       );
       await assignmentdb.load();
-      this._assigned = user_address;
+      this._assigned = project_hash;
       this.assignmentdb = assignmentdb;
     }
     return this.assignmentdb;
   }
 
-  async getAll(user_address) {
-    const _assignments = await this.factoryContract.methods
-      .getAgreementsByActor(user_address)
-      .call();
-    //   const assignments = _assignments.filter(onlyUnique);
-    //  const assignmentContracts = assignments.map((address) => {
-    //     const assigmentContract = new this.web3.eth.Contract(
-    //       ServiceAgreementAbi,
-    //       address
-    //     );
-
-    //     return assigmentContract;
-    //   });
-    return _assignments;
+  async getAll(project_hash) {
+    return this.query(project_hash, (item) => item);
   }
 
-  async put(user_address, assignment) {
-    const assignmentdb = await this.loadDb(user_address);
+  async getAssignmentsByClient(project_hash, client_address) {
+    return this.query(
+      project_hash,
+      (item) => (item.client_address = client_address)
+    );
+  }
+
+  async getAssignmentsByContractor(project_hash, contractor_address) {
+    return this.query(
+      project_hash,
+      (item) => (item.contractor_address = contractor_address)
+    );
+  }
+
+  async put(project_hash, assignment) {
+    console.log('put', assignment);
+    const assignmentdb = await this.loadDb(project_hash);
     const hash = await assignmentdb.put(assignment);
     return hash;
   }
 
-  async query(user_address, queryFn) {
-    const assignmentdb = await this.loadDb(user_address);
+  async query(project_hash, queryFn) {
+    const assignmentdb = await this.loadDb(project_hash);
     const assignments = await assignmentdb.query(queryFn);
     return assignments;
   }
 
-  async removeAll(user_address) {
-    const all = await this.getAll(user_address);
-    const assignments = Promise.all(
-      all.map(async (a) => await this.assignmentdb.del(a.hash))
-    );
-    await this.assignmentdb.drop();
-    return assignments;
-  }
+  // async removeAll(project_hash) {
+  //   const all = await this.getAll(project_hash);
+  //   const assignments = Promise.all(
+  //     all.map(async (a) => await this.assignmentdb.del(a.hash))
+  //   );
+  //   await this.assignmentdb.drop();
+  //   return assignments;
+  // }
 
-  async checkForUpdates(user_address) {
-    return this.query(user_address, (a) => !a.visited);
+  async checkForUpdates(project_hash) {
+    return this.query(project_hash, (a) => !a.visited);
   }
 
   async assign(project_hash, service, client, contractor) {
     // const status = 1;
     service.project_hash = project_hash;
     // Store assignment in db of contractor
-    // const assignment = new Assignment(service, client, contractor, status);
-    // await this.put(contractor.address, assignment);
 
     // Update boq item status in project db
-    const handleFn = async (node) => {
-      const children = await this.boqService.query(project_hash, (item) =>
+    const handleFn = async (node) =>
+      this.boqService.query(project_hash, (item) =>
         node.children.some((hash) => item.hash === hash)
       );
-      // node.status = assignment.status;
-      // const updated = Promise.all(
-      //   children.map(async (child) => {
-      //     child.status = node.status;
-      //     return child;
-      //   })
-      // );
-      return children;
-    };
     const _nodes = await flatHandle(service, handleFn);
     const nodes = Array.isArray(_nodes) ? _nodes : [_nodes];
-    console.log('service', service, 'nodes', nodes);
+
     // Store assignment on chain
     const children = nodes.map((c) => c.hash);
     const parents = nodes.map((c) => c.parent);
@@ -122,7 +111,7 @@ class AssignmentService {
     const res = await this.factoryContract.methods
       .createServiceAgreement(
         service.hash,
-        service.parent,
+        service.parent || null32bytes,
         client.address,
         contractor.address,
         children,
@@ -131,12 +120,19 @@ class AssignmentService {
         []
       )
       .send({ from: client.address, gas: 2000000 });
-    console.log('res', res);
-    // const assignments = await this.factoryContract.methods.getAgreementsByActor.call(
-    //   client.address
-    // );
-    // console.log('assignments', assignments);
-    return nodes;
+
+    const assignment = new Assignment(
+      res.events.ServiceAgreementCreated.returnValues._address,
+      service.id,
+      service.short_desc || service.name,
+      service.children,
+      service.parent,
+      service.hash,
+      client.address,
+      contractor.address
+    );
+    await this.put(project_hash, assignment);
+    return assignment;
   }
 
   async transitionNext(assignment) {

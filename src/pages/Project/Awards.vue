@@ -1,14 +1,13 @@
 <template>
   <q-page padding>
     <div class="row items-start q-gutter-md">
-      <template v-for="assignment in assignments">
+      <template v-for="award in awards">
         <AssignmentCard
           class="assignment-card"
-          :key="assignment.hash"
-          :assignment="assignment"
+          :key="award.hash"
+          :assignment="award"
       /></template>
     </div>
-    <pre>{{ assignments }}</pre>
   </q-page>
 </template>
 
@@ -16,7 +15,7 @@
 import AssignmentCard from 'components/AssignmentCard.vue';
 
 export default {
-  name: 'PageProjectAssignments',
+  name: 'PageProjectAwards',
   components: { AssignmentCard },
   data() {
     return {
@@ -24,10 +23,8 @@ export default {
     };
   },
   computed: {
-    assignments() {
-      return this.$store.getters['project/assignments'](
-        this.$auth.user().address
-      );
+    awards() {
+      return this.$store.getters['project/awards'](this.$auth.user().address);
     },
   },
   created() {
@@ -37,16 +34,14 @@ export default {
     async loadAssignments() {
       this.loading = true;
       const project_hash = this.$route.params.project;
+      // const user_address = this.$auth.user().address;
       await this.$store.dispatch('project/loadAssignments', project_hash);
+      // const assignments = await this.$services.assignment.getAll(
+      //   this.$auth.user().address
+      // );
+      // console.log('got assignments', assignments);
       this.loading = false;
     },
   },
 };
 </script>
-<style lang="scss">
-.assignment-card {
-  width: 100%;
-  // max-width: 800px;
-  overflow: hidden;
-}
-</style>

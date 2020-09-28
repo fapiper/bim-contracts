@@ -8,8 +8,8 @@ import './ServiceAgreementFactory.sol';
  * @dev Store & retreive value in a variable
  */
 contract ServiceAgreement {
-    event ServiceTransition(bytes32 service, uint8 stage);
-    event Payment(bytes32 service);
+    event ServiceTransition(bytes32 _service, uint8 _stage);
+    event Payment(bytes32 _service);
 
     enum Stages {INITIALIZED, STARTED, FINISHED, APPROVED, REJECTED, PAYED}
 
@@ -20,6 +20,7 @@ contract ServiceAgreement {
         bool billable;
     }
 
+    bytes32 service;
     mapping(bytes32 => ServiceNode) services;
 
     address client;
@@ -67,6 +68,7 @@ contract ServiceAgreement {
         bool[] memory _billables,
         bytes32[] memory _documents
     ) public {
+        service = _service;
         services[_service] = ServiceNode(
             Stages.INITIALIZED,
             _parent,
@@ -104,6 +106,14 @@ contract ServiceAgreement {
         );
         services[_parent].children.push(_service);
         return true;
+    }
+
+    /**
+     * @dev Retrieves the current stage of a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function getServiceStage(bytes32 _service) public view returns (uint8) {
+        return uint8(services[_service].stage);
     }
 
     /**

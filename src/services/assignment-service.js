@@ -4,7 +4,7 @@ import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json'
 import Assignment from 'src/models/assignment-model';
 
 const ServiceAgreementFactoryAddress =
-  '0x3AA550487A462473B282cbDFf6b1Dd53ed4034A8';
+  '0xEe44B9702161FC3BA816E858640eE3749d02FEF2';
 
 const null32bytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
 const flatHandle = async (node, handleFn) => {
@@ -48,21 +48,26 @@ class AssignmentService {
   }
 
   async getAll(project_hash) {
-    return this.query(project_hash, (item) => item);
-  }
-
-  async getAssignmentsByClient(project_hash, client_address) {
-    return this.query(
-      project_hash,
-      (item) => (item.client_address = client_address)
-    );
-  }
-
-  async getAssignmentsByContractor(project_hash, contractor_address) {
-    return this.query(
-      project_hash,
-      (item) => (item.contractor_address = contractor_address)
-    );
+    // const build = async (assignment) => {
+    //   const contract = new this.web3.eth.Contract(
+    //     ServiceAgreementAbi,
+    //     '0x849dF15C88150517b0D16301318EE864b1f5486A'
+    //   );
+    //   console.log('got contract', contract);
+    //   // const service = await contract.service.call({
+    //   //   from: '0xbE020679ffBb4B8FE98f0B3f728D74c340199F56',
+    //   // });
+    //   // console.log('got contract service', service);
+    //   const stage = await contract.methods
+    //     .getServiceStage(assignment.service.hash)
+    //     .call();
+    //   assignment.stage = stage;
+    //   console.log('got assignment', assignment);
+    //   return assignment;
+    // };
+    const _assignments = await this.query(project_hash, (item) => item);
+    // const assignments = await Promise.all(_assignments.map(build));
+    return _assignments;
   }
 
   async put(project_hash, assignment) {
@@ -131,49 +136,20 @@ class AssignmentService {
       client.address,
       contractor.address
     );
+    console.log('put', assignment);
     await this.put(project_hash, assignment);
     return assignment;
   }
 
-  async transitionNext(assignment) {
-    assignment.status++;
-    // Update assignment in db of contractor
-    await this.put(assignment.contractor.address, assignment);
+  async nextStage(assignment) {
+    const stage = await this.factoryContract.methods.getServiceStage().call();
+    console.log('got stage', stage);
+    const res = await this.factoryContract.methods
+      .setServiceStage(assignment.service.hash, 2)
+      .send({ from: assignment.client_address, gas: 2000000 });
+    console.log('got res', res);
 
-    // Update boq item status in project db
-    const handleFn = async (node) => {
-      const children = await this.boqService.query(
-        assignment.service.project_hash,
-        (item) => node.children.some((hash) => item.hash === hash)
-      );
-      node.status = assignment.status;
-      const updated = Promise.all(
-        children.map(async (child) => {
-          child.status = node.status;
-          return child;
-        })
-      );
-      return updated;
-    };
-    const nodes = await flatHandle(assignment.service, handleFn);
-
-    // Store assignment on chain
-    // const children = nodes.map((c) => c.hash);
-    // const parents = nodes.map((c) => c.parent);
-    // const billings = nodes.map((c) => c.billing_item !== null);
-    // await this.factoryContract.methods
-    //   .createServiceAgreement(
-    //     service.hash,
-    //     service.parent,
-    //     client.address,
-    //     contractor.address,
-    //     children,
-    //     parents,
-    //     billings,
-    //     []
-    //   )
-    //   .send({ from: client.address, gas: 2000000 });
-    return nodes;
+    return res;
   }
 }
 

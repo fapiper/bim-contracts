@@ -67,6 +67,8 @@ export async function fetch(state) {
     const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
       privateKey
     );
+    this._vm.$web3.eth.accounts.wallet.add(account);
+    this._vm.$web3.eth.defaultAccount = account.address;
     const user = await this._vm.$services.user.get(account.address);
     state.commit('setUser', { user, privateKey });
     return user;

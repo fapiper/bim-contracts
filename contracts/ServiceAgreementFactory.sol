@@ -73,4 +73,11 @@ contract ServiceAgreementFactory is CloneFactory {
         ServiceAgreement(agreements[_service]).setStage(_service, _stage);
         return true;
     }
+
+    /**
+     * @dev Retrieves the current stage of a service node
+     */
+    function getServiceStage() public pure returns (string memory) {
+        return 'HI';
+    }
 }

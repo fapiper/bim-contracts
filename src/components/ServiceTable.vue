@@ -1,8 +1,7 @@
 <template>
   <q-table
-    :hide-header="!isRoot"
+    hide-header
     hide-bottom
-    :title="title"
     :data="data"
     :columns="columns"
     row-key="hash"
@@ -10,9 +9,8 @@
     :loading="loading"
     :table-colspan="5"
     separator="none"
-    table-class="bc-boq-table"
+    table-class="bc-service-table"
     flat
-    :bordered="isRoot"
   >
     <template v-if="isRoot" v-slot:header="props">
       <q-tr :props="props">
@@ -84,7 +82,11 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-boq-table @assign="assign" :data="children" :project="project" />
+          <bc-service-table
+            @assign="assign"
+            :data="children"
+            :project="project"
+          />
         </q-td>
       </q-tr>
     </template>
@@ -120,9 +122,7 @@ const STATUS = {
 export default {
   name: 'ComponentServiceTable',
   props: {
-    isRoot: Boolean,
     data: Array,
-    title: String,
     project: String,
     loading: Boolean,
   },
@@ -197,9 +197,9 @@ export default {
 };
 </script>
 <style lang="scss">
-.bc-boq-table {
+.bc-service-table {
   table-layout: fixed;
-  .bc-boq-table tr td:first-child {
+  .bc-service-table tr td:first-child {
     padding-left: 32px;
   }
 }

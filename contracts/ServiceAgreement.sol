@@ -8,7 +8,7 @@ import './ServiceAgreementFactory.sol';
  * @dev Store & retreive value in a variable
  */
 contract ServiceAgreement {
-    event ServiceTransition(bytes32 _service, uint8 _stage);
+    event ServiceTransition(bytes32 _service, uint256 _stage);
     event Payment(bytes32 _service);
 
     enum Stages {
@@ -53,6 +53,11 @@ contract ServiceAgreement {
             'Function cannot be called at this stage.'
         );
         _;
+    }
+
+    modifier transitionAfter(bytes32 _service) {
+        _;
+        _nextStage(_service);
     }
 
     /**
@@ -120,8 +125,86 @@ contract ServiceAgreement {
      * @dev Retrieves the current stage of a service node
      * @param _service The hash of the service to get the current stage from
      */
-    function getServiceStage(bytes32 _service) public view returns (uint8) {
-        return uint8(services[_service].stage);
+    function getServiceStage(bytes32 _service) public view returns (Stages) {
+        return services[_service].stage;
+    }
+
+    /**
+     * @dev Starts a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function startService(bytes32 _service)
+        public
+        onlyContractor
+        atStage(_service, Stages.INITIALIZED)
+        transitionAfter(_service)
+        returns (bool)
+    {
+        return true;
+    }
+
+    /**
+     * @dev Finishes a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function finishService(bytes32 _service)
+        public
+        onlyContractor
+        atStage(_service, Stages.STARTED)
+        transitionAfter(_service)
+        returns (bool)
+    {
+        return true;
+    }
+
+    /**
+     * @dev Approves a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function approveService(bytes32 _service)
+        public
+        onlyClient
+        atStage(_service, Stages.FINISHED)
+        transitionAfter(_service)
+        returns (bool)
+    {
+        return true;
+    }
+
+    /**
+     * @dev Approves a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function rejectService(bytes32 _service)
+        public
+        onlyClient
+        atStage(_service, Stages.FINISHED)
+        returns (bool)
+    {
+        setStage(_service, Stages.REJECTED);
+        return true;
+    }
+
+    /**
+     * @dev Approves a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function payService(bytes32 _service)
+        public
+        onlyClient
+        atStage(_service, Stages.APPROVED)
+        returns (bool)
+    {
+        setStage(_service, Stages.PAYED);
+        return true;
+    }
+
+    /**
+     * @dev Transitions Service to its next stage
+     * @param _service The hash of the service to get the current stage from
+     */
+    function _nextStage(bytes32 _service) internal {
+        setStage(_service, Stages(uint256(services[_service].stage) + 1));
     }
 
     /**
@@ -129,20 +212,19 @@ contract ServiceAgreement {
      * @param _service The hash of the service to be updated
      * @param _stage The new stage of the service
      */
-    function setStage(bytes32 _service, uint8 _stage) public returns (bool) {
-        require(_stage > 0 && _stage <= uint8(Stages.APPROVED));
+    function setStage(bytes32 _service, Stages _stage) public returns (bool) {
         for (uint256 i = 0; i < services[_service].children.length; i++) {
             setStage(services[_service].children[i], _stage);
         }
-        services[_service].stage = Stages(_stage);
-        if (services[services[_service].parent].stage < Stages.INITIALIZED) {
-            // Service parent resides in another service agreement. We have to update the stage via ServiceAgreementFactory.
-            ServiceAgreementFactory(factory).setServiceStage(
-                services[_service].parent,
-                _stage
-            );
-        }
-        emit ServiceTransition(_service, _stage);
+        services[_service].stage = _stage;
+        // if (services[services[_service].parent].stage < Stages.INITIALIZED) {
+        //     // Service parent resides in another service agreement. We have to update the stage via ServiceAgreementFactory.
+        //     ServiceAgreementFactory(factory).setServiceStage(
+        //         services[_service].parent,
+        //         _stage
+        //     );
+        // }
+        emit ServiceTransition(_service, uint256(_stage));
         if (services[_service].billable) {
             emit Payment(_service);
         }

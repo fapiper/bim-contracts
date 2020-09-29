@@ -18,6 +18,14 @@ contract ServiceAgreementFactory is CloneFactory {
 
     address public implementation;
 
+    modifier onlyServiceAgreement(bytes32 _service) {
+        require(
+            agreements[_service] > address(0),
+            'Not allowed. Only from Service Agreement.'
+        );
+        _;
+    }
+
     constructor(address _implementation) public {
         implementation = _implementation;
     }
@@ -67,11 +75,10 @@ contract ServiceAgreementFactory is CloneFactory {
      * @param _service The hash of the service to be updated
      * @param _stage The new stage of the service
      */
-    function setServiceStage(bytes32 _service, uint8 _stage)
-        public
-        returns (bool)
+    function setServiceStage(bytes32 _service, ServiceAgreement.Stages _stage)
+        external
+        onlyServiceAgreement(_service)
     {
         ServiceAgreement(agreements[_service]).setStage(_service, _stage);
-        return true;
     }
 }

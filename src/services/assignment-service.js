@@ -4,7 +4,7 @@ import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json'
 import Assignment from 'src/models/assignment-model';
 
 const ServiceAgreementFactoryAddress =
-  '0x640Eb31355F935Bd334B3A9F4Fab3031d1E20458';
+  '0x6A411718bAFb6E0bFD9fBD78a84A8605d57725c0';
 
 const null32bytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
 const flatHandle = async (node, handleFn) => {
@@ -90,15 +90,6 @@ class AssignmentService {
     return assignments;
   }
 
-  // async removeAll(project_hash) {
-  //   const all = await this.getAll(project_hash);
-  //   const assignments = Promise.all(
-  //     all.map(async (a) => await this.assignmentdb.del(a.hash))
-  //   );
-  //   await this.assignmentdb.drop();
-  //   return assignments;
-  // }
-
   async checkForUpdates(project_hash) {
     return this.query(project_hash, (a) => !a.visited);
   }
@@ -140,15 +131,23 @@ class AssignmentService {
     return assignment;
   }
 
-  async nextStage(assignment) {
+  async nextStage(assignment, service) {
+    const stageToFunction = {
+      1: 'startService',
+      2: 'finishService',
+      3: 'approveService',
+      4: 'payService',
+      5: 'rejectService',
+    };
+    console.log('nextStage', assignment, service);
     const contract = new this.web3.eth.Contract(
-      ServiceAgreementFactoryAbi,
+      ServiceAgreementAbi,
       assignment.address
     );
-
-    const res = await contract.methods
-      .setServiceStage(assignment.stage + 1)
-      .send({ from: assignment.client_address, gas: 2000000 });
+    console.log('got contract', contract);
+    const res = await contract.methods[stageToFunction[service.stage]](
+      service.hash
+    ).send({ from: assignment.client.address, gas: 2000000 });
     console.log('res', res);
     return res;
   }

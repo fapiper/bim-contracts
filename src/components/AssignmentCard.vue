@@ -91,9 +91,9 @@ export default {
     assign() {
       console.log('next');
     },
-    transition() {
+    transition(service) {
       console.log('next');
-      // this.$services.assignment.nextStage(this.assignment);
+      this.$services.assignment.nextStage(this.assignment, service);
     },
   },
 };

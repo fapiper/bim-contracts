@@ -23,7 +23,9 @@ class ProjectService {
     return this.projectdb.get(hash);
   }
 
-  query(queryFn) {
+  async query(queryFn) {
+    const all = await this.projectdb.query((i) => i);
+    console.log('all projects', all);
     return this.projectdb.query(queryFn);
   }
 
@@ -54,6 +56,14 @@ class ProjectService {
     // await this.boqService.drop(hash);
     const project = await this.projectdb.del(hash);
     return project;
+  }
+
+  async addActor(project_hash, actor_address) {
+    const projects = await this.get(project_hash);
+    projects[0].actor_addresses.push(actor_address);
+    const res = await this.projectdb.put(projects[0]);
+    console.log('put', res);
+    return projects[0];
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <q-table
-    hide-header
+    :hide-header="!isRoot"
     hide-bottom
     :data="data"
     :columns="columns"
@@ -61,7 +61,7 @@
 
                 <q-item clickable v-close-popup @click="assign(props.row)">
                   <q-item-section>
-                    <q-item-label>Auftrag weiter vergeben</q-item-label>
+                    <q-item-label>Auftrag vergeben</q-item-label>
                   </q-item-section>
                 </q-item>
                 <q-item
@@ -90,6 +90,7 @@
         <q-td colspan="100%" style="padding: 0">
           <bc-service-table
             @assign="assign"
+            @transition="transition"
             :data="children"
             :project="project"
             :assignment="assignment"
@@ -111,9 +112,6 @@ export default {
     project: String,
     assignment: Object,
   },
-  mounted() {
-    console.log('data', this.data);
-  },
   methods: {
     assign(service) {
       this.$emit('assign', service);
@@ -121,6 +119,7 @@ export default {
     transition(service) {
       this.$emit('transition', service);
     },
+
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },

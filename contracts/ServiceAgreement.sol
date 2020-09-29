@@ -9,7 +9,6 @@ import './ServiceAgreementFactory.sol';
  */
 contract ServiceAgreement {
     event ServiceTransition(bytes32 _service, uint256 _stage);
-    event Payment(bytes32 _service);
 
     enum Stages {
         EMPTY, // 0 - Initial stage shouldnt be 0. This could cause validation conflicts)
@@ -217,17 +216,14 @@ contract ServiceAgreement {
             setStage(services[_service].children[i], _stage);
         }
         services[_service].stage = _stage;
-        // if (services[services[_service].parent].stage < Stages.INITIALIZED) {
-        //     // Service parent resides in another service agreement. We have to update the stage via ServiceAgreementFactory.
-        //     ServiceAgreementFactory(factory).setServiceStage(
-        //         services[_service].parent,
-        //         _stage
-        //     );
-        // }
-        emit ServiceTransition(_service, uint256(_stage));
-        if (services[_service].billable) {
-            emit Payment(_service);
+        if (services[services[_service].parent].stage < Stages.INITIALIZED) {
+            // Service parent resides in another service agreement. We have to update the stage via ServiceAgreementFactory.
+            ServiceAgreementFactory(factory).setServiceStage(
+                services[_service].parent,
+                _stage
+            );
         }
+        emit ServiceTransition(_service, uint256(_stage));
         return true;
     }
 

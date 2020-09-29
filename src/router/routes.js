@@ -27,8 +27,15 @@ const routes = [
             path: 'assignments',
             component: () => import('pages/Project/Assignments.vue'),
             meta: {
-              label: 'Aufträge',
+              label: 'Auftragsbearbeitung',
               // auth: [Roles.SUB_CONTRACTOR, Roles.GENERAL_CONTRACTOR],
+            },
+          },
+          {
+            path: 'awards',
+            component: () => import('pages/Project/Awards.vue'),
+            meta: {
+              label: 'Auftragsvergabe',
             },
           },
           {

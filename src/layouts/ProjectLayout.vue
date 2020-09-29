@@ -21,12 +21,17 @@
             exact
           />
           <q-route-tab
-            label="Aufträge"
+            label="Auftragsbearbeitung"
             :to="'/projects/' + project.hash + '/assignments'"
             exact
           >
-            <q-badge color="red" floating>{{ newAssignments.length }}</q-badge>
+            <!-- <q-badge color="red" floating>{{ newAssignments.length }}</q-badge> -->
           </q-route-tab>
+          <q-route-tab
+            label="Auftragsvergabe"
+            :to="'/projects/' + project.hash + '/awards'"
+            exact
+          />
           <q-route-tab
             label="Akteure"
             :to="'/projects/' + project.hash + '/contact'"

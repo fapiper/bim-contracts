@@ -18,9 +18,7 @@ export default {
   name: 'PageProjectAwards',
   components: { AssignmentCard },
   data() {
-    return {
-      tab: 'one',
-    };
+    return {};
   },
   computed: {
     awards() {
@@ -28,20 +26,22 @@ export default {
     },
   },
   created() {
-    this.loadAssignments();
+    this.loadAwards();
   },
   methods: {
-    async loadAssignments() {
+    async loadAwards() {
       this.loading = true;
       const project_hash = this.$route.params.project;
-      // const user_address = this.$auth.user().address;
       await this.$store.dispatch('project/loadAssignments', project_hash);
-      // const assignments = await this.$services.assignment.getAll(
-      //   this.$auth.user().address
-      // );
-      // console.log('got assignments', assignments);
       this.loading = false;
     },
   },
 };
 </script>
+<style lang="scss">
+.assignment-card {
+  width: 100%;
+  // max-width: 800px;
+  overflow: hidden;
+}
+</style>

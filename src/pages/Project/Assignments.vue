@@ -64,11 +64,6 @@ export default {
     };
   },
   computed: {
-    computed: {
-      project() {
-        return this.$store.getters['project/project'];
-      },
-    },
     assignments() {
       return this.$store.getters['project/assignments'](
         this.$auth.user().address

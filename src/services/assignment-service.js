@@ -28,6 +28,11 @@ class AssignmentService {
     );
   }
 
+  async _getStage(address, hash) {
+    const contract = new this.web3.eth.Contract(ServiceAgreementAbi, address);
+    return contract.methods.getServiceStage(hash).call();
+  }
+
   async loadDb(project_hash) {
     if (this._assigned !== project_hash) {
       const assignmentdb = await this.orbitdb.docstore(
@@ -47,31 +52,33 @@ class AssignmentService {
     return this.assignmentdb;
   }
 
-  async getAll(project_hash) {
-    // const build = async (assignment) => {
-    //   const contract = new this.web3.eth.Contract(
-    //     ServiceAgreementAbi,
-    //     '0x849dF15C88150517b0D16301318EE864b1f5486A'
-    //   );
-    //   console.log('got contract', contract);
-    //   // const service = await contract.service.call({
-    //   //   from: '0xbE020679ffBb4B8FE98f0B3f728D74c340199F56',
-    //   // });
-    //   // console.log('got contract service', service);
-    //   const stage = await contract.methods
-    //     .getServiceStage(assignment.service.hash)
-    //     .call();
-    //   assignment.stage = stage;
-    //   console.log('got assignment', assignment);
-    //   return assignment;
-    // };
+  async getAllByProject(project_hash) {
+    const build = async (assignment) => {
+      assignment.stage = await this._getStage(
+        assignment.address,
+        assignment.service.hash
+      );
+      return assignment;
+    };
     const _assignments = await this.query(project_hash, (item) => item);
-    // const assignments = await Promise.all(_assignments.map(build));
-    return _assignments;
+    const assignments = await Promise.all(_assignments.map(build));
+    return assignments;
+  }
+
+  async getChildren(project_hash, assignment) {
+    const build = async (item) => {
+      item.stage = await this._getStage(assignment.address, item.hash);
+      return item;
+    };
+    const _items = await this.boqService.query(
+      project_hash,
+      (item) => item.parent === assignment.service.hash
+    );
+    const items = await Promise.all(_items.map(build));
+    return items;
   }
 
   async put(project_hash, assignment) {
-    console.log('put', assignment);
     const assignmentdb = await this.loadDb(project_hash);
     const hash = await assignmentdb.put(assignment);
     return hash;
@@ -142,13 +149,15 @@ class AssignmentService {
   }
 
   async nextStage(assignment) {
-    const stage = await this.factoryContract.methods.getServiceStage().call();
-    console.log('got stage', stage);
-    const res = await this.factoryContract.methods
-      .setServiceStage(assignment.service.hash, 2)
-      .send({ from: assignment.client_address, gas: 2000000 });
-    console.log('got res', res);
+    const contract = new this.web3.eth.Contract(
+      ServiceAgreementFactoryAbi,
+      assignment.address
+    );
 
+    const res = await contract.methods
+      .setServiceStage(assignment.stage + 1)
+      .send({ from: assignment.client_address, gas: 2000000 });
+    console.log('res', res);
     return res;
   }
 }

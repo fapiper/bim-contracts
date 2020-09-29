@@ -61,6 +61,7 @@ contract ServiceAgreementFactory is CloneFactory {
         return true;
     }
 
+    // TODO Act as Proxy for Agreements and redirect all request. This allows easier authentication and validation (e.g. only contractor can create new service agreement)
     /**
      * @dev Updates the stage of a service agreement
      * @param _service The hash of the service to be updated
@@ -72,12 +73,5 @@ contract ServiceAgreementFactory is CloneFactory {
     {
         ServiceAgreement(agreements[_service]).setStage(_service, _stage);
         return true;
-    }
-
-    /**
-     * @dev Retrieves the current stage of a service node
-     */
-    function getServiceStage() public pure returns (string memory) {
-        return 'HI';
     }
 }

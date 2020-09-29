@@ -4,6 +4,8 @@ export async function loadProject(state, hash) {
 }
 
 export async function loadAssignments(state, project_hash) {
-  const assignments = await this._vm.$services.assignment.getAll(project_hash);
+  const assignments = await this._vm.$services.assignment.getAllByProject(
+    project_hash
+  );
   state.commit('setAssignments', assignments);
 }

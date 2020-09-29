@@ -122,6 +122,7 @@ const STATUS = {
 export default {
   name: 'ComponentServiceTable',
   props: {
+    isRoot: Boolean,
     data: Array,
     project: String,
     loading: Boolean,

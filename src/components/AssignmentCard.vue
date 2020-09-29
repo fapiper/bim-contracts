@@ -3,12 +3,11 @@
     <template v-if="loading">Lädt</template>
     <template v-else>
       <q-card-section>
-        <pre>{{ service }}</pre>
         <div class="text-overline">
-          {{ service.short_desc || service.name }}
+          {{ assignment.stage }}
         </div>
         <div class="text-h5 q-mt-sm q-mb-xs">
-          {{ service.short_desc || service.name }}
+          {{ assignment.service.name }}
         </div>
       </q-card-section>
 
@@ -23,7 +22,7 @@
           flat
           dense
           :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-          @click="expanded = !expanded"
+          @click="loadChildren"
         />
       </q-card-actions>
 
@@ -31,7 +30,8 @@
         <div v-show="expanded">
           <q-separator />
           <q-card-section>
-            <q-separator />
+            <pre>{{ children }}</pre>
+            <!-- <bc-service-table></bc-service-table> -->
           </q-card-section>
         </div>
       </q-slide-transition>
@@ -44,18 +44,14 @@ export default {
   name: 'ComponentAssignmentCard',
   data() {
     return {
+      childrenLoaded: false,
+      children: [],
       loading: true,
-      tab: 'info',
       expanded: false,
-      client: null,
-      contractor: null,
-      service: null,
     };
   },
   async mounted() {
-    this.loading = true;
-    await this.loadAssignment();
-    this.loading = false;
+    this.loadAssignment();
   },
   computed: {
     project() {
@@ -67,22 +63,17 @@ export default {
   },
   methods: {
     async loadAssignment() {
-      this.client = await this.$services.user.get(
-        this.assignment.client_address
-      );
-      console.log('got client', this.client);
-      this.contractor = await this.$services.user.get(
-        this.assignment.contractor_address
-      );
-      console.log('got contractor', this.contractor);
-
-      const services = await this.$services.boq.get(
-        this.project.hash,
-        this.assignment.service.hash
-      );
-      this.service = services[0];
-      console.log('got service', this.service);
-      return true;
+      this.loading = true;
+      this.loading = false;
+    },
+    async loadChildren(assignment) {
+      if (!this.childrenLoaded) {
+        this.children = await this.$services.assignment.getChildren(
+          this.project.hash,
+          this.assignment
+        );
+      }
+      this.expanded = !this.expanded;
     },
     assign() {},
     next() {

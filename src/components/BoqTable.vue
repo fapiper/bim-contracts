@@ -138,7 +138,6 @@ export default {
     },
     async loadChildren(props) {
       if (!this.childrenLoaded[props.row.hash]) {
-        console.log('this row ', props.row);
         this.childrenLoaded[props.row.hash] = true;
         this.children = await this.$services.boq.query(
           this.project,

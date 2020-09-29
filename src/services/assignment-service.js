@@ -104,7 +104,6 @@ class AssignmentService {
   }
 
   async assign(project_hash, service, client, contractor) {
-    // const status = 1;
     service.project_hash = project_hash;
     // Store assignment in db of contractor
 
@@ -133,6 +132,7 @@ class AssignmentService {
       )
       .send({ from: client.address, gas: 2000000 });
 
+    // TODO store full data (service has to be typeof boq item; client + contractor must be known)
     const assignment = new Assignment(
       res.events.ServiceAgreementCreated.returnValues._address,
       service.id,

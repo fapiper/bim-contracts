@@ -11,7 +11,15 @@ contract ServiceAgreement {
     event ServiceTransition(bytes32 _service, uint8 _stage);
     event Payment(bytes32 _service);
 
-    enum Stages {INITIALIZED, STARTED, FINISHED, APPROVED, REJECTED, PAYED}
+    enum Stages {
+        EMPTY, // 0 - Initial stage shouldnt be 0. This could cause validation conflicts)
+        INITIALIZED, // 1
+        STARTED, // 2
+        FINISHED, // 3
+        APPROVED, // 4
+        REJECTED, // 5
+        PAYED // 6
+    }
 
     struct ServiceNode {
         Stages stage;

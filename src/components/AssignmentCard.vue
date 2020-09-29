@@ -30,8 +30,13 @@
         <div v-show="expanded">
           <q-separator />
           <q-card-section>
-            <pre>{{ children }}</pre>
-            <!-- <bc-service-table></bc-service-table> -->
+            <bc-service-table
+              @transition="next"
+              :data="service"
+              :assignment="assignment"
+              :project="project.hash"
+              is-root
+            />
           </q-card-section>
         </div>
       </q-slide-transition>
@@ -46,6 +51,7 @@ export default {
     return {
       childrenLoaded: false,
       children: [],
+      service: null,
       loading: true,
       expanded: false,
     };
@@ -64,20 +70,26 @@ export default {
   methods: {
     async loadAssignment() {
       this.loading = true;
+      const services = await this.$services.boq.get(
+        this.project.hash,
+        this.assignment.service.hash
+      );
+      this.service = services;
       this.loading = false;
     },
     async loadChildren(assignment) {
-      if (!this.childrenLoaded) {
-        this.children = await this.$services.assignment.getChildren(
-          this.project.hash,
-          this.assignment
-        );
-      }
+      // if (!this.childrenLoaded) {
+      //   this.children = await this.$services.assignment.getChildren(
+      //     this.project.hash,
+      //     this.assignment
+      //   );
+      // }
       this.expanded = !this.expanded;
     },
     assign() {},
     next() {
-      this.$services.assignment.nextStage(this.assignment);
+      console.log('next');
+      // this.$services.assignment.nextStage(this.assignment);
     },
   },
 };

@@ -6,7 +6,6 @@
     :columns="columns"
     row-key="hash"
     :rows-per-page-options="[0]"
-    :loading="loading"
     :table-colspan="5"
     separator="none"
     table-class="bc-service-table"
@@ -86,6 +85,7 @@
             @assign="assign"
             :data="children"
             :project="project"
+            :assignment="assignment"
           />
         </q-td>
       </q-tr>
@@ -97,7 +97,7 @@
 const STATUS = {
   0: { text: 'Nicht vergeben' },
   1: {
-    text: 'Vergeben',
+    text: 'Initialisiert',
     color: 'primary',
     textColor: 'white',
   },
@@ -117,6 +117,11 @@ const STATUS = {
     color: 'negative',
     textColor: 'white',
   },
+  6: {
+    text: 'Bezahlt',
+    color: 'accent',
+    textColor: 'white',
+  },
 };
 
 export default {
@@ -125,10 +130,10 @@ export default {
     isRoot: Boolean,
     data: Array,
     project: String,
-    loading: Boolean,
+    assignment: Object,
   },
   mounted() {
-    // console.log('data', this.data);
+    console.log('data', this.data);
   },
   methods: {
     assign(service) {
@@ -139,12 +144,13 @@ export default {
     },
     async loadChildren(props) {
       if (!this.childrenLoaded[props.row.hash]) {
-        console.log('this row ', props.row);
         this.childrenLoaded[props.row.hash] = true;
-        this.children = await this.$services.boq.query(
-          this.project,
-          (item) => item.parent === props.row.hash
+        const children = await this.$services.assignment.getChildren(
+          this.project.hash,
+          this.assignment
         );
+        console.log('loaded children in service table', children);
+        this.children = children;
       }
       props.expand = !props.expand;
     },

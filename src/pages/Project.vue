@@ -140,11 +140,6 @@ export default {
   async mounted() {
     this.loadProjects();
   },
-  computed: {
-    address() {
-      return this.$auth.user().address;
-    },
-  },
   data() {
     return {
       loading: true,
@@ -179,7 +174,9 @@ export default {
     async loadProjects() {
       this.loading = true;
       this.projects = await this.$services.project.query(
-        (e) => e.general_contractor.address === this.address
+        (e) =>
+          e.actor_addresses &&
+          e.actor_addresses.includes(this.$auth.user().address)
       );
       this.loading = false;
     },
@@ -214,7 +211,7 @@ export default {
           this.project,
           billing,
           boqs,
-          this.address
+          this.$auth.user().address
         );
         const res = await this.$services.project.put(project);
         this.projects.push(res);

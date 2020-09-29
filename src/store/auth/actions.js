@@ -3,15 +3,8 @@ import { User } from 'src/models/user-model';
 
 export async function register(state, data) {
   const account = await this._vm.$web3.eth.accounts.create();
-  const wallet = await this._vm.$web3.eth.accounts.wallet.add(account);
-
-  const user = new User(
-    account.address,
-    wallet.address,
-    data.name,
-    data.role,
-    data.iban
-  );
+  await this._vm.$web3.eth.accounts.wallet.add(account);
+  const user = new User(account.address, data.name, data.role, data.iban);
   const accounts = await this._vm.$web3.eth.getAccounts();
   await this._vm.$web3.eth.sendTransaction(
     {

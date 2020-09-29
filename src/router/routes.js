@@ -38,11 +38,6 @@ const routes = [
               label: 'Auftragsvergabe',
             },
           },
-          {
-            path: 'contact',
-            component: () => import('pages/Project/Contact.vue'),
-            meta: { label: 'Kontakte' },
-          },
         ],
       },
     ],

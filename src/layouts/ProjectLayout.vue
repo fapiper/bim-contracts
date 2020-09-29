@@ -32,11 +32,6 @@
             :to="'/projects/' + project.hash + '/awards'"
             exact
           />
-          <q-route-tab
-            label="Akteure"
-            :to="'/projects/' + project.hash + '/contact'"
-            exact
-          />
 
           <!-- v-if="$auth.check([Roles.GENERAL_CONTRACTOR, Roles.SUB_CONTRACTOR])" -->
         </q-tabs>

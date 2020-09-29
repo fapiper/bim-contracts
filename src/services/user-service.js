@@ -29,9 +29,7 @@ class UserService {
   }
 
   async delete(user) {
-    const deleted = await this.userdb.del(user.address);
-    console.log('deleted user', deleted);
-    return deleted;
+    return this.userdb.del(user.address);
   }
 }
 

@@ -64,9 +64,33 @@ contract ServiceAgreementFactory is CloneFactory {
             _billables,
             _documents
         );
+
+        // Set agreement address pointer to service and his children
         agreements[_service] = clone;
+        for (uint256 i = 0; i < _children.length; i++) {
+            agreements[_children[i]] = clone;
+        }
         emit ServiceAgreementCreated(_client, _contractor, clone, _service);
         return true;
+    }
+
+    function _addServiceNode(bytes32 _service, address _agreement) internal {
+        if (agreements[_service] > address(0)) {
+            ServiceAgreement(agreements[_service]).removeServiceNode(_service);
+        }
+        agreements[_service] = _agreement;
+    }
+
+    /**
+     * @dev Retrieves the current stage of a service node
+     * @param _service The hash of the service to get the current stage from
+     */
+    function getServiceStage(bytes32 _service)
+        external
+        view
+        returns (ServiceAgreement.Stages)
+    {
+        return ServiceAgreement(agreements[_service]).getServiceStage(_service);
     }
 
     // TODO Act as Proxy for Agreements and redirect all request. This allows easier authentication and validation (e.g. only contractor can create new service agreement)

@@ -27,7 +27,6 @@ contract ServiceAgreement {
         bool billable;
     }
 
-    bytes32 service;
     mapping(bytes32 => ServiceNode) services;
 
     address client;
@@ -46,17 +45,17 @@ contract ServiceAgreement {
         _;
     }
 
+    modifier onlyFactory() {
+        require(msg.sender == factory);
+        _;
+    }
+
     modifier atStage(bytes32 _service, Stages _stage) {
         require(
             services[_service].stage == _stage,
             'Function cannot be called at this stage.'
         );
         _;
-    }
-
-    modifier transitionAfter(bytes32 _service) {
-        _;
-        _nextStage(_service);
     }
 
     /**
@@ -80,7 +79,6 @@ contract ServiceAgreement {
         bool[] memory _billables,
         bytes32[] memory _documents
     ) public {
-        service = _service;
         services[_service] = ServiceNode(
             Stages.INITIALIZED,
             _parent,
@@ -106,10 +104,6 @@ contract ServiceAgreement {
         bytes32 _parent,
         bool _billable
     ) internal returns (bool) {
-        require(
-            services[_parent].stage >= Stages.INITIALIZED,
-            'Parent service node not found.'
-        );
         services[_service] = ServiceNode(
             Stages.INITIALIZED,
             0,
@@ -121,10 +115,31 @@ contract ServiceAgreement {
     }
 
     /**
+     * @dev Removes service node and all of its children
+     * @param _service The hash of the service to be removed
+     */
+    function removeServiceNode(bytes32 _service)
+        public
+        onlyFactory
+        returns (bool)
+    {
+        for (uint256 i = 0; i < services[_service].children.length; i++) {
+            removeServiceNode(services[_service].children[i]);
+        }
+        delete services[_service];
+        return true;
+    }
+
+    /**
      * @dev Retrieves the current stage of a service node
      * @param _service The hash of the service to get the current stage from
      */
-    function getServiceStage(bytes32 _service) public view returns (Stages) {
+    function getServiceStage(bytes32 _service)
+        external
+        view
+        onlyFactory
+        returns (Stages)
+    {
         return services[_service].stage;
     }
 
@@ -136,9 +151,9 @@ contract ServiceAgreement {
         public
         onlyContractor
         atStage(_service, Stages.INITIALIZED)
-        transitionAfter(_service)
         returns (bool)
     {
+        _nextStage(_service);
         return true;
     }
 
@@ -150,9 +165,9 @@ contract ServiceAgreement {
         public
         onlyContractor
         atStage(_service, Stages.STARTED)
-        transitionAfter(_service)
         returns (bool)
     {
+        _nextStage(_service);
         return true;
     }
 
@@ -164,9 +179,9 @@ contract ServiceAgreement {
         public
         onlyClient
         atStage(_service, Stages.FINISHED)
-        transitionAfter(_service)
         returns (bool)
     {
+        _nextStage(_service);
         return true;
     }
 
@@ -213,16 +228,16 @@ contract ServiceAgreement {
      */
     function setStage(bytes32 _service, Stages _stage) public returns (bool) {
         for (uint256 i = 0; i < services[_service].children.length; i++) {
-            setStage(services[_service].children[i], _stage);
+            if (services[services[_service].children[i]].stage > Stages.EMPTY) {
+                ServiceAgreementFactory(factory).setServiceStage(
+                    services[_service].children[i],
+                    _stage
+                );
+            } else {
+                setStage(services[_service].children[i], _stage);
+            }
         }
         services[_service].stage = _stage;
-        if (services[services[_service].parent].stage < Stages.INITIALIZED) {
-            // Service parent resides in another service agreement. We have to update the stage via ServiceAgreementFactory.
-            ServiceAgreementFactory(factory).setServiceStage(
-                services[_service].parent,
-                _stage
-            );
-        }
         emit ServiceTransition(_service, uint256(_stage));
         return true;
     }

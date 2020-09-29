@@ -8,7 +8,7 @@
         {{ status[assignment.service.stage].text }}
       </div>
       <div class="text-h5 q-mt-sm q-mb-xs">
-        {{ assignment.service.name }}
+        {{ assignment.service.name || assignment.service.short_desc }}
       </div>
       <div class="">
         <q-chip dense square icon="assignment">{{ assignment.address }}</q-chip>

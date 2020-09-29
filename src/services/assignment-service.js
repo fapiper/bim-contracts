@@ -4,9 +4,10 @@ import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json'
 import Assignment from 'src/models/assignment-model';
 
 const ServiceAgreementFactoryAddress =
-  '0x6A411718bAFb6E0bFD9fBD78a84A8605d57725c0';
+  '0x9e9d3a137F64585dcA38Eb6e9C62DF8B38CD59c4';
 
 const null32bytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
+
 const flatHandle = async (node, handleFn) => {
   const children = await handleFn(node);
   return children.length > 0
@@ -29,8 +30,7 @@ class AssignmentService {
   }
 
   async _getStage(address, hash) {
-    const contract = new this.web3.eth.Contract(ServiceAgreementAbi, address);
-    return contract.methods.getServiceStage(hash).call();
+    return this.factoryContract.methods.getServiceStage(hash).call();
   }
 
   async loadDb(project_hash) {

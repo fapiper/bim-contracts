@@ -4,11 +4,11 @@ export function project(state) {
 
 export const assignments = (state) => (contractor_address) => {
   return state.assignments.filter(
-    (a) => a.contractor_address === contractor_address
+    (a) => a.contractor.address === contractor_address
   );
 };
 export const awards = (state) => (client_address) => {
-  return state.assignments.filter((a) => a.client_address === client_address);
+  return state.assignments.filter((a) => a.client.address === client_address);
 };
 
 export function newAssignments(state) {

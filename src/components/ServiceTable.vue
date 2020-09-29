@@ -194,7 +194,7 @@ export default {
           required: true,
           label: 'Status',
           align: 'center',
-          field: (row) => row.status,
+          field: (row) => row.stage,
           format: (val) => val,
           style: 'width:200px',
         },

@@ -54,7 +54,7 @@ class AssignmentService {
 
   async getAllByProject(project_hash) {
     const build = async (assignment) => {
-      assignment.stage = await this._getStage(
+      assignment.service.stage = await this._getStage(
         assignment.address,
         assignment.service.hash
       );
@@ -105,9 +105,6 @@ class AssignmentService {
 
   async assign(project_hash, service, client, contractor) {
     service.project_hash = project_hash;
-    // Store assignment in db of contractor
-
-    // Update boq item status in project db
     const handleFn = async (node) =>
       this.boqService.query(project_hash, (item) =>
         node.children.some((hash) => item.hash === hash)
@@ -132,16 +129,11 @@ class AssignmentService {
       )
       .send({ from: client.address, gas: 2000000 });
 
-    // TODO store full data (service has to be typeof boq item; client + contractor must be known)
     const assignment = new Assignment(
       res.events.ServiceAgreementCreated.returnValues._address,
-      service.id,
-      service.short_desc || service.name,
-      service.children,
-      service.parent,
-      service.hash,
-      client.address,
-      contractor.address
+      service,
+      client,
+      contractor
     );
     console.log('put', assignment);
     await this.put(project_hash, assignment);

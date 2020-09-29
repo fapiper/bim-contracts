@@ -32,7 +32,7 @@
           <q-card-section>
             <bc-service-table
               @transition="next"
-              :data="service"
+              :data="[assignment.service]"
               :assignment="assignment"
               :project="project.hash"
               is-root
@@ -70,11 +70,6 @@ export default {
   methods: {
     async loadAssignment() {
       this.loading = true;
-      const services = await this.$services.boq.get(
-        this.project.hash,
-        this.assignment.service.hash
-      );
-      this.service = services;
       this.loading = false;
     },
     async loadChildren(assignment) {

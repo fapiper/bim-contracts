@@ -3,41 +3,45 @@
     <template v-if="loading">Lädt</template>
     <template v-else>
       <q-card-section>
-        <div class="text-overline">
-          {{ assignment.stage }}
+        <div
+          class="text-overline"
+          :class="'text-' + status[assignment.service.stage].color"
+        >
+          {{ status[assignment.service.stage].text }}
         </div>
         <div class="text-h5 q-mt-sm q-mb-xs">
           {{ assignment.service.name }}
         </div>
+        <div class="">
+          <q-chip dense square icon="assignment">{{
+            assignment.address
+          }}</q-chip>
+        </div>
       </q-card-section>
 
       <q-card-actions>
-        <q-btn flat color="primary" label="Nächste Phase" @click="next" />
-        <q-btn flat label="Vergeben" @click="assign" />
-
-        <q-space />
         <q-btn
-          color="grey"
-          round
           flat
+          round
           dense
           :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
           @click="loadChildren"
         />
+
+        <q-space />
       </q-card-actions>
 
       <q-slide-transition>
         <div v-show="expanded">
           <q-separator />
-          <q-card-section>
-            <bc-service-table
-              @transition="next"
-              :data="[assignment.service]"
-              :assignment="assignment"
-              :project="project.hash"
-              is-root
-            />
-          </q-card-section>
+          <bc-service-table
+            @transition="transition"
+            @assign="assign"
+            :data="[assignment.service]"
+            :assignment="assignment"
+            :project="project.hash"
+            is-root
+          />
         </div>
       </q-slide-transition>
     </template>
@@ -45,6 +49,8 @@
 </template>
 
 <script>
+import Assignment from 'src/models/assignment-model.js';
+
 export default {
   name: 'ComponentAssignmentCard',
   data() {
@@ -54,6 +60,7 @@ export default {
       service: null,
       loading: true,
       expanded: false,
+      status: Assignment.STATUS,
     };
   },
   async mounted() {
@@ -81,8 +88,10 @@ export default {
       // }
       this.expanded = !this.expanded;
     },
-    assign() {},
-    next() {
+    assign() {
+      console.log('next');
+    },
+    transition() {
       console.log('next');
       // this.$services.assignment.nextStage(this.assignment);
     },

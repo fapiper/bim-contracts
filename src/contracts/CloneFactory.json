@@ -343,20 +343,20 @@
                 {
                   "externalReferences": [
                     {
-                      "query": {
-                        "declaration": 20,
-                        "isOffset": false,
-                        "isSlot": false,
-                        "src": "1373:5:0",
-                        "valueSize": 1
-                      }
-                    },
-                    {
                       "targetBytes": {
                         "declaration": 26,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "1142:11:0",
+                        "valueSize": 1
+                      }
+                    },
+                    {
+                      "query": {
+                        "declaration": 20,
+                        "isOffset": false,
+                        "isSlot": false,
+                        "src": "1373:5:0",
                         "valueSize": 1
                       }
                     },
@@ -826,20 +826,20 @@
                 {
                   "externalReferences": [
                     {
-                      "query": {
-                        "declaration": 20,
-                        "isOffset": false,
-                        "isSlot": false,
-                        "src": "1373:5:0",
-                        "valueSize": 1
-                      }
-                    },
-                    {
                       "targetBytes": {
                         "declaration": 26,
                         "isOffset": false,
                         "isSlot": false,
                         "src": "1142:11:0",
+                        "valueSize": 1
+                      }
+                    },
+                    {
+                      "query": {
+                        "declaration": 20,
+                        "isOffset": false,
+                        "isSlot": false,
+                        "src": "1373:5:0",
                         "valueSize": 1
                       }
                     },
@@ -980,7 +980,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-09-28T14:58:52.411Z",
+  "updatedAt": "2020-09-29T10:29:16.913Z",
   "devdoc": {
     "methods": {}
   },

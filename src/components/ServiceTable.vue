@@ -61,12 +61,19 @@
 
                 <q-item clickable v-close-popup @click="assign(props.row)">
                   <q-item-section>
-                    <q-item-label>Auftrag vergeben</q-item-label>
+                    <q-item-label>Auftrag weiter vergeben</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup @click="showDetails(props.row)">
+                <q-item
+                  v-if="status[props.row.stage].action"
+                  clickable
+                  v-close-popup
+                  @click="transition(props.row)"
+                >
                   <q-item-section>
-                    <q-item-label>Auftragsdetails einsehen</q-item-label>
+                    <q-item-label>{{
+                      status[props.row.stage].action
+                    }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -94,35 +101,7 @@
 </template>
 
 <script>
-const STATUS = {
-  0: { text: 'Nicht vergeben' },
-  1: {
-    text: 'Initialisiert',
-    color: 'primary',
-    textColor: 'white',
-  },
-  2: { text: 'Gestartet', color: 'teal', textColor: 'white' },
-  3: {
-    text: 'Beendet',
-    color: 'dark',
-    textColor: 'white',
-  },
-  4: {
-    text: 'Abgenommen',
-    color: 'accent',
-    textColor: 'white',
-  },
-  5: {
-    text: 'Abgelehnt',
-    color: 'negative',
-    textColor: 'white',
-  },
-  6: {
-    text: 'Bezahlt',
-    color: 'accent',
-    textColor: 'white',
-  },
-};
+import Assignment from 'src/models/assignment-model.js';
 
 export default {
   name: 'ComponentServiceTable',
@@ -137,6 +116,9 @@ export default {
   },
   methods: {
     assign(service) {
+      this.$emit('assign', service);
+    },
+    transition(service) {
       this.$emit('transition', service);
     },
     hasChildren(props) {
@@ -146,7 +128,7 @@ export default {
       if (!this.childrenLoaded[props.row.hash]) {
         this.childrenLoaded[props.row.hash] = true;
         const children = await this.$services.assignment.getChildren(
-          this.project.hash,
+          this.project,
           this.assignment
         );
         console.log('loaded children in service table', children);
@@ -164,7 +146,7 @@ export default {
     return {
       children: [],
       childrenLoaded: {},
-      status: STATUS,
+      status: Assignment.STATUS,
       columns: [
         {
           name: 'id',

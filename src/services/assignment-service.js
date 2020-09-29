@@ -4,7 +4,7 @@ import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json'
 import Assignment from 'src/models/assignment-model';
 
 const ServiceAgreementFactoryAddress =
-  '0xEe44B9702161FC3BA816E858640eE3749d02FEF2';
+  '0x640Eb31355F935Bd334B3A9F4Fab3031d1E20458';
 
 const null32bytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
 const flatHandle = async (node, handleFn) => {

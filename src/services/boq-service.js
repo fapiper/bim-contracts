@@ -55,13 +55,6 @@ class BoQService {
     await this.boqdb.drop();
     return boqs;
   }
-
-  async assign(project_hash, node) {
-    const nodes = await this.boqService.get(project_hash, node);
-    const assigned = nodes[0];
-    assigned.status = 1;
-    return assigned;
-  }
 }
 
 export default BoQService;

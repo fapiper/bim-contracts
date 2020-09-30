@@ -54,7 +54,10 @@ library ServiceContractLib {
     ) external {
         require(msg.sender != _contractor, 'Client and contractor are equal.');
         for (uint256 i = 0; i < _services.length; i++) {
-            _addService(self, _services[i], _contract);
+            self.children[_services[i]] = new bytes32[](0);
+            self.children[_contract].push(_services[i]);
+            self.stages[_services[i]] = Stages.INITIALIZED;
+            emit Created(_services[i]);
         }
         self.client = msg.sender;
         self.contractor = _contractor;
@@ -70,15 +73,7 @@ library ServiceContractLib {
             self.stages[_parent] != Stages.INITIALIZED,
             'Parent stage is invalid.'
         );
-        return _addService(self, _node, _parent);
-    }
-
-    function _addService(
-        ServiceContract storage self,
-        bytes32 _node,
-        bytes32 _parent
-    ) internal returns (bool) {
-        self.children[_node] = new bytes32[](1);
+        self.children[_node] = new bytes32[](0);
         self.children[_parent].push(_node);
         self.stages[_node] = Stages.INITIALIZED;
         emit Created(_node);

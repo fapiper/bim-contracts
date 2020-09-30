@@ -1,19 +1,16 @@
-import { abi as ServiceAgreementFactoryAbi } from 'src/contracts/ServiceAgreementFactory.json';
-import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json';
+import { abi as ServiceContractAbi } from 'src/contracts/ServiceContract.json';
+import { serviceContract as ServiceContractAddress } from 'app/bim-contracts.config';
 
-const ServiceAgreementFactoryAddress =
-  '0x9e9d3a137F64585dcA38Eb6e9C62DF8B38CD59c4';
-
-const null32bytes =
-  '0x0000000000000000000000000000000000000000000000000000000000000000';
-const flatHandle = async (node, handleFn) => {
-  const children = await handleFn(node);
-  return children.length > 0
-    ? Promise.all(
-        children.map((child) => flatHandle(child, handleFn))
-      ).then((res) => res.flat())
-    : node;
-};
+// const flatHandle = async (nodes, handleFn) => {
+//   return nodes.flatMap(async (node) => {
+//     const children = await handleFn(node);
+//     if (children.length > 0) {
+//       return flatHandle(children.flat(), handleFn);
+//     } else {
+//       return node;
+//     }
+//   });
+// };
 
 class AssignmentService {
   constructor(orbitdb, boqService, web3) {
@@ -21,14 +18,14 @@ class AssignmentService {
     this.assignmentdb = null;
     this.boqService = boqService;
     this.web3 = web3;
-    this.factoryContract = new web3.eth.Contract(
-      ServiceAgreementFactoryAbi,
-      ServiceAgreementFactoryAddress
+    this.serviceContract = new web3.eth.Contract(
+      ServiceContractAbi,
+      ServiceContractAddress
     );
   }
 
-  async _getStage(address, hash) {
-    return this.factoryContract.methods.getServiceStage(hash).call();
+  async _getStage(service) {
+    return this.factoryContract.methods.stageOf(service).call();
   }
 
   async loadDb(project_hash) {
@@ -55,10 +52,7 @@ class AssignmentService {
       assignment.stage = 0;
       await Promise.all(
         assignment.services.map(async (service) => {
-          service.stage = await this._getStage(
-            assignment.address,
-            service.hash
-          );
+          service.stage = await this._getStage(service.hash);
           if (assignment.stage < service.stage)
             assignment.stage = service.stage;
           return service;
@@ -75,7 +69,7 @@ class AssignmentService {
 
   async getChildren(project_hash, assignment) {
     const build = async (item) => {
-      item.stage = await this._getStage(assignment.address, item.hash);
+      item.stage = await this._getStage(item.hash);
       return item;
     };
     const _items = await this.boqService.query(
@@ -102,60 +96,67 @@ class AssignmentService {
     return this.query(project_hash, (a) => !a.visited);
   }
 
-  async assign(
-    project_hash,
-    assignment,
-    assignment_root,
-    assignment_parent = null32bytes
-  ) {
-    const nodes = [];
-    const handleFn = async (node) => {
-      const services = await this.boqService.query(project_hash, (item) => {
-        return node.children.some((hash) => item.hash === hash);
-      });
-      services.forEach((s) => (s.project_hash = project_hash));
-      return services;
-    };
-    await assignment.services.forEach(async (service) => {
-      const _nodes = await flatHandle(service, handleFn);
-      if (Array.isArray(_nodes)) nodes.push(..._nodes);
-      else nodes.push(_nodes);
-    });
-
-    console.log('assign', assignment);
-    // Store assignment on chain
-    const children = nodes.map((c) => c.hash);
-    const parents = nodes.map((c) => c.parent || null32bytes);
-    const billings = nodes.map((c) => c.billing_item !== null);
-    console.log(
-      'args',
-      assignment_root,
-      assignment_parent,
-      assignment.client.address,
-      assignment.contractor.address,
-      children,
-      parents,
-      billings,
-      []
-    );
-
-    const res = await this.factoryContract.methods
-      .createServiceAgreement(
-        assignment_root,
-        assignment_parent,
-        assignment.client.address,
+  async assign(project_hash, assignment) {
+    const res = await this.serviceContract.methods
+      .createServiceContract(
+        assignment.hash,
         assignment.contractor.address,
-        children,
-        parents,
-        billings,
-        []
+        assignment.services.map((service) => service.hash)
       )
       .send({ from: assignment.client.address, gas: 2000000 });
+    console.log('created contract', res);
 
-    assignment.address =
-      res.events.ServiceAgreementCreated.returnValues._address;
+    const handleFn = async (node) => {
+      if (node.children.length > 0) {
+        const services = await this.boqService.query(project_hash, (item) =>
+          node.children.some((hash) => item.hash === hash)
+        );
+        const children = await Promise.all(services.map((s) => handleFn(s)));
+        return children.flat();
+      } else {
+        return node;
+      }
+    };
+    const services = await Promise.all(
+      assignment.services.map(handleFn)
+    ).then((services) => services.flat());
+
+    console.log('services', services);
     console.log('put', assignment);
-    // await this.put(project_hash, assignment);
+    await this.put(project_hash, assignment);
+    //   batch.add(
+    //     this.contract.methods.createCountry(
+    //         country.name, 100, 100, 1000, this.account).send.request(this.contractObject, (err, res) => { // values are set to fixed for the example
+    //      if (err) {
+    //          throw err;
+    //      } else {
+    //      console.log(res) // this logs the transaction id
+    //      }
+    //  }));
+
+    const batch = new this.web3.BatchRequest();
+    services.slice(0, 2).forEach((service) =>
+      batch.add(
+        this.serviceContract.methods
+          .addService(assignment.hash, service.hash, service.parent)
+          .send.request(
+            {
+              from: '0x2784BbEBb56a6602920C69a15420DE0dcB707196',
+              gas: 2000000,
+            },
+            (err, res) => {
+              if (err) {
+                throw err;
+              } else {
+                console.log(res);
+              }
+            }
+          )
+      )
+    );
+    await batch.execute();
+    console.log('added res');
+
     return assignment;
   }
 
@@ -166,12 +167,7 @@ class AssignmentService {
     method
   ) {
     console.log('set Transition', method);
-    const contract = new this.web3.eth.Contract(
-      ServiceAgreementAbi,
-      assignment_address
-    );
-    console.log('got contract', contract);
-    const res = await contract.methods[method](service_hash).send({
+    const res = await this.serviceContract.methods[method](service_hash).send({
       from: contractor_address,
       gas: 2000000,
     });

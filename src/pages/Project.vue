@@ -207,18 +207,14 @@ export default {
           Project.fromView(this.project, this.$auth.user().address),
           boqs
         );
-        this.projects.push(project);
         const assignment = new Assignment(
           this.project.name,
           boqs.flatMap((boq) => boq.roots.flatMap((root) => boq.nodes[root])),
           User.toStore(this.$auth.user()),
           { address: this.project.contractor }
         );
-        await this.$services.assignment.assign(
-          project.hash,
-          assignment,
-          project.hash
-        );
+        await this.$services.assignment.assign(project.hash, assignment);
+        this.projects.push(project);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

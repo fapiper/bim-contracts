@@ -70,7 +70,11 @@ export default {
       this.$emit('assign', service);
     },
     transition(service) {
-      this.$services.assignment.nextStage(this.assignment, service);
+      this.$services.assignment.nextStage(
+        this.assignment,
+        service,
+        this.$auth.user().address
+      );
     },
   },
 };

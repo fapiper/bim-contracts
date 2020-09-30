@@ -131,7 +131,7 @@ class AssignmentService {
     return assignment;
   }
 
-  async nextStage(assignment, service) {
+  async nextStage(assignment, service, contractor_address) {
     const stageToFunction = {
       1: 'startService',
       2: 'finishService',
@@ -147,7 +147,7 @@ class AssignmentService {
     console.log('got contract', contract);
     const res = await contract.methods[stageToFunction[service.stage]](
       service.hash
-    ).send({ from: assignment.client.address, gas: 2000000 });
+    ).send({ from: contractor_address, gas: 2000000 });
     console.log('res', res);
     return res;
   }

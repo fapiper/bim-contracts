@@ -47,33 +47,40 @@
           </q-td>
         </template>
         <q-td auto-width>
-          <q-btn
-            flat
-            round
-            dense
-            color="grey"
-            icon="more_horiz"
-            :class="{ invisible: !props.row.billing_item }"
-          >
+          <template v-for="(action, index) in status[props.row.stage].action">
+            <q-btn
+              v-if="action.type === type"
+              :key="index"
+              round
+              :color="status[action.next].color"
+              dense
+              outline
+              class="q-mr-xs"
+              :icon="status[action.next].icon"
+              @click="transition(props.row, action.method)"
+            >
+              <q-tooltip>
+                {{ action.text }}
+              </q-tooltip>
+            </q-btn>
+          </template>
+          <q-btn flat round dense color="grey" icon="more_horiz">
             <q-menu>
               <q-list style="min-width: 200px">
                 <!-- v-if="props.row.status < 1" -->
-
-                <q-item clickable v-close-popup @click="assign(props.row)">
+                <q-item
+                  clickable
+                  v-close-popup
+                  @click="assign(props.row)"
+                  v-if="!props.row.billing_item || !isAssignment"
+                >
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item
-                  v-if="status[props.row.stage].action"
-                  clickable
-                  v-close-popup
-                  @click="transition(props.row)"
-                >
+                <q-item clickable v-close-popup @click="assign(props.row)">
                   <q-item-section>
-                    <q-item-label>{{
-                      status[props.row.stage].action
-                    }}</q-item-label>
+                    <q-item-label>Auftragsdetails</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -94,6 +101,7 @@
             :data="children"
             :project="project"
             :assignment="assignment"
+            :type="type"
           />
         </q-td>
       </q-tr>
@@ -111,13 +119,14 @@ export default {
     data: Array,
     project: String,
     assignment: Object,
+    type: String,
   },
   methods: {
     assign(service) {
       this.$emit('assign', service);
     },
-    transition(service) {
-      this.$emit('transition', service);
+    transition(service, method) {
+      this.$emit('transition', { service, method });
     },
 
     hasChildren(props) {
@@ -139,6 +148,9 @@ export default {
   computed: {
     isCtgy: function () {
       return this.data && this.data.some((entry) => !entry.qty);
+    },
+    isAssignment() {
+      return this.type === 'assignment';
     },
   },
   data() {

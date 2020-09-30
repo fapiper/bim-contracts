@@ -3,15 +3,20 @@
     <q-card-section>
       <div
         class="text-overline"
-        :class="'text-' + status[assignment.service.stage].color"
+        :class="'text-' + status[contract.service.stage].color"
       >
-        {{ status[assignment.service.stage].text }}
+        {{ status[contract.service.stage].text }}
       </div>
       <div class="text-h5 q-mt-sm q-mb-xs">
-        {{ assignment.service.name || assignment.service.short_desc }}
+        {{ contract.service.name || contract.service.short_desc }}
       </div>
       <div class="">
-        <q-chip dense square icon="assignment">{{ assignment.address }}</q-chip>
+        <q-chip
+          dense
+          square
+          :icon="isAssignment ? 'assignment' : 'assignment_ind'"
+          >{{ contract.address }}</q-chip
+        >
       </div>
     </q-card-section>
 
@@ -33,9 +38,10 @@
         <bc-service-table
           @transition="transition"
           @assign="assign"
-          :data="[assignment.service]"
-          :assignment="assignment"
+          :data="[contract.service]"
+          :assignment="contract"
           :project="project.hash"
+          :type="type"
           is-root
         />
       </div>
@@ -47,7 +53,7 @@
 import Assignment from 'src/models/assignment-model.js';
 
 export default {
-  name: 'ComponentAssignmentCard',
+  name: 'ComponentServiceContractCard',
   data() {
     return {
       childrenLoaded: false,
@@ -61,19 +67,24 @@ export default {
     project() {
       return this.$store.getters['project/project'];
     },
+    isAssignment() {
+      return this.type === 'assignment';
+    },
   },
   props: {
-    assignment: null,
+    contract: Object,
+    type: String, // 'assignment' || 'award'
   },
   methods: {
     assign(service) {
       this.$emit('assign', service);
     },
-    transition(service) {
-      this.$services.assignment.nextStage(
-        this.assignment,
-        service,
-        this.$auth.user().address
+    transition({ service, method }) {
+      this.$services.assignment.handleTransition(
+        this.contract.address,
+        this.$auth.user().address,
+        service.hash,
+        method
       );
     },
   },

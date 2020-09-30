@@ -131,23 +131,22 @@ class AssignmentService {
     return assignment;
   }
 
-  async nextStage(assignment, service, contractor_address) {
-    const stageToFunction = {
-      1: 'startService',
-      2: 'finishService',
-      3: 'approveService',
-      4: 'payService',
-      5: 'rejectService',
-    };
-    console.log('nextStage', assignment, service);
+  async handleTransition(
+    assignment_address,
+    contractor_address,
+    service_hash,
+    method
+  ) {
+    console.log('set Transition', method);
     const contract = new this.web3.eth.Contract(
       ServiceAgreementAbi,
-      assignment.address
+      assignment_address
     );
     console.log('got contract', contract);
-    const res = await contract.methods[stageToFunction[service.stage]](
-      service.hash
-    ).send({ from: contractor_address, gas: 2000000 });
+    const res = await contract.methods[method](service_hash).send({
+      from: contractor_address,
+      gas: 2000000,
+    });
     console.log('res', res);
     return res;
   }

@@ -1,13 +1,14 @@
 <template>
   <q-page padding>
     <div class="row items-start q-gutter-md">
-      <template v-for="assignment in assignments">
-        <AssignmentCard
-          class="assignment-card"
-          :key="assignment.hash"
-          :assignment="assignment"
-          @assign="showDialog"
-      /></template>
+      <ServiceContractCard
+        v-for="assignment in assignments"
+        class="full-width"
+        :key="assignment.hash"
+        :contract="assignment"
+        type="assignment"
+        @assign="showDialog"
+      />
     </div>
     <q-dialog v-model="prompt">
       <q-card style="min-width: 450px">
@@ -51,11 +52,11 @@
 </template>
 
 <script>
-import AssignmentCard from 'components/AssignmentCard.vue';
+import ServiceContractCard from 'components/ServiceContractCard.vue';
 
 export default {
   name: 'PageProjectAssignments',
-  components: { AssignmentCard },
+  components: { ServiceContractCard },
   data() {
     return {
       prompt: false,
@@ -113,10 +114,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.assignment-card {
-  width: 100%;
-  // max-width: 800px;
-  overflow: hidden;
-}
-</style>

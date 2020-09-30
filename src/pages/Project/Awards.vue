@@ -1,22 +1,23 @@
 <template>
   <q-page padding>
     <div class="row items-start q-gutter-md">
-      <template v-for="award in awards">
-        <AssignmentCard
-          class="assignment-card"
-          :key="award.hash"
-          :assignment="award"
-      /></template>
+      <ServiceContractCard
+        v-for="award in awards"
+        class="full-width"
+        :key="award.hash"
+        :contract="award"
+        type="award"
+      />
     </div>
   </q-page>
 </template>
 
 <script>
-import AssignmentCard from 'components/AssignmentCard.vue';
+import ServiceContractCard from 'components/ServiceContractCard.vue';
 
 export default {
   name: 'PageProjectAwards',
-  components: { AssignmentCard },
+  components: { ServiceContractCard },
   data() {
     return {};
   },
@@ -38,10 +39,3 @@ export default {
   },
 };
 </script>
-<style lang="scss">
-.assignment-card {
-  width: 100%;
-  // max-width: 800px;
-  overflow: hidden;
-}
-</style>

@@ -1,15 +1,15 @@
 import Web3 from 'web3';
 
 class Assignment {
-  constructor(address, name, services, client, contractor) {
-    this.address = address;
+  constructor(name, services, client, contractor) {
     this.name = name;
+    this.address = '';
     this.services = services;
     this.client = client;
     this.contractor = contractor;
     this.visited = false;
     this.created = new Date().toJSON();
-    this.hash = Web3.utils.sha3(this.address + this.created);
+    this.hash = Web3.utils.sha3(this.name + this.created);
   }
 
   static STATUS = {

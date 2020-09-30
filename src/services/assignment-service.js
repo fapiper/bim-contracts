@@ -1,13 +1,11 @@
 import { abi as ServiceAgreementFactoryAbi } from 'src/contracts/ServiceAgreementFactory.json';
 import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json';
 
-import Assignment from 'src/models/assignment-model';
-
 const ServiceAgreementFactoryAddress =
   '0x9e9d3a137F64585dcA38Eb6e9C62DF8B38CD59c4';
 
-const null32bytes = 0x0000000000000000000000000000000000000000000000000000000000000000;
-
+const null32bytes =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
 const flatHandle = async (node, handleFn) => {
   const children = await handleFn(node);
   return children.length > 0
@@ -70,6 +68,8 @@ class AssignmentService {
     };
     const _assignments = await this.query(project_hash, (item) => item);
     const assignments = await Promise.all(_assignments.map(build));
+    console.log('got assignments', assignments);
+
     return assignments;
   }
 
@@ -102,40 +102,60 @@ class AssignmentService {
     return this.query(project_hash, (a) => !a.visited);
   }
 
-  async assign(project_hash, service, client, contractor) {
-    service.project_hash = project_hash;
-    const handleFn = async (node) =>
-      this.boqService.query(project_hash, (item) =>
-        node.children.some((hash) => item.hash === hash)
-      );
-    const _nodes = await flatHandle(service, handleFn);
-    const nodes = Array.isArray(_nodes) ? _nodes : [_nodes];
+  async assign(
+    project_hash,
+    assignment,
+    assignment_root,
+    assignment_parent = null32bytes
+  ) {
+    const nodes = [];
+    const handleFn = async (node) => {
+      const services = await this.boqService.query(project_hash, (item) => {
+        return node.children.some((hash) => item.hash === hash);
+      });
+      services.forEach((s) => (s.project_hash = project_hash));
+      return services;
+    };
+    await assignment.services.forEach(async (service) => {
+      const _nodes = await flatHandle(service, handleFn);
+      if (Array.isArray(_nodes)) nodes.push(..._nodes);
+      else nodes.push(_nodes);
+    });
 
+    console.log('assign', assignment);
     // Store assignment on chain
     const children = nodes.map((c) => c.hash);
-    const parents = nodes.map((c) => c.parent);
+    const parents = nodes.map((c) => c.parent || null32bytes);
     const billings = nodes.map((c) => c.billing_item !== null);
+    console.log(
+      'args',
+      assignment_root,
+      assignment_parent,
+      assignment.client.address,
+      assignment.contractor.address,
+      children,
+      parents,
+      billings,
+      []
+    );
+
     const res = await this.factoryContract.methods
       .createServiceAgreement(
-        service.hash,
-        service.parent || null32bytes,
-        client.address,
-        contractor.address,
+        assignment_root,
+        assignment_parent,
+        assignment.client.address,
+        assignment.contractor.address,
         children,
         parents,
         billings,
         []
       )
-      .send({ from: client.address, gas: 2000000 });
+      .send({ from: assignment.client.address, gas: 2000000 });
 
-    const assignment = new Assignment(
-      res.events.ServiceAgreementCreated.returnValues._address,
-      service,
-      client,
-      contractor
-    );
+    assignment.address =
+      res.events.ServiceAgreementCreated.returnValues._address;
     console.log('put', assignment);
-    await this.put(project_hash, assignment);
+    // await this.put(project_hash, assignment);
     return assignment;
   }
 

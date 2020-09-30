@@ -127,6 +127,8 @@
 import IcddParser from 'src/utils/icdd-parser.js';
 import Project from 'src/models/project-model.js';
 import BoQ from 'src/models/boq-model.js';
+import { User } from 'src/models/user-model.js';
+import Assignment from 'src/models/assignment-model';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -200,11 +202,23 @@ export default {
           this.container.billingModel,
           this.container.boqs
         );
-        const res = await this.$services.project.addProject(
+
+        const project = await this.$services.project.addProject(
           Project.fromView(this.project, this.$auth.user().address),
-          boqs.map(BoQ.toStore)
+          boqs
         );
-        this.projects.push(res);
+        this.projects.push(project);
+        const assignment = new Assignment(
+          this.project.name,
+          boqs.flatMap((boq) => boq.roots.flatMap((root) => boq.nodes[root])),
+          User.toStore(this.$auth.user()),
+          { address: this.project.contractor }
+        );
+        await this.$services.assignment.assign(
+          project.hash,
+          assignment,
+          project.hash
+        );
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

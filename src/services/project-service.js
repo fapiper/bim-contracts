@@ -59,9 +59,12 @@ class ProjectService {
   }
 
   async addProject(project, services) {
-    await services.forEach(
-      async (service) =>
-        await this.boqService.putAll(project.hash, service.nodes)
+    console.log('put', services);
+
+    await Promise.all(
+      services.map((service) =>
+        this.boqService.putAll(project.hash, service.nodes)
+      )
     );
     const res = Project.toStore(project);
     await this.projectdb.put(Project.toStore(project));

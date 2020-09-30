@@ -54,9 +54,17 @@ class AssignmentService {
 
   async getAllByProject(project_hash) {
     const build = async (assignment) => {
-      assignment.service.stage = await this._getStage(
-        assignment.address,
-        assignment.service.hash
+      assignment.stage = 0;
+      await Promise.all(
+        assignment.services.map(async (service) => {
+          service.stage = await this._getStage(
+            assignment.address,
+            service.hash
+          );
+          if (assignment.stage < service.stage)
+            assignment.stage = service.stage;
+          return service;
+        })
       );
       return assignment;
     };

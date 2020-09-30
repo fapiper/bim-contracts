@@ -58,6 +58,16 @@ class ProjectService {
     return project;
   }
 
+  async addProject(project, services) {
+    await services.forEach(
+      async (service) =>
+        await this.boqService.putAll(project.hash, service.nodes)
+    );
+    const res = Project.toStore(project);
+    await this.projectdb.put(Project.toStore(project));
+    return res;
+  }
+
   async addActor(project_hash, actor_address) {
     const projects = await this.get(project_hash);
     projects[0].actor_addresses.push(actor_address);

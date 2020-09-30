@@ -63,14 +63,9 @@
               <q-input filled v-model="project.name" label="Name" />
               <q-input
                 filled
-                v-model="project.designation"
-                label="Bezeichnung"
-              />
-              <q-input
-                filled
-                v-model="project.description"
-                label="Beschreibung"
-                type="textarea"
+                v-model="project.contractor"
+                label="Auftragnehmer"
+                hint="Blockchain Identität"
               />
               <q-file
                 ref="boqs"
@@ -131,6 +126,7 @@
 <script>
 import IcddParser from 'src/utils/icdd-parser.js';
 import Project from 'src/models/project-model.js';
+import BoQ from 'src/models/boq-model.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -147,8 +143,7 @@ export default {
       projects: [],
       project: {
         name: '',
-        designation: '',
-        description: '',
+        contractor: '',
       },
       container: {
         boqs: [],
@@ -160,9 +155,7 @@ export default {
   methods: {
     useDemoProject() {
       this.project.name = 'Demoprojekt';
-      this.project.designation = 'Beispielvorhaben 1.0';
-      this.project.description =
-        'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.';
+      this.project.contractor = this.$auth.user().address;
       this.container.boqs = [
         new File([BoQFile], 'Demo-Leistungsverzeichnis.x83'),
       ];
@@ -203,17 +196,14 @@ export default {
     async addProject() {
       this.$q.loading.show();
       try {
-        const { billing, boqs } = await IcddParser.parseFromFiles(
+        const { boqs } = await IcddParser.parseFromFiles(
           this.container.billingModel,
           this.container.boqs
         );
-        const project = Project.fromView(
-          this.project,
-          billing,
-          boqs,
-          this.$auth.user().address
+        const res = await this.$services.project.addProject(
+          Project.fromView(this.project, this.$auth.user().address),
+          boqs.map(BoQ.toStore)
         );
-        const res = await this.$services.project.put(project);
         this.projects.push(res);
         this.dialog = false;
         this.$q.notify({

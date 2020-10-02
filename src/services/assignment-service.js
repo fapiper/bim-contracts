@@ -1,16 +1,16 @@
 import { abi as ServiceContractAbi } from 'src/contracts/ServiceContract.json';
 import { serviceContract as ServiceContractAddress } from 'app/bim-contracts.config';
 
-// const flatHandle = async (nodes, handleFn) => {
-//   return nodes.flatMap(async (node) => {
-//     const children = await handleFn(node);
-//     if (children.length > 0) {
-//       return flatHandle(children.flat(), handleFn);
-//     } else {
-//       return node;
-//     }
-//   });
-// };
+const n32 =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
+const flatHandle = async (node, handleFn, collect = []) => {
+  const children = await handleFn(node);
+  const _collect = await Promise.all(
+    children.map((child) => flatHandle(child, handleFn, collect))
+  );
+  _collect.push(node);
+  return _collect.flat();
+};
 
 class AssignmentService {
   constructor(orbitdb, boqService, web3) {
@@ -98,56 +98,64 @@ class AssignmentService {
 
   async assign(project_hash, assignment) {
     const res = await this.serviceContract.methods
-      .createServiceContract(
-        assignment.hash,
-        assignment.contractor.address,
-        assignment.services.map((service) => service.hash)
-      )
+      .createServiceContract(assignment.hash, assignment.contractor.address)
       .send({ from: assignment.client.address, gas: 2000000 });
     console.log('created contract', res);
+    const handleFn = async (node) =>
+      this.boqService.query(project_hash, (item) =>
+        node.children.some((hash) => item.hash === hash)
+      );
+    const services = await flatHandle(assignment.service, handleFn);
+    const sections = services.filter((s) => !s.qty);
+    for (const section of sections) {
+      const items = services.filter((s) => s.parent === section.hash);
+      const billings = items.map(
+        (s) => (s.billing_item && s.billing_item.hash) || n32
+      );
+      console.log(
+        'add service payload',
+        assignment.hash,
+        section.hash,
+        items.map((item) => item.hash),
+        billings
+      );
+      const addRes = await this.serviceContract.methods
+        .addServiceSection(
+          assignment.hash,
+          section.hash,
+          items.map((item) => item.hash),
+          billings
+        )
+        .send({ from: assignment.client.address, gas: 2000000 });
+      console.log('created service section', addRes);
+    }
 
-    const handleFn = async (node) => {
-      if (node.children.length > 0) {
-        const services = await this.boqService.query(project_hash, (item) =>
-          node.children.some((hash) => item.hash === hash)
-        );
-        const children = await Promise.all(services.map((s) => handleFn(s)));
-        return children.flat();
-      } else {
-        return node;
-      }
-    };
-    const services = await Promise.all(
-      assignment.services.map(handleFn)
-    ).then((services) => services.flat());
-
-    console.log('services', services);
-    await this.put(project_hash, assignment);
-    await Promise.all(
-      services.map(async (service) => {
-        const batch = new this.web3.BatchRequest();
-        console.log('add', service);
-        batch.add(
-          this.serviceContract.methods
-            .addService(assignment.hash, service.hash, service.parent)
-            .send.request(
-              {
-                from: assignment.client.address,
-                gas: 2000000,
-              },
-              (err, res) => {
-                if (err) {
-                  console.error('Error adding', service, err, res);
-                } else {
-                  console.log('added', service, res);
-                  return service;
-                }
-              }
-            )
-        );
-        return batch.execute();
-      })
-    );
+    // await this.put(project_hash, assignment);
+    // await Promise.all(
+    //   services.map(async (service) => {
+    //     const batch = new this.web3.BatchRequest();
+    //     console.log('add', service);
+    //     batch.add(
+    //       this.serviceContract.methods
+    //         .addService(assignment.hash, service.hash, service.parent)
+    //         .send.request(
+    //           {
+    //             from: assignment.client.address,
+    //             gas: 2000000,
+    //           },
+    //           (err, res) => {
+    //             if (err) {
+    //               console.error('Error adding', service, err, res);
+    //             } else {
+    //               console.log('added', service, res);
+    //               return service;
+    //             }
+    //           }
+    //         )
+    //     );
+    //     return batch.execute();
+    //   })
+    // );
     return assignment;
   }
 

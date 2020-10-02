@@ -137,6 +137,9 @@
 </template>
 
 <script>
+import { User } from 'src/models/user-model.js';
+import Assignment from 'src/models/assignment-model';
+
 export default {
   name: 'PageProjectOverview',
   data() {
@@ -173,11 +176,15 @@ export default {
       this.$q.loading.show();
       this.assignPrompt = false;
       try {
+        const assignment = new Assignment(
+          this.project.name,
+          this.selectedBoq,
+          User.toStore(this.$auth.user()),
+          { address: this.assigneeAddress }
+        );
         const nodes = await this.$services.assignment.assign(
           this.project.hash,
-          this.selectedBoq,
-          this.$auth.user(),
-          { address: this.assigneeAddress }
+          assignment
         );
         console.log('assigned', nodes);
         this.$q.notify({

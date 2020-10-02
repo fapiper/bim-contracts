@@ -9,19 +9,15 @@ contract ServiceContract {
     mapping(bytes32 => ServiceContractLib.ServiceContract) private instances;
     mapping(bytes32 => bytes32) private contracts;
 
-    function createServiceContract(
-        bytes32 _contract,
-        address _contractor,
-        bytes32 _node,
-        bytes32[] calldata _children,
-        bytes32[] calldata _billings
-    ) external returns (bool) {
+    function createServiceContract(bytes32 _contract, address _contractor)
+        external
+        returns (bool)
+    {
         require(
             !instances[_contract].exists,
             'Service contract already exists.'
         );
         instances[_contract].init(_contractor);
-        addServiceSection(_contract, _node, _children, _billings);
         return true;
     }
 

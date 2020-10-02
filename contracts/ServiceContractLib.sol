@@ -59,6 +59,13 @@ library ServiceContractLib {
         bytes32[] memory _children,
         bytes32[] memory _billings
     ) public returns (bool) {
+        require(self.exists, 'Service contract not existing.');
+        if (self.stages[_node] > Stages.INITIALIZED) {
+            require(
+                msg.sender == self.contractor,
+                'Not allowed for already assigned contracts. Only contractor.'
+            );
+        }
         self.children[_node] = _children;
         self.stages[_node] = Stages.INITIALIZED;
         for (uint256 i = 0; i < _children.length; i++) {

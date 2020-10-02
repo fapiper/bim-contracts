@@ -57,7 +57,7 @@
               outline
               class="q-mr-xs"
               :icon="status[action.next].icon"
-              @click="transition(props.row, action.method)"
+              @click="transition({ service: props.row, method: action.method })"
             >
               <q-tooltip>
                 {{ action.text }}
@@ -125,10 +125,10 @@ export default {
     assign(service) {
       this.$emit('assign', service);
     },
-    transition(service, method) {
-      this.$emit('transition', { service, method });
+    transition(config) {
+      console.log('inside transition', config);
+      this.$emit('transition', config);
     },
-
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },

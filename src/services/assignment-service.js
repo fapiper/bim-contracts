@@ -25,7 +25,7 @@ class AssignmentService {
   }
 
   async _getStage(service) {
-    return this.factoryContract.methods.stageOf(service).call();
+    return this.serviceContract.methods.stageOf(service).call();
   }
 
   async loadDb(project_hash) {
@@ -49,20 +49,17 @@ class AssignmentService {
 
   async getAllByProject(project_hash) {
     const build = async (assignment) => {
-      assignment.stage = 0;
-      await Promise.all(
-        assignment.services.map(async (service) => {
-          service.stage = await this._getStage(service.hash);
-          if (assignment.stage < service.stage)
-            assignment.stage = service.stage;
-          return service;
-        })
-      );
+      assignment.service.stage = await this._getStage(assignment.service.hash);
+      console.log('service with stage', assignment.service);
+      if (assignment.stage < assignment.service.stage) {
+        assignment.stage = assignment.service.stage;
+      }
       return assignment;
     };
     const _assignments = await this.query(project_hash, (item) => item);
+    console.log('got _assignments', _assignments);
     const assignments = await Promise.all(_assignments.map(build));
-    console.log('got assignments', assignments);
+    console.log('got assignments with status', assignments);
 
     return assignments;
   }
@@ -112,13 +109,6 @@ class AssignmentService {
       const billings = items.map(
         (s) => (s.billing_item && s.billing_item.hash) || n32
       );
-      console.log(
-        'add service payload',
-        assignment.hash,
-        section.hash,
-        items.map((item) => item.hash),
-        billings
-      );
       const addRes = await this.serviceContract.methods
         .addServiceSection(
           assignment.hash,
@@ -130,32 +120,7 @@ class AssignmentService {
       console.log('created service section', addRes);
     }
 
-    // await this.put(project_hash, assignment);
-    // await Promise.all(
-    //   services.map(async (service) => {
-    //     const batch = new this.web3.BatchRequest();
-    //     console.log('add', service);
-    //     batch.add(
-    //       this.serviceContract.methods
-    //         .addService(assignment.hash, service.hash, service.parent)
-    //         .send.request(
-    //           {
-    //             from: assignment.client.address,
-    //             gas: 2000000,
-    //           },
-    //           (err, res) => {
-    //             if (err) {
-    //               console.error('Error adding', service, err, res);
-    //             } else {
-    //               console.log('added', service, res);
-    //               return service;
-    //             }
-    //           }
-    //         )
-    //     );
-    //     return batch.execute();
-    //   })
-    // );
+    await this.put(project_hash, assignment);
     return assignment;
   }
 

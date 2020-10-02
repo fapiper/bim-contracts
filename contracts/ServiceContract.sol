@@ -17,6 +17,7 @@ contract ServiceContract {
             !instances[_contract].exists,
             'Service contract already exists.'
         );
+
         instances[_contract].init(_contractor);
         return true;
     }
@@ -27,7 +28,6 @@ contract ServiceContract {
         bytes32[] memory _children,
         bytes32[] memory _billings
     ) public returns (bool) {
-        require(instances[_contract].exists, 'Service contract not existing.');
         contracts[_node] = _contract;
         for (uint256 i = 0; i < _children.length; i++) {
             contracts[_children[i]] = _contract;

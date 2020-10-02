@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <div class="row q-col-gutter-sm">
+    <div class="row q-col-gutter-md">
       <q-banner
         class="bg-grey-2 col-12"
         inline-actions

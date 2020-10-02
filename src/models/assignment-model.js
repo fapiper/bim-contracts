@@ -21,7 +21,7 @@ class Assignment {
       action: [
         {
           text: 'Auftrag starten',
-          method: 'startService',
+          method: 'start',
           next: 2,
           type: 'assignment',
         },
@@ -35,7 +35,7 @@ class Assignment {
       action: [
         {
           text: 'Auftrag beenden',
-          method: 'finishService',
+          method: 'finish',
           next: 3,
           type: 'assignment',
         },
@@ -49,13 +49,13 @@ class Assignment {
       action: [
         {
           text: 'Auftrag abnehmen',
-          method: 'approveService',
+          method: 'approve',
           next: 4,
           type: 'award',
         },
         {
           text: 'Auftrag ablehnen',
-          method: 'rejectService',
+          method: 'reject',
           next: 5,
           type: 'award',
         },
@@ -76,7 +76,7 @@ class Assignment {
       action: [
         {
           text: 'Änderungen bestätigen',
-          method: 'finishService',
+          method: 'finish',
           next: 3,
           type: 'assignment',
         },

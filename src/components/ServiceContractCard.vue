@@ -15,7 +15,7 @@
           dense
           square
           :icon="isAssignment ? 'assignment' : 'assignment_ind'"
-          >{{ contract.address }}</q-chip
+          >{{ contract.hash }}</q-chip
         >
       </div>
     </q-card-section>
@@ -80,6 +80,7 @@ export default {
       this.$emit('assign', service);
     },
     transition({ service, method }) {
+      console.log('transition', service, method);
       this.$services.assignment.handleTransition(
         this.contract.address,
         this.$auth.user().address,

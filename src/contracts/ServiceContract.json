@@ -5490,14 +5490,14 @@
         }
       },
       "links": {
-        "ServiceContractLib": "0xD1Acb16daDd3354a924ef3999FB73AB03B893897"
+        "ServiceContractLib": "0x9B3d17F8d043eB33B3BD63cF0ed983a9AA2ca019"
       },
-      "address": "0xb95F0601B224d83c3FBB5BD442B987bb783b2fAb",
-      "transactionHash": "0x65b8e96f4838360a80a7e990c82875982834194ba86125c84ceb629b7d71ccf2"
+      "address": "0xD52acB0A997Ee03Ca0812D83C67339d8Fad7Ff6e",
+      "transactionHash": "0x018743fb1e5f25a68ee0b997c7f471e15e98ccdcbfbfa21abc2137213aed0531"
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-09-30T23:15:20.951Z",
+  "updatedAt": "2020-10-02T09:07:20.734Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

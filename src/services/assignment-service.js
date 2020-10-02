@@ -122,41 +122,32 @@ class AssignmentService {
     ).then((services) => services.flat());
 
     console.log('services', services);
-    console.log('put', assignment);
     await this.put(project_hash, assignment);
-    //   batch.add(
-    //     this.contract.methods.createCountry(
-    //         country.name, 100, 100, 1000, this.account).send.request(this.contractObject, (err, res) => { // values are set to fixed for the example
-    //      if (err) {
-    //          throw err;
-    //      } else {
-    //      console.log(res) // this logs the transaction id
-    //      }
-    //  }));
-
-    const batch = new this.web3.BatchRequest();
-    services.slice(0, 2).forEach((service) =>
-      batch.add(
-        this.serviceContract.methods
-          .addService(assignment.hash, service.hash, service.parent)
-          .send.request(
-            {
-              from: '0x2784BbEBb56a6602920C69a15420DE0dcB707196',
-              gas: 2000000,
-            },
-            (err, res) => {
-              if (err) {
-                throw err;
-              } else {
-                console.log(res);
+    await Promise.all(
+      services.map(async (service) => {
+        const batch = new this.web3.BatchRequest();
+        console.log('add', service);
+        batch.add(
+          this.serviceContract.methods
+            .addService(assignment.hash, service.hash, service.parent)
+            .send.request(
+              {
+                from: assignment.client.address,
+                gas: 2000000,
+              },
+              (err, res) => {
+                if (err) {
+                  console.error('Error adding', service, err, res);
+                } else {
+                  console.log('added', service, res);
+                  return service;
+                }
               }
-            }
-          )
-      )
+            )
+        );
+        return batch.execute();
+      })
     );
-    await batch.execute();
-    console.log('added res');
-
     return assignment;
   }
 

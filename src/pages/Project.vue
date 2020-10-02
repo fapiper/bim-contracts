@@ -125,10 +125,6 @@ import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Doc
 export default {
   name: 'PageProjectIndex',
   async mounted() {
-    console.log('remove all');
-    const res = await this.$services.project.removeAll();
-    console.log('removed', res);
-
     this.loadProjects();
   },
   data() {

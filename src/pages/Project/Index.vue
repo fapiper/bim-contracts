@@ -20,7 +20,7 @@
         <bc-boq-table
           title="Leistungen"
           @assign="showAssignPrompt"
-          :data="data"
+          :data="services"
           :loading="boqsLoading"
           :project="project.hash"
           is-root
@@ -149,7 +149,7 @@ export default {
       boqsLoading: true,
       assignPrompt: false,
       assigneeAddress: '',
-      data: [],
+      services: [],
     };
   },
   created() {
@@ -197,18 +197,20 @@ export default {
     },
     async loadBoqs() {
       this.boqsLoading = true;
-      this.data = await this.$services.boq.query(this.project.hash, (item) =>
-        this.project.boqs[0].roots.some((hash) => hash === item.hash)
+      this.services = await this.$services.boq.query(
+        this.project.hash,
+        (item) => !item.parent
       );
+      console.log('got root services', this.services);
       this.boqsLoading = false;
     },
     async loadActors() {
       this.actorsLoading = true;
       const users = await this.$services.user.getAll();
-      this.actors.push(users[this.project.owner_address]);
       this.actors = this.project.actor_addresses.map(
         (address) => users[address]
       );
+      this.actors.push(users[this.project.owner_address]);
       this.actorsLoading = false;
     },
     async addActor() {

@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
 class Project {
-  constructor(name, owner_address, actor_addresses) {
+  constructor(name, owner_address, actor_addresses, services, billings) {
     this.name = name;
     this.owner_address = owner_address;
     this.actor_addresses = actor_addresses;

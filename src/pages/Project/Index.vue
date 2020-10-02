@@ -201,7 +201,6 @@ export default {
         this.project.hash,
         (item) => !item.parent
       );
-      console.log('got root services', this.services);
       this.boqsLoading = false;
     },
     async loadActors() {

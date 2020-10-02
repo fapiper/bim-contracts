@@ -38,26 +38,11 @@
         </q-td>
         <template>
           <q-td v-for="col in props.cols" :key="col.name" :props="props">
-            <template v-if="col.name === 'status'">
-              <q-chip
-                size="sm"
-                :color="status[col.value].color"
-                :text-color="status[col.value].textColor"
-                >{{ status[col.value].text }}</q-chip
-              >
-            </template>
-            <template v-else> {{ col.value }} </template>
+            {{ col.value }}
           </q-td>
         </template>
         <q-td auto-width>
-          <q-btn
-            flat
-            round
-            dense
-            color="grey"
-            icon="more_horiz"
-            :class="{ invisible: !props.row.billing_item }"
-          >
+          <q-btn flat round dense color="grey" icon="more_horiz">
             <q-menu>
               <q-list style="min-width: 200px">
                 <!-- v-if="props.row.status < 1" -->
@@ -126,9 +111,7 @@ export default {
     project: String,
     loading: Boolean,
   },
-  mounted() {
-    // console.log('data', this.data);
-  },
+  mounted() {},
   methods: {
     assign(service) {
       this.$emit('assign', service);
@@ -179,15 +162,6 @@ export default {
           align: 'left',
           field: (row) => row.qty,
           format: (val, row) => (val ? `${val} ${row.qty_unit}` : ''),
-          style: 'width:200px',
-        },
-        {
-          name: 'status',
-          required: true,
-          label: 'Status',
-          align: 'center',
-          field: (row) => row.status,
-          format: (val) => val,
           style: 'width:200px',
         },
       ],

@@ -12,27 +12,31 @@ contract ServiceContract {
     function createServiceContract(
         bytes32 _contract,
         address _contractor,
-        bytes32[] calldata _services
+        bytes32 _node,
+        bytes32[] calldata _children,
+        bytes32[] calldata _billings
     ) external returns (bool) {
         require(
             !instances[_contract].exists,
             'Service contract already exists.'
         );
-        for (uint256 i = 0; i < _services.length; i++) {
-            contracts[_services[i]] = _contract;
-        }
-        instances[_contract].init(_contract, _contractor, _services);
+        instances[_contract].init(_contractor);
+        addServiceSection(_contract, _node, _children, _billings);
         return true;
     }
 
-    function addService(
+    function addServiceSection(
         bytes32 _contract,
         bytes32 _node,
-        bytes32 _parent
-    ) external returns (bool) {
+        bytes32[] memory _children,
+        bytes32[] memory _billings
+    ) public returns (bool) {
         require(instances[_contract].exists, 'Service contract not existing.');
         contracts[_node] = _contract;
-        instances[_contract].addService(_node, _parent);
+        for (uint256 i = 0; i < _children.length; i++) {
+            contracts[_children[i]] = _contract;
+        }
+        instances[_contract].addServiceSection(_node, _children, _billings);
         return true;
     }
 

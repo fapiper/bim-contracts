@@ -43,40 +43,29 @@ library ServiceContractLib {
         _;
     }
 
-    event Created(bytes32 indexed service);
+    event CreatedServiceSection(bytes32 indexed service);
     event Transition(Stages indexed current, Stages indexed previous);
 
-    function init(
-        ServiceContract storage self,
-        bytes32 _contract,
-        address _contractor,
-        bytes32[] calldata _services
-    ) external {
+    function init(ServiceContract storage self, address _contractor) external {
         require(msg.sender != _contractor, 'Client and contractor are equal.');
-        for (uint256 i = 0; i < _services.length; i++) {
-            self.children[_services[i]] = new bytes32[](0);
-            self.children[_contract].push(_services[i]);
-            self.stages[_services[i]] = Stages.INITIALIZED;
-            emit Created(_services[i]);
-        }
         self.client = msg.sender;
         self.contractor = _contractor;
         self.exists = true;
     }
 
-    function addService(
+    function addServiceSection(
         ServiceContract storage self,
         bytes32 _node,
-        bytes32 _parent
-    ) external returns (bool) {
-        require(
-            self.stages[_parent] != Stages.INITIALIZED,
-            'Parent stage is invalid.'
-        );
-        self.children[_node] = new bytes32[](0);
-        self.children[_parent].push(_node);
+        bytes32[] memory _children,
+        bytes32[] memory _billings
+    ) public returns (bool) {
+        self.children[_node] = _children;
         self.stages[_node] = Stages.INITIALIZED;
-        emit Created(_node);
+        for (uint256 i = 0; i < _children.length; i++) {
+            self.stages[_children[i]] = Stages.INITIALIZED;
+            self.billings[_children[i]] = _billings[i];
+        }
+        emit CreatedServiceSection(_node);
         return true;
     }
 

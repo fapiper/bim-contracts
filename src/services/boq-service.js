@@ -50,10 +50,11 @@ class BoQService {
   }
 
   async removeAll(project_hash) {
-    const all = await this.getAll(project_hash);
-    const boqs = await all.map(async (item) => await this.boqdb.del(item.hash));
-    await this.boqdb.drop();
-    return boqs;
+    const boqdb = await this.loadDb(project_hash);
+    // const all = await this.getAll(project_hash);
+    // const boqs = await all.map(async (item) => await this.boqdb.del(item.hash));
+    await boqdb.drop();
+    return boqdb;
   }
 }
 

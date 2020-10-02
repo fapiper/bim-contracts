@@ -29,33 +29,42 @@ class ProjectService {
     return this.projectdb.query(queryFn);
   }
 
-  async put(project) {
+  async put(project, { billing, boqs }) {
     const billingdb = await this.orbitdb.keyvalue(
       `projects.${project.hash}.billings`
     );
-    await billingdb.put(project.billing);
-    await project.boqs.forEach(
-      async (boq) => await this.boqService.putAll(project.hash, boq.nodes)
+    await billingdb.put(billing);
+    await Promise.all(
+      boqs.map((boq) => this.boqService.putAll(project.hash, boq.nodes))
     );
     const res = Project.toStore(project);
     await this.projectdb.put(res);
     return res;
   }
 
-  async remove(hash) {
-    const drop = async (id) => {
+  async removeAll() {
+    const drop = async (hash, id) => {
       const db = await this.orbitdb.keyvalue(`projects.${hash}.${id}`);
-      await db.load();
-      await Object.keys(db.all).forEach(
-        async (item) => await db.del(item.hash)
-      );
-      await db.drop();
+      // await db.load();
+      // await Object.keys(db.all).forEach(
+      //   async (item) => await db.del(item.hash)
+      // );
+      return db.drop();
     };
-    await this.boqService.removeAll(hash);
-    await drop('billings');
     // await this.boqService.drop(hash);
-    const project = await this.projectdb.del(hash);
-    return project;
+    const projects = await this.query((p) => p);
+    const res = await Promise.all(
+      projects.map(async (p) => {
+        console.log('deleting project', p);
+        // const boqs = await this.boqService.removeAll(p.hash);
+        // console.log('deleted', boqs);
+        const billings = await drop(p.hash, 'billings');
+        console.log('deleted', billings);
+        const project = await this.projectdb.del(p.hash);
+        console.log('deleted', project);
+      })
+    );
+    return res;
   }
 
   async addProject(project, services) {

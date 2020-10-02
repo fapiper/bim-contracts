@@ -13,11 +13,11 @@
           Bislang sind noch keine Projekte vorhanden
         </h4>
       </div>
-      <div class="row items-start q-gutter-md">
+      <div class="row q-gutter-y-md">
         <q-card
           v-for="(project, index) of projects"
           :key="index"
-          class="project-card"
+          class="full-width"
           flat
           bordered
         >
@@ -27,15 +27,13 @@
           </q-card-section>
           <q-separator />
           <q-card-actions align="left" class="bg-grey-2">
-            <q-btn flat :to="'projects/' + project.hash + '/boqs'"
+            <q-btn
+              outline
+              color="primary"
+              class="full-width"
+              :to="'projects/' + project.hash + '/'"
               >Auswählen</q-btn
             >
-            <q-btn
-              flat
-              color="negative"
-              icon="delete"
-              @click="removeProject(project)"
-            />
           </q-card-actions>
         </q-card>
       </div>
@@ -61,12 +59,6 @@
           <q-card-section>
             <div class="q-gutter-y-md">
               <q-input filled v-model="project.name" label="Name" />
-              <q-input
-                filled
-                v-model="project.contractor"
-                label="Auftragnehmer"
-                hint="Blockchain Identität"
-              />
               <q-file
                 ref="boqs"
                 filled
@@ -126,9 +118,6 @@
 <script>
 import IcddParser from 'src/utils/icdd-parser.js';
 import Project from 'src/models/project-model.js';
-import BoQ from 'src/models/boq-model.js';
-import { User } from 'src/models/user-model.js';
-import Assignment from 'src/models/assignment-model';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -136,6 +125,10 @@ import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Doc
 export default {
   name: 'PageProjectIndex',
   async mounted() {
+    console.log('remove all');
+    const res = await this.$services.project.removeAll();
+    console.log('removed', res);
+
     this.loadProjects();
   },
   data() {
@@ -145,7 +138,6 @@ export default {
       projects: [],
       project: {
         name: '',
-        contractor: '',
       },
       container: {
         boqs: [],
@@ -157,7 +149,6 @@ export default {
   methods: {
     useDemoProject() {
       this.project.name = 'Demoprojekt';
-      this.project.contractor = this.$auth.user().address;
       this.container.boqs = [
         new File([BoQFile], 'Demo-Leistungsverzeichnis.x83'),
       ];
@@ -167,54 +158,28 @@ export default {
       );
     },
     async loadProjects() {
+      const queryFn = (e) =>
+        e.owner_address === this.$auth.user().address ||
+        (e.actor_addresses &&
+          e.actor_addresses.includes(this.$auth.user().address));
+
       this.loading = true;
-      this.projects = await this.$services.project.query(
-        (e) =>
-          e.actor_addresses &&
-          e.actor_addresses.includes(this.$auth.user().address)
-      );
+      this.projects = await this.$services.project.query(queryFn);
       this.loading = false;
-    },
-    async removeProject({ hash }) {
-      this.$q.loading.show();
-      try {
-        await this.$services.project.remove(hash);
-        this.projects = this.projects.filter((p) => p.hash !== hash);
-        this.$q.notify({
-          type: 'positive',
-          message: `Das Bauprojekt wurde erfolgreich entfernt`,
-          position: 'bottom-right',
-        });
-      } catch (error) {
-        console.error(error);
-        this.$q.notify({
-          type: 'negative',
-          message: `Beim Entfernen des Bauprojektes ist ein Fehler aufgetreten`,
-          position: 'bottom-right',
-        });
-      }
-      this.$q.loading.hide();
     },
     async addProject() {
       this.$q.loading.show();
       try {
-        const { boqs } = await IcddParser.parseFromFiles(
+        const icdd = await IcddParser.parseFromFiles(
           this.container.billingModel,
           this.container.boqs
         );
-
-        const project = await this.$services.project.addProject(
-          Project.fromView(this.project, this.$auth.user().address),
-          boqs
+        const project = Project.fromView(
+          this.project,
+          this.$auth.user().address
         );
-        const assignment = new Assignment(
-          this.project.name,
-          boqs.flatMap((boq) => boq.roots.flatMap((root) => boq.nodes[root])),
-          User.toStore(this.$auth.user()),
-          { address: this.project.contractor }
-        );
-        await this.$services.assignment.assign(project.hash, assignment);
-        this.projects.push(project);
+        const res = await this.$services.project.put(project, icdd);
+        this.projects.push(res);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

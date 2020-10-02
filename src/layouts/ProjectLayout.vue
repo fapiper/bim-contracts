@@ -16,11 +16,6 @@
             exact
           />
           <q-route-tab
-            label="Leistungsverzeichnisse"
-            :to="'/projects/' + project.hash + '/boqs'"
-            exact
-          />
-          <q-route-tab
             label="Auftragsbearbeitung"
             :to="'/projects/' + project.hash + '/assignments'"
             exact

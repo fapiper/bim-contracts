@@ -24,10 +24,6 @@ class AssignmentService {
     );
   }
 
-  async _getStage(service) {
-    return this.serviceContract.methods.stageOf(service).call();
-  }
-
   async loadDb(project_hash) {
     if (this._assigned !== project_hash) {
       const assignmentdb = await this.orbitdb.docstore(
@@ -49,29 +45,27 @@ class AssignmentService {
 
   async getAllByProject(project_hash) {
     const build = async (assignment) => {
-      assignment.service.stage = await this._getStage(assignment.service.hash);
-      console.log('service with stage', assignment.service);
+      assignment.service.stage = await this.serviceContract.methods
+        .stageOf(assignment.service.hash)
+        .call();
       if (assignment.stage < assignment.service.stage) {
         assignment.stage = assignment.service.stage;
       }
       return assignment;
     };
-    const _assignments = await this.query(project_hash, (item) => item);
-    console.log('got _assignments', _assignments);
-    const assignments = await Promise.all(_assignments.map(build));
-    console.log('got assignments with status', assignments);
-
-    return assignments;
+    return this.query(project_hash, (item) => item).then((assignments) =>
+      Promise.all(assignments.map(build))
+    );
   }
 
-  async getChildren(project_hash, assignment) {
+  async getChildren(project_hash, service_hash) {
     const build = async (item) => {
-      item.stage = await this._getStage(item.hash);
+      item.stage = await this.serviceContract.methods.stageOf(item.hash).call();
       return item;
     };
     const _items = await this.boqService.query(
       project_hash,
-      (item) => item.parent === assignment.service.hash
+      (item) => item.parent === service_hash
     );
     const items = await Promise.all(_items.map(build));
     return items;
@@ -89,27 +83,22 @@ class AssignmentService {
     return assignments;
   }
 
-  async checkForUpdates(project_hash) {
-    return this.query(project_hash, (a) => !a.visited);
-  }
-
   async assign(project_hash, assignment) {
-    const res = await this.serviceContract.methods
+    await this.serviceContract.methods
       .createServiceContract(assignment.hash, assignment.contractor.address)
       .send({ from: assignment.client.address, gas: 2000000 });
-    console.log('created contract', res);
-    const handleFn = async (node) =>
+    const services = await flatHandle(assignment.service, async (node) =>
       this.boqService.query(project_hash, (item) =>
         node.children.some((hash) => item.hash === hash)
-      );
-    const services = await flatHandle(assignment.service, handleFn);
+      )
+    );
     const sections = services.filter((s) => !s.qty);
     for (const section of sections) {
       const items = services.filter((s) => s.parent === section.hash);
       const billings = items.map(
         (s) => (s.billing_item && s.billing_item.hash) || n32
       );
-      const addRes = await this.serviceContract.methods
+      await this.serviceContract.methods
         .addServiceSection(
           assignment.hash,
           section.hash,
@@ -117,25 +106,17 @@ class AssignmentService {
           billings
         )
         .send({ from: assignment.client.address, gas: 2000000 });
-      console.log('created service section', addRes);
     }
 
     await this.put(project_hash, assignment);
     return assignment;
   }
 
-  async handleTransition(
-    assignment_address,
-    contractor_address,
-    service_hash,
-    method
-  ) {
-    console.log('set Transition', method);
+  async handleTransition(contractor_address, service_hash, method) {
     const res = await this.serviceContract.methods[method](service_hash).send({
       from: contractor_address,
       gas: 2000000,
     });
-    console.log('res', res);
     return res;
   }
 }

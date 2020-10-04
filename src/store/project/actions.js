@@ -1,6 +1,5 @@
 export async function loadProject(state, hash) {
   const projects = await this._vm.$services.project.get(hash);
-  console.log('got project', projects);
   state.commit('setProject', projects[0]);
 }
 

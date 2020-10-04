@@ -182,11 +182,7 @@ export default {
           User.toStore(this.$auth.user()),
           { address: this.assigneeAddress }
         );
-        const nodes = await this.$services.assignment.assign(
-          this.project.hash,
-          assignment
-        );
-        console.log('assigned', nodes);
+        await this.$services.assignment.assign(this.project.hash, assignment);
         this.$q.notify({
           type: 'positive',
           message: `Der Auftrag wurde erfolgreich vergeben.`,

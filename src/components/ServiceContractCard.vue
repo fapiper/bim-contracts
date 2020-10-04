@@ -80,9 +80,7 @@ export default {
       this.$emit('assign', service);
     },
     transition({ service, method }) {
-      console.log('transition', service, method);
       this.$services.assignment.handleTransition(
-        this.contract.address,
         this.$auth.user().address,
         service.hash,
         method

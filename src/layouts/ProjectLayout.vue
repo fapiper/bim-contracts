@@ -16,11 +16,6 @@
             exact
           />
           <q-route-tab
-            label="Leistungsverzeichnisse"
-            :to="'/projects/' + project.hash + '/boqs'"
-            exact
-          />
-          <q-route-tab
             label="Auftragsbearbeitung"
             :to="'/projects/' + project.hash + '/assignments'"
             exact
@@ -77,7 +72,6 @@ export default {
       this.loadProject(project_hash),
       this.loadAssignments(project_hash, user_address),
     ]);
-    console.log('loaded', this.project, this.newAssignments);
     this.loading = false;
   },
   methods: {

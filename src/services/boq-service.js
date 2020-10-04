@@ -42,25 +42,11 @@ class BoQService {
   }
 
   async putAll(project_hash, nodes) {
-    await this.loadDb(project_hash);
+    const boqdb = await this.loadDb(project_hash);
     const boq = await Promise.all(
-      Object.keys(nodes).map((key) => this.boqdb.put(nodes[key]))
+      Object.keys(nodes).map((key) => boqdb.put(nodes[key]))
     );
     return boq;
-  }
-
-  async removeAll(project_hash) {
-    const all = await this.getAll(project_hash);
-    const boqs = await all.map(async (item) => await this.boqdb.del(item.hash));
-    await this.boqdb.drop();
-    return boqs;
-  }
-
-  async assign(project_hash, node) {
-    const nodes = await this.boqService.get(project_hash, node);
-    const assigned = nodes[0];
-    assigned.status = 1;
-    return assigned;
   }
 }
 

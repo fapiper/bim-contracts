@@ -19,11 +19,6 @@ const routes = [
             meta: { label: 'Übersicht' },
           },
           {
-            path: 'boqs',
-            component: () => import('pages/Project/Boqs.vue'),
-            meta: { label: 'Leistungsverzeichnisse' },
-          },
-          {
             path: 'assignments',
             component: () => import('pages/Project/Assignments.vue'),
             meta: {

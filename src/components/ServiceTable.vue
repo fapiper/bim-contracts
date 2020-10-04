@@ -57,7 +57,7 @@
               outline
               class="q-mr-xs"
               :icon="status[action.next].icon"
-              @click="transition(props.row, action.method)"
+              @click="transition({ service: props.row, method: action.method })"
             >
               <q-tooltip>
                 {{ action.text }}
@@ -72,13 +72,14 @@
                   clickable
                   v-close-popup
                   @click="assign(props.row)"
-                  v-if="!props.row.billing_item || !isAssignment"
+                  v-if="isAssignment"
                 >
+                  <!-- && props.row.billing_item -->
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup @click="assign(props.row)">
+                <q-item clickable v-close-popup @click="showDetails(props.row)">
                   <q-item-section>
                     <q-item-label>Auftragsdetails</q-item-label>
                   </q-item-section>
@@ -125,10 +126,12 @@ export default {
     assign(service) {
       this.$emit('assign', service);
     },
-    transition(service, method) {
-      this.$emit('transition', { service, method });
+    showDetails(service) {
+      this.$emit('showDetails', service);
     },
-
+    transition(config) {
+      this.$emit('transition', config);
+    },
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },
@@ -137,9 +140,8 @@ export default {
         this.childrenLoaded[props.row.hash] = true;
         const children = await this.$services.assignment.getChildren(
           this.project,
-          this.assignment
+          props.row.hash
         );
-        console.log('loaded children in service table', children);
         this.children = children;
       }
       props.expand = !props.expand;

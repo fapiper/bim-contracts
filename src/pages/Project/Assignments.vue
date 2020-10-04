@@ -53,6 +53,8 @@
 
 <script>
 import ServiceContractCard from 'components/ServiceContractCard.vue';
+import Assignment from 'src/models/assignment-model.js';
+import { User } from 'src/models/user-model.js';
 
 export default {
   name: 'PageProjectAssignments',
@@ -89,11 +91,15 @@ export default {
       this.$q.loading.show();
       this.prompt = false;
       try {
+        const assignment = new Assignment(
+          this.selected.short_desc || this.selected.name,
+          this.selected,
+          User.toStore(this.$auth.user()),
+          { address: this.address }
+        );
         const nodes = await this.$services.assignment.assign(
           this.$route.params.project,
-          this.selected,
-          this.$auth.user(),
-          { address: this.address }
+          assignment
         );
         console.log('assigned', nodes);
         this.$q.notify({

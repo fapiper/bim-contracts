@@ -1,14 +1,14 @@
 import Web3 from 'web3';
 
 class Assignment {
-  constructor(address, service, client, contractor) {
-    this.address = address;
+  constructor(name, service, client, contractor) {
+    this.name = name;
     this.service = service;
     this.client = client;
     this.contractor = contractor;
     this.visited = false;
     this.created = new Date().toJSON();
-    this.hash = Web3.utils.sha3(this.address + this.created);
+    this.hash = Web3.utils.sha3(this.name + this.created);
   }
 
   static STATUS = {
@@ -21,7 +21,7 @@ class Assignment {
       action: [
         {
           text: 'Auftrag starten',
-          method: 'startService',
+          method: 'start',
           next: 2,
           type: 'assignment',
         },
@@ -35,7 +35,7 @@ class Assignment {
       action: [
         {
           text: 'Auftrag beenden',
-          method: 'finishService',
+          method: 'finish',
           next: 3,
           type: 'assignment',
         },
@@ -49,13 +49,13 @@ class Assignment {
       action: [
         {
           text: 'Auftrag abnehmen',
-          method: 'approveService',
+          method: 'approve',
           next: 4,
           type: 'award',
         },
         {
           text: 'Auftrag ablehnen',
-          method: 'rejectService',
+          method: 'reject',
           next: 5,
           type: 'award',
         },
@@ -76,7 +76,7 @@ class Assignment {
       action: [
         {
           text: 'Änderungen bestätigen',
-          method: 'finishService',
+          method: 'finish',
           next: 3,
           type: 'assignment',
         },

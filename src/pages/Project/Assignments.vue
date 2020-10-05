@@ -97,11 +97,10 @@ export default {
           User.toStore(this.$auth.user()),
           { address: this.address }
         );
-        const nodes = await this.$services.assignment.assign(
+        await this.$services.assignment.assign(
           this.$route.params.project,
           assignment
         );
-        console.log('assigned', nodes);
         this.$q.notify({
           type: 'positive',
           message: `Der Auftrag wurde erfolgreich vergeben.`,

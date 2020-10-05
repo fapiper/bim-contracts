@@ -3,14 +3,6 @@ import { serviceContract as ServiceContractAddress } from 'app/bim-contracts.con
 
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
-const flatHandle = async (node, handleFn, collect = []) => {
-  const children = await handleFn(node);
-  const _collect = await Promise.all(
-    children.map((child) => flatHandle(child, handleFn, collect))
-  );
-  _collect.push(node);
-  return _collect.flat();
-};
 
 class AssignmentService {
   constructor(orbitdb, boqService, web3) {
@@ -71,6 +63,22 @@ class AssignmentService {
     return items;
   }
 
+  async getAllServices(project_hash, service) {
+    const flatHandle = async (node, handleFn, collect = []) => {
+      const children = await handleFn(node);
+      const _collect = await Promise.all(
+        children.map((child) => flatHandle(child, handleFn, collect))
+      );
+      _collect.push(node);
+      return _collect.flat();
+    };
+    return flatHandle(service, (node) =>
+      this.boqService.query(project_hash, (item) =>
+        node.children.some((hash) => item.hash === hash)
+      )
+    );
+  }
+
   async put(project_hash, assignment) {
     const assignmentdb = await this.loadDb(project_hash);
     const hash = await assignmentdb.put(assignment);
@@ -87,10 +95,9 @@ class AssignmentService {
     await this.serviceContract.methods
       .createServiceContract(assignment.hash, assignment.contractor.address)
       .send({ from: assignment.client.address, gas: 2000000 });
-    const services = await flatHandle(assignment.service, async (node) =>
-      this.boqService.query(project_hash, (item) =>
-        node.children.some((hash) => item.hash === hash)
-      )
+    const services = await this.getAllServices(
+      project_hash,
+      assignment.service
     );
     const sections = services.filter((s) => !s.qty);
     for (const section of sections) {
@@ -112,12 +119,24 @@ class AssignmentService {
     return assignment;
   }
 
-  async handleTransition(contractor_address, service_hash, method) {
-    const res = await this.serviceContract.methods[method](service_hash).send({
-      from: contractor_address,
-      gas: 2000000,
-    });
-    return res;
+  async handleTransition(project_hash, contractor_address, service, method) {
+    const services = await this.getAllServices(project_hash, service).then(
+      async (services) => {
+        for (const _service of services) {
+          _service.stage = await this.serviceContract.methods
+            .stageOf(_service.hash)
+            .call();
+          if (_service.stage < service.stage + 1) {
+            await this.serviceContract.methods[method](_service.hash).send({
+              from: contractor_address,
+              gas: 2000000,
+            });
+          }
+        }
+        return services;
+      }
+    );
+    return services;
   }
 }
 

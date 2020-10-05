@@ -99,7 +99,7 @@
           <bc-service-table
             @assign="assign"
             @transition="transition"
-            :data="children"
+            :data="children[props.row.hash] || []"
             :project="project"
             :assignment="assignment"
             :type="type"
@@ -137,12 +137,19 @@ export default {
     },
     async loadChildren(props) {
       if (!this.childrenLoaded[props.row.hash]) {
-        this.childrenLoaded[props.row.hash] = true;
-        const children = await this.$services.assignment.getChildren(
-          this.project,
-          props.row.hash
-        );
-        this.children = children;
+        try {
+          const children = await this.$services.assignment.getChildren(
+            this.project,
+            props.row.hash
+          );
+          // console.log(props, 'got children', children);
+          this.children[props.row.hash] = children;
+          this.childrenLoaded[props.row.hash] = true;
+        } catch (error) {
+          console.error(error);
+          this.childrenLoaded[props.row.hash] = false;
+          return;
+        }
       }
       props.expand = !props.expand;
     },
@@ -157,7 +164,7 @@ export default {
   },
   data() {
     return {
-      children: [],
+      children: {},
       childrenLoaded: {},
       status: Assignment.STATUS,
       columns: [

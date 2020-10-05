@@ -79,12 +79,29 @@ export default {
     assign(service) {
       this.$emit('assign', service);
     },
-    transition({ service, method }) {
-      this.$services.assignment.handleTransition(
-        this.$auth.user().address,
-        service.hash,
-        method
-      );
+    async transition({ service, method }) {
+      this.$q.loading.show();
+      try {
+        await this.$services.assignment.handleTransition(
+          this.project.hash,
+          this.$auth.user().address,
+          service,
+          method
+        );
+        this.$q.notify({
+          type: 'positive',
+          message: `Die AKtion war erfolgreich.`,
+          position: 'bottom-right',
+        });
+      } catch (error) {
+        console.error(error);
+        this.$q.notify({
+          type: 'negative',
+          message: `Ein Fehler ist aufgetreten.`,
+          position: 'bottom-right',
+        });
+      }
+      this.$q.loading.hide();
     },
   },
 };

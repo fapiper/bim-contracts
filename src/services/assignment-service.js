@@ -119,14 +119,19 @@ class AssignmentService {
     return assignment;
   }
 
-  async handleTransition(project_hash, contractor_address, service, method) {
+  async handleTransition(
+    project_hash,
+    contractor_address,
+    service,
+    { method, next }
+  ) {
     const services = await this.getAllServices(project_hash, service).then(
       async (services) => {
         for (const _service of services) {
           _service.stage = await this.serviceContract.methods
             .stageOf(_service.hash)
             .call();
-          if (_service.stage < service.stage + 1) {
+          if (_service.stage < next) {
             await this.serviceContract.methods[method](_service.hash).send({
               from: contractor_address,
               gas: 2000000,

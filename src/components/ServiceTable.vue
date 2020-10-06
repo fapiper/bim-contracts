@@ -57,7 +57,7 @@
               outline
               class="q-mr-xs"
               :icon="status[action.next].icon"
-              @click="transition({ service: props.row, method: action.method })"
+              @click="transition({ service: props.row, action })"
             >
               <q-tooltip>
                 {{ action.text }}
@@ -103,6 +103,7 @@
             :project="project"
             :assignment="assignment"
             :type="type"
+            ref="service-table"
           />
         </q-td>
       </q-tr>
@@ -121,6 +122,25 @@ export default {
     project: String,
     assignment: Object,
     type: String,
+  },
+  watch: {
+    data: {
+      deep: true,
+      handler(data, old) {
+        if (old.length > 0) {
+          Object.keys(this.children).forEach((key) => {
+            const parent = data.find((service) => service.hash === key);
+
+            const children = this.children[key].map((child, i) => {
+              if (child.stage < parent.stage) child.stage = parent.stage;
+              return child;
+            });
+            console.log('set children of', key, children);
+            this.$set(this.children, key, children);
+          });
+        }
+      },
+    },
   },
   methods: {
     assign(service) {

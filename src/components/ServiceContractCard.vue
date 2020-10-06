@@ -79,15 +79,16 @@ export default {
     assign(service) {
       this.$emit('assign', service);
     },
-    async transition({ service, method }) {
+    async transition({ service, action }) {
       this.$q.loading.show();
       try {
         await this.$services.assignment.handleTransition(
           this.project.hash,
           this.$auth.user().address,
           service,
-          method
+          action
         );
+        this.contract.service.stage = action.next;
         this.$q.notify({
           type: 'positive',
           message: `Die AKtion war erfolgreich.`,

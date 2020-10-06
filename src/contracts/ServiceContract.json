@@ -5245,14 +5245,15 @@
         }
       },
       "links": {
-        "ServiceContractLib": "0x97391aCA21b0AB98332673d0df73c619ECD1c10a"
+        "ServiceContractLib": "0x5D219C3bDF5Aa8208ac7A184803e5cD8E3669bf8"
       },
-      "address": "0xBfA9c27CF9B9f4f175235D93AF9F09B78a5fbb24",
-      "transactionHash": "0xc2dec7d470ed76e698bdde691cd46dc65dbe816b4dcb7c33efdaaeb1b288c712"
+      "address": "0x7E8DCa4a289932820354283b5Da63C8EdA0309DB",
+      "transactionHash": "0xec8292916e45c59e3cccdc881a11a59c168f33eca44524ace163b1d5736d1207"
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-05T11:35:07.500Z",
+  "updatedAt": "2020-10-06T09:26:07.743Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

@@ -4,6 +4,28 @@ import { contract as ServiceContractFactoryAddress } from 'app/bim-contracts.con
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
 
+const unflatten = (array) => {
+  const hashTable = Object.create(null);
+  array.forEach((node) => (hashTable[node.hash] = { ...node, children: [] }));
+  const tree = [];
+  array.forEach((node) => {
+    if (node.parent) hashTable[node.parent].children.push(hashTable[node.hash]);
+    else tree.push(hashTable[node.hash]);
+  });
+  return tree;
+};
+
+const traverseHandle = async (node, handleFn, once = true) => {
+  const children = node.children || [];
+  for (const child of children) {
+    if (once) {
+      once = false;
+      handleFn && (await handleFn(node, children));
+    }
+    await traverseHandle(child, handleFn);
+  }
+};
+
 class AssignmentService {
   constructor(orbitdb, boqService, web3) {
     this.orbitdb = orbitdb;
@@ -96,22 +118,26 @@ class AssignmentService {
       .create(contract.hash, contract.contractor.address)
       .send({ from: contract.client.address, gas: 2000000 });
     const services = await this.getAllServices(project_hash, contract.service);
-    const sections = services.filter((s) => !s.qty);
-    for (const section of sections) {
-      const items = services.filter((s) => s.parent === section.hash);
-      const billings = items.map(
-        (s) => (s.billing_item && s.billing_item.hash) || n32
+    contract.children = unflatten(services);
+    await traverseHandle(contract, async (node, children) => {
+      const hasSections = children.some(
+        (service) => typeof service.qty === 'undefined'
       );
-      await this.serviceContract.methods
-        .addServiceSection(
-          contract.hash,
-          section.hash,
-          items.map((item) => item.hash),
-          billings
-        )
-        .send({ from: contract.client.address, gas: 2000000 });
-    }
-
+      const payload = [
+        contract.hash,
+        node.hash,
+        children.map((service) => service.hash),
+        children.map(
+          (service) =>
+            (service.billing_item && service.billing_item.hash) || n32
+        ),
+      ];
+      const method = hasSections ? 'addSections' : 'addItems';
+      await this.factoryContract.methods[method](...payload).send({
+        from: contract.client.address,
+        gas: 2000000,
+      });
+    });
     await this.put(project_hash, contract);
     return contract;
   }

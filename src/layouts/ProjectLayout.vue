@@ -57,9 +57,6 @@ export default {
     };
   },
   computed: {
-    newAssignments() {
-      return this.$store.getters['project/newAssignments'];
-    },
     project() {
       return this.$store.getters['project/project'];
     },
@@ -67,20 +64,10 @@ export default {
   async mounted() {
     this.loading = true;
     const project_hash = this.$route.params.project;
-    const user_address = this.$auth.user().address;
-    await Promise.all([
-      this.loadProject(project_hash),
-      this.loadAssignments(project_hash, user_address),
-    ]);
+    await this.loadProject(project_hash);
     this.loading = false;
   },
   methods: {
-    async loadAssignments(project_hash, user_address) {
-      return this.$store.dispatch('project/loadAssignments', {
-        project_hash,
-        user_address,
-      });
-    },
     async loadProject(project_hash) {
       return Promise.all([
         this.$store.dispatch('project/loadProject', project_hash),

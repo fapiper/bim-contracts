@@ -1,21 +1,6 @@
 <template>
   <q-page padding>
     <div class="row q-col-gutter-md">
-      <q-banner
-        class="bg-grey-2 col-12"
-        inline-actions
-        v-if="newAssignments.length > 0"
-      >
-        <template v-slot:avatar>
-          <q-icon name="assignment" />
-        </template>
-        Sie haben {{ newAssignments.length }} neue{{
-          newAssignments.length > 1 ? ' Aufträge' : 'n Auftrag'
-        }}
-        <template v-slot:action>
-          <q-btn flat label="Ansehen" />
-        </template>
-      </q-banner>
       <div class="col-6">
         <bc-boq-table
           title="Leistungen"
@@ -162,9 +147,6 @@ export default {
   computed: {
     project() {
       return this.$store.getters['project/project'];
-    },
-    newAssignments() {
-      return this.$store.getters['project/newAssignments'];
     },
   },
   methods: {

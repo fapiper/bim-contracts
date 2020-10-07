@@ -84,6 +84,22 @@ contract ServiceContractFactory is CloneFactory {
         return true;
     }
 
+    function getContractsByClient(address _client)
+        external
+        view
+        returns (bytes32[] memory)
+    {
+        return contractsByClient[_client];
+    }
+
+    function getContractsByContractor(address _contractor)
+        external
+        view
+        returns (bytes32[] memory)
+    {
+        return contractsByContractor[_contractor];
+    }
+
     function sectionsOf(bytes32 _super)
         external
         view

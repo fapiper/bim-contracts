@@ -313,7 +313,7 @@
         "id": 74,
         "nodeType": "ImportDirective",
         "scope": 347,
-        "sourceUnit": 929,
+        "sourceUnit": 955,
         "src": "66:28:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -327,10 +327,10 @@
               "id": 75,
               "name": "StateMachine",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 928,
+              "referencedDeclaration": 954,
               "src": "124:12:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StateMachine_$928",
+                "typeIdentifier": "t_contract$_StateMachine_$954",
                 "typeString": "contract StateMachine"
               }
             },
@@ -340,7 +340,7 @@
           }
         ],
         "contractDependencies": [
-          928
+          954
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -348,7 +348,7 @@
         "id": 346,
         "linearizedBaseContracts": [
           346,
-          928
+          954
         ],
         "name": "ServiceContract",
         "nodeType": "ContractDefinition",
@@ -618,7 +618,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 943,
+                            "referencedDeclaration": 969,
                             "src": "519:3:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -694,10 +694,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        946,
-                        947
+                        972,
+                        973
                       ],
-                      "referencedDeclaration": 947,
+                      "referencedDeclaration": 973,
                       "src": "511:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -779,7 +779,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 943,
+                        "referencedDeclaration": 969,
                         "src": "674:3:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -2017,7 +2017,7 @@
                       "name": "initStage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 927,
+                      "referencedDeclaration": 953,
                       "src": "1738:9:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_bytes32_$returns$__$",
@@ -2375,7 +2375,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2000:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -2408,10 +2408,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2038:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -2425,7 +2425,7 @@
                     "referencedDeclaration": null,
                     "src": "2038:18:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -2437,10 +2437,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2023:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -2470,7 +2470,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2066:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -2582,7 +2582,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2176:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -2615,10 +2615,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2214:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -2632,7 +2632,7 @@
                     "referencedDeclaration": null,
                     "src": "2214:14:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -2644,10 +2644,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2199:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -2677,7 +2677,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2238:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -2789,7 +2789,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2349:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -2822,10 +2822,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2387:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -2839,7 +2839,7 @@
                     "referencedDeclaration": null,
                     "src": "2387:15:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -2851,10 +2851,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2372:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -2886,10 +2886,10 @@
                         "name": "StateMachine",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 928,
+                        "referencedDeclaration": 954,
                         "src": "2432:12:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StateMachine_$928_$",
+                          "typeIdentifier": "t_type$_t_contract$_StateMachine_$954_$",
                           "typeString": "type(contract StateMachine)"
                         }
                       },
@@ -2900,10 +2900,10 @@
                       "lValueRequested": false,
                       "memberName": "Stages",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2432:19:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -2917,7 +2917,7 @@
                     "referencedDeclaration": null,
                     "src": "2432:28:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -2929,10 +2929,10 @@
                   "name": "transitionTo",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 902,
+                  "referencedDeclaration": 928,
                   "src": "2412:12:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3041,7 +3041,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2550:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3074,10 +3074,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2588:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3091,7 +3091,7 @@
                     "referencedDeclaration": null,
                     "src": "2588:15:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3103,10 +3103,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2573:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3136,7 +3136,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2613:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3248,7 +3248,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2720:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3281,10 +3281,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2758:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3298,7 +3298,7 @@
                     "referencedDeclaration": null,
                     "src": "2758:15:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3310,10 +3310,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2743:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3343,7 +3343,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2783:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3438,7 +3438,7 @@
         "id": 74,
         "nodeType": "ImportDirective",
         "scope": 347,
-        "sourceUnit": 929,
+        "sourceUnit": 955,
         "src": "66:28:2",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3452,10 +3452,10 @@
               "id": 75,
               "name": "StateMachine",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 928,
+              "referencedDeclaration": 954,
               "src": "124:12:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StateMachine_$928",
+                "typeIdentifier": "t_contract$_StateMachine_$954",
                 "typeString": "contract StateMachine"
               }
             },
@@ -3465,7 +3465,7 @@
           }
         ],
         "contractDependencies": [
-          928
+          954
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -3473,7 +3473,7 @@
         "id": 346,
         "linearizedBaseContracts": [
           346,
-          928
+          954
         ],
         "name": "ServiceContract",
         "nodeType": "ContractDefinition",
@@ -3743,7 +3743,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 943,
+                            "referencedDeclaration": 969,
                             "src": "519:3:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -3819,10 +3819,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        946,
-                        947
+                        972,
+                        973
                       ],
-                      "referencedDeclaration": 947,
+                      "referencedDeclaration": 973,
                       "src": "511:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3904,7 +3904,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 943,
+                        "referencedDeclaration": 969,
                         "src": "674:3:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -5142,7 +5142,7 @@
                       "name": "initStage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 927,
+                      "referencedDeclaration": 953,
                       "src": "1738:9:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_bytes32_$returns$__$",
@@ -5500,7 +5500,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2000:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -5533,10 +5533,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2038:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -5550,7 +5550,7 @@
                     "referencedDeclaration": null,
                     "src": "2038:18:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -5562,10 +5562,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2023:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -5595,7 +5595,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2066:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -5707,7 +5707,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2176:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -5740,10 +5740,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2214:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -5757,7 +5757,7 @@
                     "referencedDeclaration": null,
                     "src": "2214:14:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -5769,10 +5769,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2199:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -5802,7 +5802,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2238:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -5914,7 +5914,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2349:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -5947,10 +5947,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2387:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -5964,7 +5964,7 @@
                     "referencedDeclaration": null,
                     "src": "2387:15:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -5976,10 +5976,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2372:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -6011,10 +6011,10 @@
                         "name": "StateMachine",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 928,
+                        "referencedDeclaration": 954,
                         "src": "2432:12:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_contract$_StateMachine_$928_$",
+                          "typeIdentifier": "t_type$_t_contract$_StateMachine_$954_$",
                           "typeString": "type(contract StateMachine)"
                         }
                       },
@@ -6025,10 +6025,10 @@
                       "lValueRequested": false,
                       "memberName": "Stages",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2432:19:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -6042,7 +6042,7 @@
                     "referencedDeclaration": null,
                     "src": "2432:28:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -6054,10 +6054,10 @@
                   "name": "transitionTo",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 902,
+                  "referencedDeclaration": 928,
                   "src": "2412:12:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -6166,7 +6166,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2550:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -6199,10 +6199,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2588:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -6216,7 +6216,7 @@
                     "referencedDeclaration": null,
                     "src": "2588:15:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -6228,10 +6228,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2573:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -6261,7 +6261,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2613:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -6373,7 +6373,7 @@
                   "name": "isValid",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 829,
+                  "referencedDeclaration": 855,
                   "src": "2720:7:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -6406,10 +6406,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 809,
+                      "referencedDeclaration": 835,
                       "src": "2758:6:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$809_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$835_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -6423,7 +6423,7 @@
                     "referencedDeclaration": null,
                     "src": "2758:15:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$809",
+                      "typeIdentifier": "t_enum$_Stages_$835",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -6435,10 +6435,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 846,
+                  "referencedDeclaration": 872,
                   "src": "2743:7:2",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$809_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$835_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -6468,7 +6468,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 889,
+                  "referencedDeclaration": 915,
                   "src": "2783:14:2",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -6589,12 +6589,12 @@
       "links": {
         "ServiceContractLib": "0x5D219C3bDF5Aa8208ac7A184803e5cD8E3669bf8"
       },
-      "address": "0x00E61692dF094D60B273c2555ccCfC9eBcDeFe29",
-      "transactionHash": "0xc4437f53afa5cff19688e4df707a4434172f52aee3d4352756501a81aa2a3786"
+      "address": "0xC84586518eA996Af643629ED997595CACacaf9CA",
+      "transactionHash": "0xb0a8dabf52ae30686772b5a8167e9d486a10f831a9fd613a1e2a3c6378506bba"
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-07T13:35:47.243Z",
+  "updatedAt": "2020-10-07T16:18:23.939Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

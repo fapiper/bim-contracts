@@ -61,26 +61,23 @@ export default {
   components: { ServiceContractCard },
   data() {
     return {
+      assignments: [],
       prompt: false,
       selected: null,
       address: '',
     };
   },
-  computed: {
-    assignments() {
-      return this.$store.getters['project/assignments'](
-        this.$auth.user().address
-      );
-    },
-  },
-  created() {
+  mounted() {
     this.loadAssignments();
   },
   methods: {
     async loadAssignments() {
       this.loading = true;
       const project_hash = this.$route.params.project;
-      await this.$store.dispatch('project/loadAssignments', project_hash);
+      this.assignments = await this.$services.assignment.getAssignmentsByProject(
+        project_hash,
+        this.$auth.user().address
+      );
       this.loading = false;
     },
     showDialog(service) {

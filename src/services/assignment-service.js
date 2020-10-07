@@ -57,19 +57,35 @@ class AssignmentService {
     return this.assignmentdb;
   }
 
-  async getAllByProject(project_hash) {
-    const build = async (assignment) => {
-      assignment.service.stage = await this.serviceContract.methods
-        .stageOf(assignment.service.hash)
+  async getAssignmentsByProject(project_hash, user_address) {
+    const contracts = await this.factoryContract.methods
+      .getContractsByContractor(user_address)
+      .call();
+    console.log('got assignments', contracts);
+    return this._buildContracts(contracts, project_hash);
+  }
+
+  async getAwardsByProject(project_hash, user_address) {
+    const contracts = await this.factoryContract.methods
+      .getContractsByClient(user_address)
+      .call();
+    console.log('got awards', contracts);
+    return this._buildContracts(contracts, project_hash);
+  }
+
+  async _buildContracts(contracts, project_hash) {
+    const build = async (contract) => {
+      contract.service.stage = await this.factoryContract.methods
+        .stageOf(contract.service.hash)
         .call();
-      if (assignment.stage < assignment.service.stage) {
-        assignment.stage = assignment.service.stage;
+      if (contract.stage < contract.service.stage) {
+        contract.stage = contract.service.stage;
       }
-      return assignment;
+      return contract;
     };
-    return this.query(project_hash, (item) => item).then((assignments) =>
-      Promise.all(assignments.map(build))
-    );
+    return this.query(project_hash, (item) =>
+      contracts.includes(item.hash)
+    ).then((entries) => Promise.all(entries.map(build)));
   }
 
   async getChildren(project_hash, service_hash) {
@@ -133,10 +149,11 @@ class AssignmentService {
         ),
       ];
       const method = hasSections ? 'addSections' : 'addItems';
-      await this.factoryContract.methods[method](...payload).send({
+      const res = await this.factoryContract.methods[method](...payload).send({
         from: contract.client.address,
         gas: 2000000,
       });
+      console.log('sent', method, 'payload', payload, 'result', res);
     });
     await this.put(project_hash, contract);
     return contract;

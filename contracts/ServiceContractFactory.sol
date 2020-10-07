@@ -46,7 +46,7 @@ contract ServiceContractFactory is CloneFactory {
         return true;
     }
 
-    function addSections(
+    function addServices(
         bytes32 _contract,
         bytes32 _super,
         bytes32[] calldata _sections,
@@ -54,30 +54,9 @@ contract ServiceContractFactory is CloneFactory {
     ) external onlyClient(_instanceByContract(_contract)) returns (bool) {
         for (uint256 i = 0; i < _billings.length; i++) {
             contracts[_sections[i]] = _contract;
-            _instanceByContract(_contract).setSectionOf(
+            _instanceByContract(_contract).setServiceOf(
                 _super,
                 _sections[i],
-                _billings[i]
-            );
-        }
-        return true;
-    }
-
-    function addItems(
-        bytes32 _contract,
-        bytes32 _section,
-        bytes32[] calldata _items,
-        bytes32[] calldata _billings
-    ) external onlyClient(_instanceByContract(_contract)) returns (bool) {
-        require(
-            _items.length == _billings.length,
-            'Provided items or billings are invalid.'
-        );
-        for (uint256 i = 0; i < _items.length; i++) {
-            contracts[_items[i]] = _contract;
-            ServiceContract(instances[_contract]).setItemOf(
-                _section,
-                _items[i],
                 _billings[i]
             );
         }
@@ -100,20 +79,12 @@ contract ServiceContractFactory is CloneFactory {
         return contractsByContractor[_contractor];
     }
 
-    function sectionsOf(bytes32 _super)
+    function servicesOf(bytes32 _super)
         external
         view
         returns (bytes32[] memory)
     {
-        return _instanceByService(_super).getSectionsOf(_super);
-    }
-
-    function itemsOf(bytes32 _section)
-        external
-        view
-        returns (bytes32[] memory)
-    {
-        return _instanceByService(_section).getItemsOf(_section);
+        return _instanceByService(_super).getServicesOf(_super);
     }
 
     function stageOf(bytes32 _item)

@@ -61,7 +61,6 @@ class AssignmentService {
     const contracts = await this.factoryContract.methods
       .getContractsByContractor(user_address)
       .call();
-    console.log('got assignments', contracts);
     return this._buildContracts(contracts, project_hash);
   }
 
@@ -69,7 +68,6 @@ class AssignmentService {
     const contracts = await this.factoryContract.methods
       .getContractsByClient(user_address)
       .call();
-    console.log('got awards', contracts);
     return this._buildContracts(contracts, project_hash);
   }
 
@@ -89,16 +87,19 @@ class AssignmentService {
   }
 
   async getChildren(project_hash, service_hash) {
-    const build = async (item) => {
-      item.stage = await this.serviceContract.methods.stageOf(item.hash).call();
+    const build = async (service_hash) => {
+      const item = await this.boqService
+        .get(project_hash, service_hash)
+        .then((items) => items[0]);
+      item.stage = await this.factoryContract.methods
+        .stageOf(service_hash)
+        .call();
       return item;
     };
-    const _items = await this.boqService.query(
-      project_hash,
-      (item) => item.parent === service_hash
-    );
-    const items = await Promise.all(_items.map(build));
-    return items;
+    const services = await this.factoryContract.methods
+      .servicesOf(service_hash)
+      .call();
+    return Promise.all(services.map(build));
   }
 
   async getAllServices(project_hash, service) {
@@ -136,24 +137,21 @@ class AssignmentService {
     const services = await this.getAllServices(project_hash, contract.service);
     contract.children = unflatten(services);
     await traverseHandle(contract, async (node, children) => {
-      const hasSections = children.some(
-        (service) => typeof service.qty === 'undefined'
-      );
-      const payload = [
-        contract.hash,
-        node.hash,
-        children.map((service) => service.hash),
-        children.map(
-          (service) =>
-            (service.billing_item && service.billing_item.hash) || n32
-        ),
-      ];
-      const method = hasSections ? 'addSections' : 'addItems';
-      const res = await this.factoryContract.methods[method](...payload).send({
-        from: contract.client.address,
-        gas: 2000000,
-      });
-      console.log('sent', method, 'payload', payload, 'result', res);
+      const res = await this.factoryContract.methods
+        .addServices(
+          contract.hash,
+          node.hash,
+          children.map((service) => service.hash),
+          children.map(
+            (service) =>
+              (service.billing_item && service.billing_item.hash) || n32
+          )
+        )
+        .send({
+          from: contract.client.address,
+          gas: 2000000,
+        });
+      return res;
     });
     await this.put(project_hash, contract);
     return contract;
@@ -165,14 +163,15 @@ class AssignmentService {
     service,
     { method, next }
   ) {
+    console.log(method, next);
     const services = await this.getAllServices(project_hash, service).then(
       async (services) => {
         for (const _service of services) {
-          _service.stage = await this.serviceContract.methods
+          _service.stage = await this.factoryContract.methods
             .stageOf(_service.hash)
             .call();
           if (_service.stage < next) {
-            await this.serviceContract.methods[method](_service.hash).send({
+            await this.factoryContract.methods[method](_service.hash).send({
               from: contractor_address,
               gas: 2000000,
             });

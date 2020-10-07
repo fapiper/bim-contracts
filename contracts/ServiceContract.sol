@@ -8,9 +8,8 @@ contract ServiceContract is StateMachine {
     address private contractor;
     address private factory;
 
-    mapping(bytes32 => bytes32[]) private sections; // supersection or contract -> subsections
-    mapping(bytes32 => bytes32[]) private items; // section -> items
-    mapping(bytes32 => bytes32) private billings; // section or item -> billing
+    mapping(bytes32 => bytes32[]) private services; // super -> services
+    mapping(bytes32 => bytes32) private billings; // service -> billing
 
     modifier onlyFactory() {
         require(msg.sender == factory, 'Not allowed. Only factory.');
@@ -31,41 +30,23 @@ contract ServiceContract is StateMachine {
         return contractor;
     }
 
-    function getSectionsOf(bytes32 _super)
+    function getServicesOf(bytes32 _super)
         external
         view
         onlyFactory
         returns (bytes32[] memory)
     {
-        return sections[_super];
+        return services[_super];
     }
 
-    function setSectionOf(
+    function setServiceOf(
         bytes32 _super,
-        bytes32 _section,
+        bytes32 _service,
         bytes32 _billing
     ) external onlyFactory {
-        billings[_section] = _billing;
-        sections[_super].push(_section);
-    }
-
-    function getItemsOf(bytes32 _section)
-        external
-        view
-        onlyFactory
-        returns (bytes32[] memory)
-    {
-        return items[_section];
-    }
-
-    function setItemOf(
-        bytes32 _section,
-        bytes32 _item,
-        bytes32 _billing
-    ) external onlyFactory {
-        billings[_section] = _billing;
-        items[_section].push(_item);
-        initStage(_item);
+        billings[_service] = _billing;
+        services[_super].push(_service);
+        initStage(_service);
     }
 
     function getBillingOf(bytes32 _of)

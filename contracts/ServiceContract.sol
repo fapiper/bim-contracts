@@ -1,66 +1,119 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.7.1;
 
-import './ServiceContractLib.sol';
+import './StateMachine.sol';
 
-contract ServiceContract {
-    using ServiceContractLib for ServiceContractLib.ServiceContract;
+contract ServiceContract is StateMachine {
+    address private client;
+    address private contractor;
+    address private factory;
 
-    mapping(bytes32 => ServiceContractLib.ServiceContract) private instances;
-    mapping(bytes32 => bytes32) private contracts;
+    mapping(bytes32 => bytes32[]) private sections; // supersection or contract -> subsections
+    mapping(bytes32 => bytes32[]) private items; // section -> items
+    mapping(bytes32 => bytes32) private billings; // section or item -> billing
 
-    function createServiceContract(bytes32 _contract, address _contractor)
+    modifier onlyFactory() {
+        require(msg.sender == factory, 'Not allowed. Only factory.');
+        _;
+    }
+
+    function init(address _client, address _contractor) public {
+        factory = msg.sender;
+        client = _client;
+        contractor = _contractor;
+    }
+
+    function getClient() external view onlyFactory returns (address) {
+        return client;
+    }
+
+    function getContractor() external view onlyFactory returns (address) {
+        return contractor;
+    }
+
+    function getSectionsOf(bytes32 _super)
         external
-        returns (bool)
-    {
-        require(
-            !instances[_contract].exists,
-            'Service contract already exists.'
-        );
-
-        instances[_contract].init(_contractor);
-        return true;
-    }
-
-    function addServiceSection(
-        bytes32 _contract,
-        bytes32 _node,
-        bytes32[] memory _children,
-        bytes32[] memory _billings
-    ) public returns (bool) {
-        contracts[_node] = _contract;
-        for (uint256 i = 0; i < _children.length; i++) {
-            contracts[_children[i]] = _contract;
-        }
-        instances[_contract].addServiceSection(_node, _children, _billings);
-        return true;
-    }
-
-    function stageOf(bytes32 _service)
-        public
         view
-        returns (ServiceContractLib.Stages)
+        onlyFactory
+        returns (bytes32[] memory)
     {
-        return instances[contracts[_service]].stageOf(_service);
+        return sections[_super];
     }
 
-    function start(bytes32 _service) external returns (bool) {
-        return instances[contracts[_service]].start(_service);
+    function setSectionOf(
+        bytes32 _super,
+        bytes32 _section,
+        bytes32 _billing
+    ) external onlyFactory {
+        billings[_section] = _billing;
+        sections[_super].push(_section);
     }
 
-    function finish(bytes32 _service) external returns (bool) {
-        return instances[contracts[_service]].finish(_service);
+    function getItemsOf(bytes32 _section)
+        external
+        view
+        onlyFactory
+        returns (bytes32[] memory)
+    {
+        return items[_section];
     }
 
-    function approve(bytes32 _service) external returns (bool) {
-        return instances[contracts[_service]].approve(_service);
+    function setItemOf(
+        bytes32 _section,
+        bytes32 _item,
+        bytes32 _billing
+    ) external onlyFactory {
+        billings[_section] = _billing;
+        items[_section].push(_item);
+        initStage(_item);
     }
 
-    function reject(bytes32 _service) external returns (bool) {
-        return instances[contracts[_service]].reject(_service);
+    function getBillingOf(bytes32 _of)
+        external
+        view
+        onlyFactory
+        returns (bytes32)
+    {
+        return billings[_of];
     }
 
-    function pay(bytes32 _service) external returns (bool) {
-        return instances[contracts[_service]].pay(_service);
-    }
+    function start(bytes32 _item)
+        external
+        onlyFactory
+        isValid(_item)
+        atStage(_item, Stages.INITIALIZED)
+        transitionNext(_item)
+    {}
+
+    function finish(bytes32 _item)
+        external
+        onlyFactory
+        isValid(_item)
+        atStage(_item, Stages.STARTED)
+        transitionNext(_item)
+    {}
+
+    function approve(bytes32 _item)
+        external
+        onlyFactory
+        isValid(_item)
+        atStage(_item, Stages.FINISHED)
+        transitionTo(_item, StateMachine.Stages.APPROVED)
+    {}
+
+    function reject(bytes32 _item)
+        external
+        onlyFactory
+        isValid(_item)
+        atStage(_item, Stages.FINISHED)
+        transitionNext(_item)
+    {}
+
+    function pay(bytes32 _item)
+        external
+        onlyFactory
+        isValid(_item)
+        atStage(_item, Stages.APPROVED)
+        transitionNext(_item)
+    {}
 }

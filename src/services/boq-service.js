@@ -10,9 +10,6 @@ class BoQService {
       const boqdb = await this.orbitdb.docs(`projects.${project_hash}.boqs`, {
         indexBy: 'hash',
         create: true,
-        accessController: {
-          write: ['*'],
-        },
       });
       await boqdb.load();
       this._assigned = project_hash;

@@ -1,5 +1,5 @@
-import { abi as ServiceContractAbi } from 'src/contracts/ServiceContract.json';
-import { serviceContract as ServiceContractAddress } from 'app/bim-contracts.config';
+import { abi as ServiceContractFactoryAbi } from 'src/contracts/ServiceContractFactory.json';
+import { contract as ServiceContractFactoryAddress } from 'app/bim-contracts.config';
 
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -10,9 +10,9 @@ class AssignmentService {
     this.assignmentdb = null;
     this.boqService = boqService;
     this.web3 = web3;
-    this.serviceContract = new web3.eth.Contract(
-      ServiceContractAbi,
-      ServiceContractAddress
+    this.factoryContract = new web3.eth.Contract(
+      ServiceContractFactoryAbi,
+      ServiceContractFactoryAddress
     );
   }
 
@@ -91,14 +91,11 @@ class AssignmentService {
     return assignments;
   }
 
-  async assign(project_hash, assignment) {
-    await this.serviceContract.methods
-      .createServiceContract(assignment.hash, assignment.contractor.address)
-      .send({ from: assignment.client.address, gas: 2000000 });
-    const services = await this.getAllServices(
-      project_hash,
-      assignment.service
-    );
+  async assign(project_hash, contract) {
+    await this.factoryContract.methods
+      .create(contract.hash, contract.contractor.address)
+      .send({ from: contract.client.address, gas: 2000000 });
+    const services = await this.getAllServices(project_hash, contract.service);
     const sections = services.filter((s) => !s.qty);
     for (const section of sections) {
       const items = services.filter((s) => s.parent === section.hash);
@@ -107,16 +104,16 @@ class AssignmentService {
       );
       await this.serviceContract.methods
         .addServiceSection(
-          assignment.hash,
+          contract.hash,
           section.hash,
           items.map((item) => item.hash),
           billings
         )
-        .send({ from: assignment.client.address, gas: 2000000 });
+        .send({ from: contract.client.address, gas: 2000000 });
     }
 
-    await this.put(project_hash, assignment);
-    return assignment;
+    await this.put(project_hash, contract);
+    return contract;
   }
 
   async handleTransition(

@@ -74,6 +74,7 @@ class AssignmentService {
   }
 
   async _buildContracts(contracts, project_hash) {
+    console.log('contracts', contracts);
     const build = async (contract) => {
       contract.service.stage = await this.factoryContract.methods
         .stageOf(contract.service.hash)

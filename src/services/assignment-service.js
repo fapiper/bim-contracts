@@ -9,7 +9,8 @@ const unflatten = (array) => {
   array.forEach((node) => (hashTable[node.hash] = { ...node, children: [] }));
   const tree = [];
   array.forEach((node) => {
-    if (node.parent) hashTable[node.parent].children.push(hashTable[node.hash]);
+    if (node.parent && hashTable[node.parent])
+      hashTable[node.parent].children.push(hashTable[node.hash]);
     else tree.push(hashTable[node.hash]);
   });
   return tree;
@@ -118,6 +119,20 @@ class AssignmentService {
     );
   }
 
+  async getSuperServices(project_hash, service) {
+    const build = async (node, collect = []) => {
+      const parents = node.parent
+        ? await this.boqService.get(project_hash, node.parent)
+        : [];
+      const _collect = await Promise.all(
+        parents.map((child) => build(child, collect))
+      );
+      _collect.push(node);
+      return _collect.flat();
+    };
+    return build(service);
+  }
+
   async put(project_hash, assignment) {
     const assignmentdb = await this.loadDb(project_hash);
     const hash = await assignmentdb.put(assignment);
@@ -134,53 +149,45 @@ class AssignmentService {
     await this.factoryContract.methods
       .create(contract.hash, contract.contractor.address)
       .send({ from: contract.client.address, gas: 2000000 });
-    const services = await this.getAllServices(project_hash, contract.service);
-    contract.children = unflatten(services);
-    await traverseHandle(contract, async (node, children) => {
-      const res = await this.factoryContract.methods
-        .addServices(
-          contract.hash,
-          node.hash,
-          children.map((service) => service.hash),
-          children.map(
-            (service) =>
-              (service.billing_item && service.billing_item.hash) || n32
-          )
-        )
-        .send({
-          from: contract.client.address,
-          gas: 2000000,
-        });
-      return res;
-    });
+    const flat = await this.getAllServices(project_hash, contract.service);
+    const deep = unflatten(flat);
+    const services = await Promise.all(
+      deep.map((service) =>
+        traverseHandle(service, async (node, children) => {
+          console.log(
+            'addServices',
+            children.map((service) => service),
+            'of',
+            node
+          );
+          const res = await this.factoryContract.methods
+            .addServices(
+              contract.hash,
+              node.hash,
+              children.map((service) => service.hash),
+              children.map(
+                (service) =>
+                  (service.billing_item && service.billing_item.hash) || n32
+              )
+            )
+            .send({
+              from: contract.client.address,
+              gas: 2000000,
+            });
+          return res;
+        })
+      )
+    );
+    console.log('added', services);
     await this.put(project_hash, contract);
     return contract;
   }
 
-  async handleTransition(
-    project_hash,
-    contractor_address,
-    service,
-    { method, next }
-  ) {
-    console.log(method, next);
-    const services = await this.getAllServices(project_hash, service).then(
-      async (services) => {
-        for (const _service of services) {
-          _service.stage = await this.factoryContract.methods
-            .stageOf(_service.hash)
-            .call();
-          if (_service.stage < next) {
-            await this.factoryContract.methods[method](_service.hash).send({
-              from: contractor_address,
-              gas: 2000000,
-            });
-          }
-        }
-        return services;
-      }
-    );
-    return services;
+  async handleTransition(user_address, service, method) {
+    return this.factoryContract.methods[method](service.hash).send({
+      from: user_address,
+      gas: 2000000,
+    });
   }
 }
 

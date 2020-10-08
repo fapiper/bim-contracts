@@ -83,12 +83,10 @@ export default {
       this.$q.loading.show();
       try {
         await this.$services.assignment.handleTransition(
-          this.project.hash,
           this.$auth.user().address,
           service,
-          action
+          action.method
         );
-        this.contract.service.stage = action.next;
         this.$q.notify({
           type: 'positive',
           message: `Die AKtion war erfolgreich.`,

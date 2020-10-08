@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.21 <0.7.1;
 
+import './StateMachine.sol';
 import './ServiceContract.sol';
 import './CloneFactory.sol';
 
@@ -11,8 +12,9 @@ contract ServiceContractFactory is CloneFactory {
         implementation = _implementation;
     }
 
-    mapping(bytes32 => bytes32) contracts; // section or item -> contract
+    mapping(bytes32 => bytes32) contracts; // service -> contract
     mapping(bytes32 => address) instances; // contract hash to contract address
+    mapping(bytes32 => bytes32) sections; // service -> section
 
     mapping(address => bytes32[]) contractsByContractor; // contractor to contract hashes
     mapping(address => bytes32[]) contractsByClient; // client to contract hashes
@@ -33,13 +35,23 @@ contract ServiceContractFactory is CloneFactory {
         _;
     }
 
+    modifier contractNotStarted(bytes32 _contract) {
+        if (instances[_contract] > address(0)) {
+            require(
+                stageOf(_contract) > StateMachine.Stages.INITIALIZED,
+                'Not allowed. Contract already Started'
+            );
+        }
+        _;
+    }
+
     function create(bytes32 _contract, address _contractor)
         public
+        contractNotStarted(_contract)
         returns (bool)
     {
         address clone = createClone(implementation);
         instances[_contract] = clone;
-        contracts[_contract] = _contract; // Include contract in contract pointers, as it is super of first level sections or items
         _instanceByContract(_contract).init(msg.sender, _contractor);
         contractsByContractor[_contractor].push(_contract);
         contractsByClient[msg.sender].push(_contract);
@@ -53,6 +65,7 @@ contract ServiceContractFactory is CloneFactory {
         bytes32[] calldata _billings
     ) external onlyClient(_instanceByContract(_contract)) returns (bool) {
         for (uint256 i = 0; i < _billings.length; i++) {
+            sections[_sections[i]] = _super;
             contracts[_sections[i]] = _contract;
             _instanceByContract(_contract).setServiceOf(
                 _super,
@@ -96,10 +109,17 @@ contract ServiceContractFactory is CloneFactory {
     }
 
     function start(bytes32 _item)
-        external
+        public
         onlyContractor(_instanceByService(_item))
         returns (bool)
     {
+        if (
+            sections[_item] > 0 &&
+            (uint256(stageOf(sections[_item])) <
+                uint256(StateMachine.Stages.STARTED))
+        ) {
+            start(sections[_item]);
+        }
         _instanceByService(_item).start(_item);
         return true;
     }
@@ -154,7 +174,10 @@ contract ServiceContractFactory is CloneFactory {
         view
         returns (ServiceContract)
     {
-        require(contracts[_service] > 0, 'Contract does not exists.');
+        require(
+            contracts[_service] > 0 || instances[_service] > address(0),
+            'Linked service contract not found.'
+        );
         return _instanceByContract(contracts[_service]);
     }
 }

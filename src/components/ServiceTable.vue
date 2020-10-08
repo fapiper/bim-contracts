@@ -47,34 +47,34 @@
           </q-td>
         </template>
         <q-td auto-width>
-          <template v-for="(action, index) in status[props.row.stage].action">
-            <q-btn
-              v-if="action.type === type"
-              :key="index"
-              round
-              :color="status[action.next].color"
-              dense
-              outline
-              class="q-mr-xs"
-              :icon="status[action.next].icon"
-              @click="transition({ service: props.row, action })"
-            >
-              <q-tooltip>
-                {{ action.text }}
-              </q-tooltip>
-            </q-btn>
+          <template v-if="!isCtgy">
+            <template v-for="(action, index) in status[props.row.stage].action">
+              <q-btn
+                v-if="action.type === type"
+                :key="index"
+                round
+                :color="status[action.next].color"
+                dense
+                outline
+                class="q-mr-xs"
+                :icon="status[action.next].icon"
+                @click="transition({ service: props.row, action })"
+              >
+                <q-tooltip>
+                  {{ action.text }}
+                </q-tooltip>
+              </q-btn>
+            </template>
           </template>
           <q-btn flat round dense color="grey" icon="more_horiz">
             <q-menu>
               <q-list style="min-width: 200px">
-                <!-- v-if="props.row.status < 1" -->
                 <q-item
                   clickable
                   v-close-popup
                   @click="assign(props.row)"
-                  v-if="isAssignment"
+                  v-if="isAssignment && isCtgy"
                 >
-                  <!-- && props.row.billing_item -->
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
                   </q-item-section>
@@ -123,25 +123,6 @@ export default {
     assignment: Object,
     type: String,
   },
-  watch: {
-    data: {
-      deep: true,
-      handler(data, old) {
-        if (old.length > 0) {
-          Object.keys(this.children).forEach((key) => {
-            const parent = data.find((service) => service.hash === key);
-
-            const children = this.children[key].map((child, i) => {
-              if (child.stage < parent.stage) child.stage = parent.stage;
-              return child;
-            });
-            console.log('set children of', key, children);
-            this.$set(this.children, key, children);
-          });
-        }
-      },
-    },
-  },
   methods: {
     assign(service) {
       this.$emit('assign', service);
@@ -162,7 +143,6 @@ export default {
             this.project,
             props.row.hash
           );
-          // console.log(props, 'got children', children);
           this.children[props.row.hash] = children;
           this.childrenLoaded[props.row.hash] = true;
         } catch (error) {

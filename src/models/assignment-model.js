@@ -56,7 +56,7 @@ class Assignment {
         {
           text: 'Auftrag ablehnen',
           method: 'reject',
-          next: 5,
+          next: 6,
           type: 'award',
         },
       ],
@@ -69,6 +69,13 @@ class Assignment {
       action: [],
     },
     5: {
+      text: 'Abgenommen & Bezahlt',
+      color: 'accent',
+      textColor: 'white',
+      icon: 'attach_money',
+      action: [],
+    },
+    6: {
       text: 'Abgelehnt',
       color: 'negative',
       textColor: 'white',
@@ -81,13 +88,6 @@ class Assignment {
           type: 'assignment',
         },
       ],
-    },
-    6: {
-      text: 'Bezahlt',
-      color: 'accent',
-      textColor: 'white',
-      icon: 'attach_money',
-      action: [],
     },
   };
 }

@@ -70,8 +70,7 @@ contract ServiceContract is StateMachine {
         public
         onlyFactory
         isValid(_item)
-        atStage(_item, Stages.STARTED)
-        transitionNext(_item)
+        transitionTo(_item, StateMachine.Stages.FINISHED)
     {}
 
     function approve(bytes32 _item)
@@ -82,19 +81,18 @@ contract ServiceContract is StateMachine {
         transitionNext(_item)
     {}
 
-    function reject(bytes32 _item)
-        public
-        onlyFactory
-        isValid(_item)
-        atStage(_item, Stages.FINISHED)
-        transitionTo(_item, StateMachine.Stages.REJECTED)
-    {}
-
     function pay(bytes32 _item)
         external
         onlyFactory
         isValid(_item)
         atStage(_item, Stages.APPROVED)
         transitionNext(_item)
+    {}
+
+    function reject(bytes32 _item)
+        public
+        onlyFactory
+        isValid(_item)
+        transitionTo(_item, StateMachine.Stages.REJECTED)
     {}
 }

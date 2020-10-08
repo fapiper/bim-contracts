@@ -8,8 +8,8 @@ contract StateMachine {
         STARTED, // 2
         FINISHED, // 3
         APPROVED, // 4
-        REJECTED, // 5
-        PAYED // 6
+        PAYED, // 5
+        REJECTED // 6
     }
 
     mapping(bytes32 => Stages) stages;

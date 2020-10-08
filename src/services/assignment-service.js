@@ -25,6 +25,7 @@ const traverseHandle = async (node, handleFn, once = true) => {
     }
     await traverseHandle(child, handleFn);
   }
+  return node;
 };
 
 class AssignmentService {
@@ -150,35 +151,27 @@ class AssignmentService {
       .create(contract.hash, contract.contractor.address)
       .send({ from: contract.client.address, gas: 2000000 });
     const flat = await this.getAllServices(project_hash, contract.service);
-    const deep = unflatten(flat);
-    const services = await Promise.all(
-      deep.map((service) =>
-        traverseHandle(service, async (node, children) => {
-          console.log(
-            'addServices',
-            children.map((service) => service),
-            'of',
-            node
-          );
-          const res = await this.factoryContract.methods
-            .addServices(
-              contract.hash,
-              node.hash,
-              children.map((service) => service.hash),
-              children.map(
-                (service) =>
-                  (service.billing_item && service.billing_item.hash) || n32
-              )
-            )
-            .send({
-              from: contract.client.address,
-              gas: 2000000,
-            });
-          return res;
-        })
-      )
-    );
-    console.log('added', services);
+    contract.children = unflatten(flat);
+    await traverseHandle(contract, async (node, children) => {
+      const parent =
+        node.hash === contract.hash ? node.service.parent || n32 : node.hash;
+      const res = await this.factoryContract.methods
+        .addServices(
+          contract.hash,
+          parent,
+          children.map((service) => service.hash),
+          children.map(
+            (service) =>
+              (service.billing_item && service.billing_item.hash) || n32
+          )
+        )
+        .send({
+          from: contract.client.address,
+          gas: 2000000,
+        });
+      return res;
+    });
+
     await this.put(project_hash, contract);
     return contract;
   }

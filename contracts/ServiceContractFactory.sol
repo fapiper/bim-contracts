@@ -61,17 +61,11 @@ contract ServiceContractFactory is CloneFactory {
     function addServices(
         bytes32 _contract,
         bytes32 _super,
-        bytes32[] calldata _sections,
+        bytes32[] calldata _services,
         bytes32[] calldata _billings
     ) external onlyClient(_instanceByContract(_contract)) returns (bool) {
         for (uint256 i = 0; i < _billings.length; i++) {
-            sections[_sections[i]] = _super;
-            contracts[_sections[i]] = _contract;
-            _instanceByContract(_contract).setServiceOf(
-                _super,
-                _sections[i],
-                _billings[i]
-            );
+            _addService(_contract, _super, _services[i], _billings[i]);
         }
         return true;
     }
@@ -113,6 +107,7 @@ contract ServiceContractFactory is CloneFactory {
         onlyContractor(_instanceByService(_item))
         returns (bool)
     {
+        _instanceByService(_item).start(_item);
         if (
             sections[_item] > 0 &&
             (uint256(stageOf(sections[_item])) <
@@ -120,44 +115,102 @@ contract ServiceContractFactory is CloneFactory {
         ) {
             start(sections[_item]);
         }
-        _instanceByService(_item).start(_item);
         return true;
     }
 
     function finish(bytes32 _item)
-        external
+        public
         onlyContractor(_instanceByService(_item))
         returns (bool)
     {
         _instanceByService(_item).finish(_item);
+        if (sections[_item] > 0) {
+            bytes32[] memory _services = _instanceByService(sections[_item])
+                .getServicesOf(sections[_item]);
+            for (uint256 i = 0; i < _services.length; i++) {
+                if (
+                    uint256(stageOf(_services[i])) <
+                    uint256(StateMachine.Stages.FINISHED)
+                ) {
+                    return true;
+                }
+            }
+            finish(sections[_item]);
+        }
         return true;
     }
 
     function approve(bytes32 _item)
-        external
+        public
         onlyClient(_instanceByService(_item))
         returns (bool)
     {
         _instanceByService(_item).approve(_item);
-        return true;
-    }
+        if (sections[_item] > 0) {
+            bytes32[] memory _services = _instanceByService(sections[_item])
+                .getServicesOf(sections[_item]);
+            for (uint256 i = 0; i < _services.length; i++) {
+                if (
+                    uint256(stageOf(_services[i])) <
+                    uint256(StateMachine.Stages.APPROVED) ||
+                    stageOf(_services[i]) == StateMachine.Stages.REJECTED
+                ) {
+                    return true;
+                }
+            }
+            approve(sections[_item]);
+        }
 
-    function reject(bytes32 _item)
-        external
-        onlyClient(_instanceByService(_item))
-        returns (bool)
-    {
-        _instanceByService(_item).reject(_item);
         return true;
     }
 
     function pay(bytes32 _item)
-        external
+        public
         onlyClient(_instanceByService(_item))
         returns (bool)
     {
         _instanceByService(_item).pay(_item);
+        if (sections[_item] > 0) {
+            bytes32[] memory _services = _instanceByService(sections[_item])
+                .getServicesOf(sections[_item]);
+            for (uint256 i = 0; i < _services.length; i++) {
+                if (
+                    uint256(stageOf(_services[i])) <
+                    uint256(StateMachine.Stages.PAYED)
+                ) {
+                    return true;
+                }
+            }
+            pay(sections[_item]);
+        }
         return true;
+    }
+
+    function reject(bytes32 _item)
+        public
+        onlyClient(_instanceByService(_item))
+        returns (bool)
+    {
+        if (
+            sections[_item] > 0 &&
+            (uint256(stageOf(sections[_item])) <
+                uint256(StateMachine.Stages.REJECTED))
+        ) {
+            reject(sections[_item]);
+        }
+        _instanceByService(_item).reject(_item);
+        return true;
+    }
+
+    function _addService(
+        bytes32 _contract,
+        bytes32 _super,
+        bytes32 _service,
+        bytes32 _billing
+    ) internal {
+        sections[_service] = _super;
+        contracts[_service] = _contract;
+        _instanceByContract(_contract).setServiceOf(_super, _service, _billing);
     }
 
     function _instanceByContract(bytes32 _contract)
@@ -174,10 +227,7 @@ contract ServiceContractFactory is CloneFactory {
         view
         returns (ServiceContract)
     {
-        require(
-            contracts[_service] > 0 || instances[_service] > address(0),
-            'Linked service contract not found.'
-        );
+        require(contracts[_service] > 0, 'Linked service contract not found.');
         return _instanceByContract(contracts[_service]);
     }
 }

@@ -89,9 +89,15 @@ export default {
         );
         this.$q.notify({
           type: 'positive',
-          message: `Die AKtion war erfolgreich.`,
+          message: `${action.text} war erfolgreich.`,
           position: 'bottom-right',
         });
+        if (this.contract.service.stage < action.next) {
+          const updated = this.contract.service;
+          updated.stage = action.next;
+          this.$set(this.contract, 'service', updated);
+          console.log('updated', this.contract);
+        }
       } catch (error) {
         console.error(error);
         this.$q.notify({

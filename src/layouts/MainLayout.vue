@@ -125,29 +125,14 @@ import { copyToClipboard } from 'quasar';
 
 const linksData = [
   {
-    title: 'Dashboard',
-    icon: 'dashboard',
-    link: '/dashboard',
-  },
-  {
     title: 'Bauvorhaben',
     icon: 'assignment',
     link: '/projects',
   },
   {
-    title: 'Kontakte',
-    icon: 'group',
-    link: '',
-  },
-  {
     title: 'Mein Profil',
     icon: 'person',
     link: '/me',
-  },
-  {
-    title: 'Einstellungen',
-    icon: 'settings',
-    link: '',
   },
 ];
 

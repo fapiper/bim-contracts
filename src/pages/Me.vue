@@ -1,13 +1,12 @@
 <template>
   <q-page padding>
-    <h2 class="text-h5">Benutzer</h2>
+    <h2 class="text-h5 q-pb-sm">Benutzer</h2>
     <q-form class="q-gutter-md">
       <q-input filled v-model="user.name" readonly label="Name" />
-      <q-input filled v-model="user.role" readonly label="Rolle" />
       <q-input filled v-model="user.iban" readonly label="IBAN" />
       <q-input filled v-model="user.privateKey" readonly label="Private Key" />
     </q-form>
-    <h2 class="text-h5">Account</h2>
+    <h2 class="text-h5 q-pb-sm">Account</h2>
     <q-form class="q-gutter-md">
       <q-input filled v-model="user.address" readonly label="Addresse" />
       <q-input filled v-model="account.balance" readonly label="Balance" />

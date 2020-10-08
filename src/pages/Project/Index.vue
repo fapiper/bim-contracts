@@ -198,13 +198,35 @@ export default {
       this.actorsLoading = false;
     },
     async addActor() {
-      const users = await this.$services.user.getAll();
-      if (users[this.actorAddress]) {
-        await this.$services.project.addActor(
-          this.project.hash,
-          this.actorAddress
-        );
+      this.addActorsPrompt = false;
+      this.$q.loading.show();
+      try {
+        const users = await this.$services.user.getAll();
+        if (
+          users[this.actorAddress] &&
+          !this.actors.some((a) => a.address === this.actorAddress)
+        ) {
+          await this.$services.project.addActor(
+            this.project.hash,
+            this.actorAddress
+          );
+        } else {
+          throw Error('Unknown user');
+        }
+        this.$q.notify({
+          type: 'positive',
+          message: `${users[this.actorAddress].name} erfolgreich hinzugefügt.`,
+          position: 'bottom-right',
+        });
+      } catch (error) {
+        console.error(error);
+        this.$q.notify({
+          type: 'negative',
+          message: `Ein Fehler ist aufgetreten.`,
+          position: 'bottom-right',
+        });
       }
+      this.$q.loading.hide();
     },
   },
 };

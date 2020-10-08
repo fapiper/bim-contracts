@@ -5,12 +5,10 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true },
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: 'dashboard', component: () => import('pages/Dashboard.vue') },
-      { path: '/me', component: () => import('pages/Me.vue') },
-      { path: '/projects', component: () => import('pages/Project.vue') },
+      { path: 'me', component: () => import('pages/Me.vue') },
+      { path: 'projects', component: () => import('pages/Project.vue') },
       {
-        path: '/projects/:project',
+        path: 'projects/:project',
         component: () => import('layouts/ProjectLayout.vue'),
         children: [
           {
@@ -23,7 +21,6 @@ const routes = [
             component: () => import('pages/Project/Assignments.vue'),
             meta: {
               label: 'Auftragsbearbeitung',
-              // auth: [Roles.SUB_CONTRACTOR, Roles.GENERAL_CONTRACTOR],
             },
           },
           {

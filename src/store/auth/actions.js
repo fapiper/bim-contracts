@@ -1,19 +1,16 @@
 import { Cookies, Notify, LocalStorage } from 'quasar';
-import { User } from 'src/models/user-model';
+import User from 'src/models/user-model';
 
 export async function register(state, data) {
   const account = await this._vm.$web3.eth.accounts.create();
   await this._vm.$web3.eth.accounts.wallet.add(account);
-  const user = new User(account.address, data.name, data.role, data.iban);
+  const user = new User(account.address, data.name, data.iban);
   const accounts = await this._vm.$web3.eth.getAccounts();
-  await this._vm.$web3.eth.sendTransaction(
-    {
-      from: accounts[0],
-      to: account.address,
-      value: this._vm.$web3.utils.toWei('10', 'ether'),
-    },
-    '51ef5561cc067561eda5544865c796257ce66bc43b461cce97569c571e1d6c36'
-  );
+  await this._vm.$web3.eth.sendTransaction({
+    from: accounts[0],
+    to: account.address,
+    value: this._vm.$web3.utils.toWei('10', 'ether'),
+  });
   await this._vm.$services.user.put(user);
   const privateKey = account.privateKey;
   state.commit('setUser', { privateKey, user });

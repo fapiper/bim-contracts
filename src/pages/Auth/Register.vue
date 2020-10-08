@@ -8,14 +8,6 @@
       <q-card-section>
         <q-form @submit.prevent="register" class="q-gutter-md">
           <q-input filled v-model="data.name" label="Name" />
-          <q-select
-            filled
-            v-model="data.role"
-            :options="options"
-            label="Rolle"
-            :option-value="(key) => key"
-            :option-label="(key) => roles[key]"
-          />
           <q-input filled v-model="data.iban" :options="options" label="Iban" />
 
           <q-checkbox
@@ -46,17 +38,12 @@
 </template>
 
 <script>
-import { Roles } from 'src/models/user-model';
-
 export default {
   name: 'PageRegister',
   data() {
     return {
-      roles: Roles,
-      options: Object.keys(Roles),
       data: {
         name: 'Max Mustermann',
-        role: 'CLIENT',
         iban: '1234567890',
         rememberMe: false,
       },
@@ -65,24 +52,12 @@ export default {
   },
   methods: {
     async register() {
-      // this.$v.data.$touch();
-      // if (!this.$v.data.$error) {
       this.loading = true;
       await this.$auth.register(this.data);
       this.loading = false;
-      this.$router.push('/');
-      // }
+      this.$router.push('/projects');
     },
   },
-  // validations: {
-  //   data: {
-  //     body: {
-  //       role: {
-  //         required,
-  //       },
-  //     },
-  //   },
-  // },
 };
 </script>
 

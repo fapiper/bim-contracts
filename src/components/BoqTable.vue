@@ -42,7 +42,14 @@
           </q-td>
         </template>
         <q-td auto-width>
-          <q-btn flat round dense color="grey" icon="more_horiz">
+          <q-btn
+            flat
+            round
+            dense
+            color="grey"
+            icon="more_horiz"
+            v-if="isRoot && isCtgy"
+          >
             <q-menu>
               <q-list style="min-width: 200px">
                 <!-- v-if="props.row.status < 1" -->
@@ -50,11 +57,6 @@
                 <q-item clickable v-close-popup @click="assign(props.row)">
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item clickable v-close-popup @click="showDetails(props.row)">
-                  <q-item-section>
-                    <q-item-label>Auftragsdetails einsehen</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>

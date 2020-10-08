@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import xml2js from 'xml2js';
-import BoQ from 'src/models/boq-model.js';
+import { BoQ } from 'src/models/boq-model.js';
 import BillingModel from 'src/models/billing-model.js';
 
 const nameProcessor = (name) =>

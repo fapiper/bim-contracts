@@ -21,10 +21,11 @@ const traverseHandle = async (node, handleFn, once = true) => {
   for (const child of children) {
     if (once) {
       once = false;
-      handleFn && (await handleFn(node, children));
+      await handleFn(node, children);
     }
     await traverseHandle(child, handleFn);
   }
+  return children;
 };
 
 class AssignmentService {
@@ -104,19 +105,17 @@ class AssignmentService {
   }
 
   async getAllServices(project_hash, service) {
-    const flatHandle = async (node, handleFn, collect = []) => {
-      const children = await handleFn(node);
+    const flatHandle = async (node, collect = []) => {
+      const children = await this.boqService.query(project_hash, (item) =>
+        node.children.some((hash) => item.hash === hash)
+      );
       const _collect = await Promise.all(
-        children.map((child) => flatHandle(child, handleFn, collect))
+        children.map((child) => flatHandle(child, collect))
       );
       _collect.push(node);
       return _collect.flat();
     };
-    return flatHandle(service, (node) =>
-      this.boqService.query(project_hash, (item) =>
-        node.children.some((hash) => item.hash === hash)
-      )
-    );
+    return flatHandle(service);
   }
 
   async getSuperServices(project_hash, service) {
@@ -151,34 +150,26 @@ class AssignmentService {
       .send({ from: contract.client.address, gas: 2000000 });
     const flat = await this.getAllServices(project_hash, contract.service);
     const deep = unflatten(flat);
-    const services = await Promise.all(
-      deep.map((service) =>
-        traverseHandle(service, async (node, children) => {
-          console.log(
-            'addServices',
-            children.map((service) => service),
-            'of',
-            node
-          );
-          const res = await this.factoryContract.methods
-            .addServices(
-              contract.hash,
-              node.hash,
-              children.map((service) => service.hash),
-              children.map(
-                (service) =>
-                  (service.billing_item && service.billing_item.hash) || n32
-              )
+    for (const service of deep) {
+      await traverseHandle(service, async (node, children) => {
+        console.log('add services', children);
+        const res = await this.factoryContract.methods
+          .addServices(
+            contract.hash,
+            node.hash,
+            children.map((service) => service.hash),
+            children.map(
+              (service) =>
+                (service.billing_item && service.billing_item.hash) || n32
             )
-            .send({
-              from: contract.client.address,
-              gas: 2000000,
-            });
-          return res;
-        })
-      )
-    );
-    console.log('added', services);
+          )
+          .send({
+            from: contract.client.address,
+            gas: 4000000,
+          });
+        return res;
+      });
+    }
     await this.put(project_hash, contract);
     return contract;
   }

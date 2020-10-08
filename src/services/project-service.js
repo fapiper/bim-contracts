@@ -1,13 +1,16 @@
 import Project from 'src/models/project-model.js';
+import Assignment from 'src/models/assignment-model.js';
+import { User } from 'src/models/user-model.js';
 
 class ProjectService {
-  constructor(boqService, orbitdb, projectdb) {
+  constructor(boqService, assignmentService, orbitdb, projectdb) {
     this.boqService = boqService;
+    this.assignmentService = assignmentService;
     this.orbitdb = orbitdb;
     this.projectdb = projectdb;
   }
 
-  static async init(boqService, orbitdb) {
+  static async init(boqService, assignmentService, orbitdb) {
     const projectdb = await orbitdb.docs('projects', {
       indexBy: 'hash',
       create: true,
@@ -16,7 +19,12 @@ class ProjectService {
       },
     });
     await projectdb.load();
-    return new ProjectService(boqService, orbitdb, projectdb);
+    return new ProjectService(
+      boqService,
+      assignmentService,
+      orbitdb,
+      projectdb
+    );
   }
 
   async get(hash) {
@@ -29,7 +37,7 @@ class ProjectService {
     return this.projectdb.query(queryFn);
   }
 
-  async put(project, { billing, boqs }) {
+  async addProject(project, client, contractor, { billing, boqs }) {
     const billingdb = await this.orbitdb.keyvalue(
       `projects.${project.hash}.billings`
     );
@@ -37,21 +45,17 @@ class ProjectService {
     await Promise.all(
       boqs.map((boq) => this.boqService.putAll(project.hash, boq.nodes))
     );
-    const res = Project.toStore(project);
-    await this.projectdb.put(res);
-    return res;
-  }
-
-  async addProject(project, services) {
-    console.log('put', services);
-
-    await Promise.all(
-      services.map((service) =>
-        this.boqService.putAll(project.hash, service.nodes)
-      )
+    const service = Project.toServiceSection(project);
+    service.children = boqs.flatMap((boq) => boq.roots);
+    const assignment = new Assignment(
+      project.name,
+      service,
+      User.toStore(client),
+      contractor
     );
     const res = Project.toStore(project);
     await this.projectdb.put(Project.toStore(project));
+    await this.assignmentService.assign(project.hash, assignment);
     return res;
   }
 

@@ -1,7 +1,8 @@
 import Web3 from 'web3';
+import { BoQCtgy } from 'src/models/boq-model.js';
 
 class Project {
-  constructor(name, owner_address, actor_addresses, services, billings) {
+  constructor(name, owner_address, actor_addresses) {
     this.name = name;
     this.owner_address = owner_address;
     this.actor_addresses = actor_addresses;
@@ -19,8 +20,12 @@ class Project {
     };
   }
 
+  static toServiceSection(project) {
+    return new BoQCtgy('', '', project.name);
+  }
+
   static fromView(project, user_address) {
-    return new Project(project.name, user_address, []);
+    return new Project(project.name, user_address, [project.contractor]);
   }
 }
 

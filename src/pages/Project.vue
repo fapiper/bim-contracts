@@ -59,6 +59,12 @@
           <q-card-section>
             <div class="q-gutter-y-md">
               <q-input filled v-model="project.name" label="Name" />
+              <q-input
+                filled
+                v-model="project.contractor"
+                label="Auftragnehmer"
+                hint="Blockchain Identität"
+              />
               <q-file
                 ref="boqs"
                 filled
@@ -134,6 +140,7 @@ export default {
       projects: [],
       project: {
         name: '',
+        contractor: '',
       },
       container: {
         boqs: [],
@@ -174,7 +181,12 @@ export default {
           this.project,
           this.$auth.user().address
         );
-        const res = await this.$services.project.put(project, icdd);
+        const res = await this.$services.project.addProject(
+          project,
+          this.$auth.user(),
+          { address: this.project.contractor },
+          icdd
+        );
         this.projects.push(res);
         this.dialog = false;
         this.$q.notify({

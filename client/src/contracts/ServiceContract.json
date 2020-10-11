@@ -5345,12 +5345,12 @@
       "links": {
         "ServiceContractLib": "0x5D219C3bDF5Aa8208ac7A184803e5cD8E3669bf8"
       },
-      "address": "0xe5A69aad4FfbE632C639eA020a3f0443ED25C6c8",
-      "transactionHash": "0x40f6f7484c4f067132a5f2ec2941d7ef7670ef3847eaa17989ac2f5e3be96a86"
+      "address": "0x44ba078c8BBF2e2285A8D4a8F2aD7C0d01682403",
+      "transactionHash": "0x1a508ef2adb87356671ea39fc910f076107ffce2cc87adfc8fbf4c02f34a5585"
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-11T19:28:53.369Z",
+  "updatedAt": "2020-10-11T21:10:17.609Z",
   "devdoc": {
     "methods": {}
   },

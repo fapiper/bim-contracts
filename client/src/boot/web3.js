@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import config from 'app/bim-contracts.config';
+import config from 'app/../bim-contracts.config';
 
 export default async ({ Vue }) => {
   try {

@@ -18528,12 +18528,13 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xD5C8B1BbFE3528eB76C8f5A62C86De1a961Dda43",
-      "transactionHash": "0x9ad3b2d026589aef1d8a5f443742c8aa681710f6885c6afcaf829377a2ea8bbd"
+      "address": "0xf92DD5D15f5CfF96BdcDF809a7F0D9972db556a2",
+      "transactionHash": "0xe186b594953813e9a40d1ba85635392951f550a3f4fb44b4f8f4ffd146b2d602"
     }
   },
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-10T13:59:41.221Z",
+  "updatedAt": "2020-10-11T21:02:46.223Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

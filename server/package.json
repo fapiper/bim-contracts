@@ -1,10 +1,6 @@
 {
   "name": "bim-contracts-server",
   "version": "1.0.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/repype/bim-contracts.git"
-  },
   "author": "Fabian Piper <fabianpiper@web.de>",
   "license": "MIT",
   "scripts": {

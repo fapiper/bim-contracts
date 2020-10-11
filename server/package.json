@@ -1,0 +1,22 @@
+{
+  "name": "bim-contracts-server",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/repype/bim-contracts.git"
+  },
+  "author": "Fabian Piper <fabianpiper@web.de>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon ./index.js"
+  },
+  "main": "index.js",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  }
+}

@@ -54,7 +54,7 @@
 <script>
 import ServiceContractCard from 'components/ServiceContractCard.vue';
 import Assignment from 'src/models/assignment-model.js';
-import { User } from 'src/models/user-model.js';
+import User from 'src/models/user-model.js';
 
 export default {
   name: 'PageProjectAssignments',

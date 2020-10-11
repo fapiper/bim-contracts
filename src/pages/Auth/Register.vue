@@ -8,7 +8,7 @@
       <q-card-section>
         <q-form @submit.prevent="register" class="q-gutter-md">
           <q-input filled v-model="data.name" label="Name" />
-          <q-input filled v-model="data.iban" :options="options" label="Iban" />
+          <q-input filled v-model="data.iban" label="Iban" />
 
           <q-checkbox
             id="rememberMe"

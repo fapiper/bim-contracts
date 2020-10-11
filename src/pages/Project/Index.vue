@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { User } from 'src/models/user-model.js';
+import User from 'src/models/user-model.js';
 import Assignment from 'src/models/assignment-model';
 
 export default {

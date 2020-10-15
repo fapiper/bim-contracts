@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 
-const CONTROLLER_DIR = 'controllers';
+const userController = require('./controllers/user.controller');
 
-const helloWorldController = require(`./${CONTROLLER_DIR}/helloWorldController`);
-
-router.get('/', helloWorldController.sayHello);
+router.route('/').post(userController.createUser).get(userController.getUsers);
+router
+  .route('/:userId')
+  .get(userController.getUser)
+  .patch(userController.updateUser)
+  .delete(userController.deleteUser);
 
 module.exports = router;

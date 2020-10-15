@@ -1,6 +1,7 @@
 {
   "name": "bim-contracts",
   "version": "1.0.0",
+  "license": "MIT",
   "description": "",
   "productName": "BIMcontracts",
   "author": "Fabian Piper <fabianpiper@web.de>",
@@ -12,12 +13,18 @@
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
     "dev:client": "cd client && quasar dev",
-    "dev:server": "cd server && yarn dev",
+    "dev:server": "cd server && yarn start",
     "dev": "truffle migrate && npm-run-all -l -p dev:server dev:client"
+  },
+  "_moduleAliases": {
+    "@server": "server",
+    "@client": "client"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^3.2.0",
-    "@openzeppelin/upgrades": "^2.8.0"
+    "@openzeppelin/upgrades": "^2.8.0",
+    "module-alias": "^2.2.2",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

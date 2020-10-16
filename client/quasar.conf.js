@@ -17,7 +17,7 @@ module.exports = function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
-    boot: ['axios', 'web3', 'services', 'vuelidate', 'auth', 'components'],
+    boot: ['axios', 'web3', 'services', 'auth', 'components'],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],

@@ -108,7 +108,6 @@
 </template>
 
 <script>
-import User from 'src/models/user-model.js';
 import Assignment from 'src/models/assignment-model';
 
 export default {
@@ -142,10 +141,11 @@ export default {
       this.$q.loading.show();
       this.assignPrompt = false;
       try {
+        const { privateKey, ...client } = this.$auth.user();
         const assignment = new Assignment(
           this.project.name,
           this.selectedBoq,
-          User.toStore(this.$auth.user()),
+          client,
           { address: this.assigneeAddress }
         );
         await this.$services.assignment.assign(this.project._id, assignment);

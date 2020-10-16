@@ -4,7 +4,7 @@
       <ServiceContractCard
         v-for="award in awards"
         class="full-width"
-        :key="award.hash"
+        :key="award._id"
         :contract="award"
         type="award"
       />
@@ -27,9 +27,8 @@ export default {
   methods: {
     async loadAwards() {
       this.loading = true;
-      const project_hash = this.$route.params.project;
       this.awards = await this.$services.assignment.getAwardsByProject(
-        project_hash,
+        this.$route.params.project,
         this.$auth.user().address
       );
       this.loading = false;

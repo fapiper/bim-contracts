@@ -40,7 +40,7 @@
           @assign="assign"
           :data="[contract.service]"
           :assignment="contract"
-          :project="project.hash"
+          :project="project._id"
           :type="type"
           is-root
         />
@@ -96,7 +96,6 @@ export default {
           const updated = this.contract.service;
           updated.stage = action.next;
           this.$set(this.contract, 'service', updated);
-          console.log('updated', this.contract);
         }
       } catch (error) {
         console.error(error);

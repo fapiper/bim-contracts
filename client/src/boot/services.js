@@ -1,7 +1,6 @@
 import IPFS from 'ipfs';
 import OrbitDB from 'orbit-db';
 
-import ProjectService from 'src/services/project-service.js';
 import BoQService from 'src/services/boq-service.js';
 import AssignmentService from 'src/services/assignment-service.js';
 
@@ -25,7 +24,6 @@ export default async ({ Vue }) => {
   Vue.prototype.$orbitdb = orbitdb;
   const services = {};
   services.boq = new BoQService(orbitdb);
-  services.project = await ProjectService.init(services.boq, orbitdb);
   services.assignment = new AssignmentService(
     orbitdb,
     services.boq,

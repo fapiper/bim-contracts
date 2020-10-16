@@ -40,10 +40,10 @@ class AssignmentService {
     );
   }
 
-  async loadDb(project_hash) {
-    if (this._assigned !== project_hash) {
+  async loadDb(projectId) {
+    if (this._assigned !== projectId) {
       const assignmentdb = await this.orbitdb.docstore(
-        `projects.${project_hash}.assignments`,
+        `projects.${projectId}.assignments`,
         {
           indexBy: 'hash',
           create: true,
@@ -53,27 +53,27 @@ class AssignmentService {
         }
       );
       await assignmentdb.load();
-      this._assigned = project_hash;
+      this._assigned = projectId;
       this.assignmentdb = assignmentdb;
     }
     return this.assignmentdb;
   }
 
-  async getAssignmentsByProject(project_hash, user_address) {
+  async getAssignmentsByProject(projectId, user_address) {
     const contracts = await this.factoryContract.methods
       .getContractsByContractor(user_address)
       .call();
-    return this._buildContracts(contracts, project_hash);
+    return this._buildContracts(contracts, projectId);
   }
 
-  async getAwardsByProject(project_hash, user_address) {
+  async getAwardsByProject(projectId, user_address) {
     const contracts = await this.factoryContract.methods
       .getContractsByClient(user_address)
       .call();
-    return this._buildContracts(contracts, project_hash);
+    return this._buildContracts(contracts, projectId);
   }
 
-  async _buildContracts(contracts, project_hash) {
+  async _buildContracts(contracts, projectId) {
     const build = async (contract) => {
       contract.service.stage = await this.factoryContract.methods
         .stageOf(contract.service.hash)
@@ -83,15 +83,15 @@ class AssignmentService {
       }
       return contract;
     };
-    return this.query(project_hash, (item) =>
+    return this.query(projectId, (item) =>
       contracts.includes(item.hash)
     ).then((entries) => Promise.all(entries.map(build)));
   }
 
-  async getChildren(project_hash, service_hash) {
+  async getChildren(projectId, service_hash) {
     const build = async (service_hash) => {
       const item = await this.boqService
-        .get(project_hash, service_hash)
+        .get(projectId, service_hash)
         .then((items) => items[0]);
       item.stage = await this.factoryContract.methods
         .stageOf(service_hash)
@@ -104,7 +104,7 @@ class AssignmentService {
     return Promise.all(services.map(build));
   }
 
-  async getAllServices(project_hash, service) {
+  async getAllServices(projectId, service) {
     const flatHandle = async (node, handleFn, collect = []) => {
       const children = await handleFn(node);
       const _collect = await Promise.all(
@@ -114,16 +114,16 @@ class AssignmentService {
       return _collect.flat();
     };
     return flatHandle(service, (node) =>
-      this.boqService.query(project_hash, (item) =>
+      this.boqService.query(projectId, (item) =>
         node.children.some((hash) => item.hash === hash)
       )
     );
   }
 
-  async getSuperServices(project_hash, service) {
+  async getSuperServices(projectId, service) {
     const build = async (node, collect = []) => {
       const parents = node.parent
-        ? await this.boqService.get(project_hash, node.parent)
+        ? await this.boqService.get(projectId, node.parent)
         : [];
       const _collect = await Promise.all(
         parents.map((child) => build(child, collect))
@@ -134,23 +134,23 @@ class AssignmentService {
     return build(service);
   }
 
-  async put(project_hash, assignment) {
-    const assignmentdb = await this.loadDb(project_hash);
+  async put(projectId, assignment) {
+    const assignmentdb = await this.loadDb(projectId);
     const hash = await assignmentdb.put(assignment);
     return hash;
   }
 
-  async query(project_hash, queryFn) {
-    const assignmentdb = await this.loadDb(project_hash);
+  async query(projectId, queryFn) {
+    const assignmentdb = await this.loadDb(projectId);
     const assignments = await assignmentdb.query(queryFn);
     return assignments;
   }
 
-  async assign(project_hash, contract) {
+  async assign(projectId, contract) {
     await this.factoryContract.methods
       .create(contract.hash, contract.contractor.address)
       .send({ from: contract.client.address, gas: 2000000 });
-    const flat = await this.getAllServices(project_hash, contract.service);
+    const flat = await this.getAllServices(projectId, contract.service);
     contract.children = unflatten(flat);
     await traverseHandle(contract, async (node, children) => {
       const parent =
@@ -172,7 +172,7 @@ class AssignmentService {
       return res;
     });
 
-    await this.put(project_hash, contract);
+    await this.put(projectId, contract);
     return contract;
   }
 

@@ -4,7 +4,7 @@
       <ServiceContractCard
         v-for="assignment in assignments"
         class="full-width"
-        :key="assignment.hash"
+        :key="assignment._id"
         :contract="assignment"
         type="assignment"
         @assign="showDialog"
@@ -54,7 +54,6 @@
 <script>
 import ServiceContractCard from 'components/ServiceContractCard.vue';
 import Assignment from 'src/models/assignment-model.js';
-import User from 'src/models/user-model.js';
 
 export default {
   name: 'PageProjectAssignments',
@@ -88,10 +87,11 @@ export default {
       this.$q.loading.show();
       this.prompt = false;
       try {
+        const { privateKey, ...client } = this.$auth.user();
         const assignment = new Assignment(
           this.selected.short_desc || this.selected.name,
           this.selected,
-          User.toStore(this.$auth.user()),
+          client,
           { address: this.address }
         );
         await this.$services.assignment.assign(

@@ -1,5 +1,5 @@
 import { abi as ServiceContractFactoryAbi } from 'src/contracts/ServiceContractFactory.json';
-import { contract as ServiceContractFactoryAddress } from 'app/../bim-contracts.config';
+import { factoryContract as ServiceContractFactoryAddress } from 'app/../bim-contracts.config';
 
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';

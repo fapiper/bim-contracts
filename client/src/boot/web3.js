@@ -1,10 +1,10 @@
 import Web3 from 'web3';
-import config from 'app/../bim-contracts.config';
+import { network } from 'app/../bim-contracts.config';
 
 export default async ({ Vue }) => {
   try {
     const web3 = new Web3(
-      Web3.givenProvider || `ws://${config.host}:${config.port}`
+      Web3.givenProvider || `ws://${network.host}:${network.port}`
     );
     Vue.prototype.$web3 = web3;
   } catch (error) {

@@ -4,7 +4,6 @@ export async function loadProject(state, id) {
 }
 
 export async function addActor(state, actorId) {
-  console.log('state', state);
   const res = await this._vm.$axios.post(
     `projects/${state.state.project._id}/addActor`,
     {

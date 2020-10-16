@@ -1,4 +1,4 @@
-export default ({ app, router, store, Vue }) => {
+export default ({ router, store, Vue }) => {
   /**
    * Register auth store
    */
@@ -42,30 +42,30 @@ export default ({ app, router, store, Vue }) => {
   };
   router.addRoutes([routes]);
 
-  const helper = {};
-  helper.register = (data) => {
+  const auth = {};
+  auth.register = (data) => {
     return store.dispatch('auth/register', data);
   };
-  helper.loggedIn = () => {
+  auth.loggedIn = () => {
     return store.getters['auth/loggedIn'];
   };
-  helper.check = (roles) => {
+  auth.check = (roles) => {
     return store.getters['auth/check'](roles);
   };
-  helper.login = (data) => {
+  auth.login = (data) => {
     return store.dispatch('auth/login', data);
   };
-  helper.setKey = (user) => {
+  auth.setKey = (user) => {
     return store.dispatch('auth/setKey', user);
   };
-  helper.logout = () => {
+  auth.logout = () => {
     return store.dispatch('auth/logout');
   };
-  helper.fetch = () => {
+  auth.fetch = () => {
     return store.dispatch('auth/fetch');
   };
-  helper.user = () => {
+  auth.user = () => {
     return store.getters['auth/user'];
   };
-  Vue.prototype.$auth = helper;
+  Vue.prototype.$auth = auth;
 };

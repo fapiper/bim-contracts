@@ -12,9 +12,7 @@ const _login = async (account, axios) => {
     params: { address: account.address },
   });
   if (res.data.length > 0) {
-    const user = res.data[0];
-    console.log('got user from api', user);
-    return user;
+    return res.data[0];
   } else {
     const message = 'Benutzer nicht bekannt';
     Notify.create({

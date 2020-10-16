@@ -20,7 +20,7 @@ function get(req, res, next) {
  */
 function create(req, res, next) {
   const user = new User(req.body);
-
+  console.log('got user', user);
   user
     .save()
     .then((savedUser) => res.json(savedUser))

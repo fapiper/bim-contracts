@@ -2,8 +2,6 @@
 // Error utilities
 //
 
-// const logger = require('winston'); // require **winston** - this retrieves the default logger configured in util/log !!
-
 function reject(message) {
   return Promise.reject(err(message));
 }

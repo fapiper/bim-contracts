@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userCtrl = require('@server/controllers/user.controller');
+const userCtrl = require('controllers/user.controller');
 
 router.route('/').get(userCtrl.list).post(userCtrl.create);
 

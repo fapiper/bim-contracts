@@ -16,15 +16,9 @@
     "dev:server": "cd server && yarn start",
     "dev": "truffle migrate && npm-run-all -l -p dev:server dev:client"
   },
-  "_moduleAliases": {
-    "@server": "server",
-    "@client": "client"
-  },
   "dependencies": {
     "@openzeppelin/contracts": "^3.2.0",
-    "@openzeppelin/upgrades": "^2.8.0",
-    "module-alias": "^2.2.2",
-    "winston": "^3.3.3"
+    "@openzeppelin/upgrades": "^2.8.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

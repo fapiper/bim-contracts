@@ -1,6 +1,6 @@
-const User = require('@server/models/user.model');
-const Project = require('@server/models/project.model');
-const helpers = require('@server/util/helpers');
+const User = require('models/user.model');
+const Project = require('models/project.model');
+const helpers = require('util/helpers');
 
 const { handle, handleErr } = helpers.handlers('User', 'users');
 const id = helpers.id;

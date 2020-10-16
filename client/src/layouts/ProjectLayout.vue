@@ -27,8 +27,6 @@
             :to="'/projects/' + project._id + '/awards'"
             exact
           />
-
-          <!-- v-if="$auth.check([Roles.GENERAL_CONTRACTOR, Roles.SUB_CONTRACTOR])" -->
         </q-tabs>
       </q-toolbar>
       <div class="q-pa-md q-gutter-sm">
@@ -67,10 +65,10 @@ export default {
     this.loading = false;
   },
   methods: {
-    async loadProject(project_hash) {
+    async loadProject(projectId) {
       return Promise.all([
-        this.$store.dispatch('project/loadProject', project_hash),
-        this.$services.boq.loadDb(project_hash),
+        this.$store.dispatch('project/loadProject', projectId),
+        this.$services.boq.loadDb(projectId),
       ]);
     },
   },

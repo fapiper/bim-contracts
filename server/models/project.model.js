@@ -41,6 +41,10 @@ ProjectSchema.statics = {
   findAndPopulate(id) {
     return this.findById(id).populate('actors').populate('owner').exec();
   },
+  async updateAnPopulate(id, update) {
+    await this.findByIdAndUpdate(id, update);
+    return this.findAndPopulate(id);
+  },
   findByUserId(userId) {
     return this.find({ actors: userId })
       .populate('actors')

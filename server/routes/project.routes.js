@@ -10,4 +10,6 @@ router
   .put(projectCtrl.update)
   .delete(projectCtrl.remove);
 
+router.route('/:id/addActor').post(projectCtrl.addActor);
+
 module.exports = router;

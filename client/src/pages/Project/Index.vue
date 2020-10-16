@@ -89,7 +89,7 @@
             dense
             placeholder="Adresse"
             hint="Blockchain Identität"
-            v-model="actorAddress"
+            v-model="actorId"
             autofocus
           />
         </q-card-section>
@@ -117,7 +117,7 @@ export default {
     return {
       actorsLoading: true,
       addActorsPrompt: false,
-      actorAddress: '',
+      actorId: '',
       selectedBoq: null,
       boqsLoading: true,
       assignPrompt: false,
@@ -176,23 +176,16 @@ export default {
       this.addActorsPrompt = false;
       this.$q.loading.show();
       try {
-        const users = await this.$services.user.getAll();
-        if (
-          users[this.actorAddress] &&
-          !this.actors.some((a) => a.address === this.actorAddress)
-        ) {
-          await this.$services.project.addActor(
-            this.project._id,
-            this.actorAddress
-          );
-        } else {
-          throw Error('Unknown user');
-        }
+        const project = await this.$store.dispatch(
+          'project/addActor',
+          this.actorId
+        );
         this.$q.notify({
           type: 'positive',
-          message: `${users[this.actorAddress].name} erfolgreich hinzugefügt.`,
+          message: `${this.actorId} erfolgreich hinzugefügt.`,
           position: 'bottom-right',
         });
+        console.log('updated', project);
       } catch (error) {
         console.error(error);
         this.$q.notify({

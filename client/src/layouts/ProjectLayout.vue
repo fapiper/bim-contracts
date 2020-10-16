@@ -12,19 +12,19 @@
         <q-tabs shrink>
           <q-route-tab
             label="Übersicht"
-            :to="'/projects/' + project.hash"
+            :to="'/projects/' + project._id"
             exact
           />
           <q-route-tab
             label="Auftragsbearbeitung"
-            :to="'/projects/' + project.hash + '/assignments'"
+            :to="'/projects/' + project._id + '/assignments'"
             exact
           >
             <!-- <q-badge color="red" floating>{{ newAssignments.length }}</q-badge> -->
           </q-route-tab>
           <q-route-tab
             label="Auftragsvergabe"
-            :to="'/projects/' + project.hash + '/awards'"
+            :to="'/projects/' + project._id + '/awards'"
             exact
           />
 
@@ -35,7 +35,7 @@
         <q-breadcrumbs gutter="sm">
           <q-breadcrumbs-el to="/projects" label="Projekte" />
           <q-breadcrumbs-el
-            :to="'/projects/' + project.hash"
+            :to="'/projects/' + project._id"
             :label="project.name"
           />
           <q-breadcrumbs-el :label="$route.meta.label" />
@@ -63,8 +63,7 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    const project_hash = this.$route.params.project;
-    await this.loadProject(project_hash);
+    await this.loadProject(this.$route.params.project);
     this.loading = false;
   },
   methods: {

@@ -1,4 +1,4 @@
-export async function loadProject(state, hash) {
-  const projects = await this._vm.$services.project.get(hash);
-  state.commit('setProject', projects[0]);
+export async function loadProject(state, id) {
+  const res = await this._vm.$axios.get(`projects/${id}`);
+  state.commit('setProject', res.data);
 }

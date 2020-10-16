@@ -7,49 +7,35 @@
           @assign="showAssignPrompt"
           :data="services"
           :loading="boqsLoading"
-          :project="project.hash"
+          :project="project._id"
           is-root
         />
       </div>
-      <template v-if="actorsLoading">
-        <q-spinner color="grey-6" size="3em" />
-      </template>
-      <template v-else>
-        <div class="col-6">
-          <q-toolbar class="bg-primary text-white shadow-2">
-            <q-toolbar-title>Akteure</q-toolbar-title>
-            <q-btn
-              flat
-              round
-              dense
-              icon="add"
-              @click="addActorsPrompt = true"
-            />
-          </q-toolbar>
-          <q-list bordered>
-            <q-item
-              v-for="actor in actors"
-              :key="actor.address"
-              class="q-my-sm"
-            >
-              <q-item-section avatar>
-                <q-avatar color="primary" text-color="white"> MM </q-avatar>
-              </q-item-section>
+      <div class="col-6">
+        <q-toolbar class="bg-primary text-white shadow-2">
+          <q-toolbar-title>Akteure</q-toolbar-title>
+          <q-btn flat round dense icon="add" @click="addActorsPrompt = true" />
+        </q-toolbar>
+        <q-list bordered>
+          <q-item
+            v-for="actor in project.actors"
+            :key="actor.address"
+            class="q-my-sm"
+          >
+            <q-item-section avatar>
+              <q-avatar color="primary" text-color="white"> MM </q-avatar>
+            </q-item-section>
 
-              <q-item-section>
-                <q-item-label>{{ actor.name }}</q-item-label>
-                <q-item-label caption>{{ actor.address }}</q-item-label>
-              </q-item-section>
-              <q-item-section
-                side
-                v-if="actor.address === $auth.user().address"
-              >
-                <q-item-label caption>Du</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-      </template>
+            <q-item-section>
+              <q-item-label>{{ actor.name }}</q-item-label>
+              <q-item-label caption>{{ actor.address }}</q-item-label>
+            </q-item-section>
+            <q-item-section side v-if="actor.address === $auth.user().address">
+              <q-item-label caption>Du</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
     </div>
     <q-dialog v-model="assignPrompt">
       <q-card style="min-width: 450px">
@@ -130,7 +116,6 @@ export default {
   data() {
     return {
       actorsLoading: true,
-      actors: [],
       addActorsPrompt: false,
       actorAddress: '',
       selectedBoq: null,
@@ -142,7 +127,6 @@ export default {
   },
   created() {
     this.loadBoqs();
-    this.loadActors();
   },
   computed: {
     project() {
@@ -164,7 +148,7 @@ export default {
           User.toStore(this.$auth.user()),
           { address: this.assigneeAddress }
         );
-        await this.$services.assignment.assign(this.project.hash, assignment);
+        await this.$services.assignment.assign(this.project._id, assignment);
         this.$q.notify({
           type: 'positive',
           message: `Der Auftrag wurde erfolgreich vergeben.`,
@@ -183,19 +167,10 @@ export default {
     async loadBoqs() {
       this.boqsLoading = true;
       this.services = await this.$services.boq.query(
-        this.project.hash,
+        this.project._id,
         (item) => !item.parent
       );
       this.boqsLoading = false;
-    },
-    async loadActors() {
-      this.actorsLoading = true;
-      const users = await this.$services.user.getAll();
-      this.actors = this.project.actor_addresses.map(
-        (address) => users[address]
-      );
-      this.actors.push(users[this.project.owner_address]);
-      this.actorsLoading = false;
     },
     async addActor() {
       this.addActorsPrompt = false;
@@ -207,7 +182,7 @@ export default {
           !this.actors.some((a) => a.address === this.actorAddress)
         ) {
           await this.$services.project.addActor(
-            this.project.hash,
+            this.project._id,
             this.actorAddress
           );
         } else {

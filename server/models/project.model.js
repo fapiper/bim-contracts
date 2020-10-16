@@ -39,7 +39,7 @@ ProjectSchema.statics = {
       .exec();
   },
   findAndPopulate(id) {
-    return this.findById(id).populate('actors').exec();
+    return this.findById(id).populate('actors').populate('owner').exec();
   },
   findByUserId(userId) {
     return this.find({ actors: userId })

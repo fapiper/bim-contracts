@@ -9,10 +9,10 @@ const ProjectSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      minlength: [
-        5,
-        'The value of path `{PATH}` (`{VALUE}`) is shorter than the minimum allowed length ({MINLENGTH})',
-      ],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
     },
     actors: [
       {
@@ -42,7 +42,10 @@ ProjectSchema.statics = {
     return this.findById(id).populate('actors').exec();
   },
   findByUserId(userId) {
-    return this.find({ actors: userId }).populate('actors').exec();
+    return this.find({ actors: userId })
+      .populate('actors')
+      .populate('owner')
+      .exec();
   },
 };
 

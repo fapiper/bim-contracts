@@ -1,10 +1,10 @@
 import Web3 from 'web3';
 
 class Project {
-  constructor(name, owner_address, actor_addresses, services, billings) {
+  constructor(name, owner, actors) {
     this.name = name;
-    this.owner_address = owner_address;
-    this.actor_addresses = actor_addresses;
+    this.owner = owner;
+    this.actors = actors;
     this.created = new Date().toJSON();
     this.hash = Web3.utils.sha3(this.name + this.created);
   }
@@ -13,9 +13,8 @@ class Project {
     return {
       hash: project.hash,
       name: project.name,
-      owner_address: project.owner_address,
-      actor_addresses: project.actor_addresses,
-      created: project.created,
+      owner: project.owner,
+      actors: project.actors,
     };
   }
 

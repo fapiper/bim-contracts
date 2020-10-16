@@ -23,7 +23,6 @@
         >
           <q-card-section>
             <div class="text-h5">{{ project.name }}</div>
-            <div class="text-subtitle3">{{ project.designation }}</div>
           </q-card-section>
           <q-separator />
           <q-card-actions align="left" class="bg-grey-2">
@@ -31,7 +30,7 @@
               outline
               color="primary"
               class="full-width"
-              :to="'projects/' + project.hash + '/'"
+              :to="'projects/' + project._id + '/'"
               >Auswählen</q-btn
             >
           </q-card-actions>
@@ -117,7 +116,6 @@
 
 <script>
 import IcddParser from 'src/utils/icdd-parser.js';
-import Project from 'src/models/project-model.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -154,28 +152,28 @@ export default {
       );
     },
     async loadProjects() {
-      const queryFn = (e) =>
-        e.owner_address === this.$auth.user().address ||
-        (e.actor_addresses &&
-          e.actor_addresses.includes(this.$auth.user().address));
-
       this.loading = true;
-      this.projects = await this.$services.project.query(queryFn);
+      const res = await this.$axios.get(
+        `users/${this.$auth.user()._id}/projects`
+      );
+      this.projects = res.data;
       this.loading = false;
     },
     async addProject() {
       this.$q.loading.show();
       try {
-        const icdd = await IcddParser.parseFromFiles(
+        const { billing, boqs } = await IcddParser.parseFromFiles(
           this.container.billingModel,
           this.container.boqs
         );
-        const project = Project.fromView(
-          this.project,
-          this.$auth.user().address
-        );
-        const res = await this.$services.project.put(project, icdd);
-        this.projects.push(res);
+        const res = await this.$axios.post(`projects`, {
+          name: this.project.name,
+          owner: this.$auth.user()._id,
+          actors: [this.$auth.user()._id],
+        });
+        const project = res.data;
+        await this.$services.project.put(project._id, { billing, boqs });
+        this.projects.push(project);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

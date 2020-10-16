@@ -29,17 +29,15 @@ class ProjectService {
     return this.projectdb.query(queryFn);
   }
 
-  async put(project, { billing, boqs }) {
+  async put(project_hash, { billing, boqs }) {
     const billingdb = await this.orbitdb.keyvalue(
-      `projects.${project.hash}.billings`
+      `projects.${project_hash}.billings`
     );
     await billingdb.put(billing);
     await Promise.all(
-      boqs.map((boq) => this.boqService.putAll(project.hash, boq.nodes))
+      boqs.map((boq) => this.boqService.putAll(project_hash, boq.nodes))
     );
-    const res = Project.toStore(project);
-    await this.projectdb.put(res);
-    return res;
+    return project_hash;
   }
 
   async addProject(project, services) {

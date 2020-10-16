@@ -41,8 +41,8 @@ function update(req, res, next) {
  * Get user list
  */
 function list(req, res, next) {
-  const { limit = '0', skip = '0' } = req.query;
-  User.list({ limit, skip })
+  const { limit = '0', skip = '0', address } = req.query;
+  User.list({ limit, skip, address })
     .then((users) => res.json(users))
     .catch((err) => handleErr(next, err, 'getAll()'));
 }

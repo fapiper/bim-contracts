@@ -45,8 +45,8 @@ UserSchema.statics = {
   /**
    * List users in ascending order of 'name'
    */
-  list({ skip = '0', limit = '0' } = {}) {
-    return this.find()
+  list({ skip = '0', limit = '0', address } = {}) {
+    return this.find(address ? { address } : {})
       .sort({ name: 1 })
       .skip(parseInt(skip))
       .limit(parseInt(limit))

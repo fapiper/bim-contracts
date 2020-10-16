@@ -1,6 +1,3 @@
-const isArrayOrString = (variable) =>
-  typeof variable === typeof [] || typeof variable === typeof '';
-
 export default ({ app, router, store, Vue }) => {
   /**
    * Register auth store
@@ -12,19 +9,20 @@ export default ({ app, router, store, Vue }) => {
    */
   router.beforeEach(async (to, from, next) => {
     const record = to.matched.find((record) => record.meta.auth);
-    if (record) {
-      await store.dispatch('auth/fetch');
-      if (!store.getters['auth/loggedIn']) {
-        console.log('Not logged in');
-        next('/auth/login');
-      } else if (
-        isArrayOrString(record.meta.auth) &&
-        !store.getters['auth/check'](record.meta.auth)
-      ) {
-        next('/dashboard');
+    if (record && record.meta.auth) {
+      if (store.getters['auth/loggedIn']) {
+        next();
+      } else {
+        const fetched = await store.dispatch('auth/fetch');
+        if (!fetched) {
+          next('/auth/login');
+        } else {
+          next();
+        }
       }
+    } else {
+      next();
     }
-    next();
   });
 
   /**

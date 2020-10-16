@@ -5,8 +5,14 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     meta: { auth: true },
     children: [
-      { path: 'me', component: () => import('pages/Me.vue') },
-      { path: 'projects', component: () => import('pages/Project.vue') },
+      {
+        path: 'me',
+        component: () => import('pages/Me.vue'),
+      },
+      {
+        path: 'projects',
+        component: () => import('pages/Project.vue'),
+      },
       {
         path: 'projects/:project',
         component: () => import('layouts/ProjectLayout.vue'),
@@ -19,16 +25,12 @@ const routes = [
           {
             path: 'assignments',
             component: () => import('pages/Project/Assignments.vue'),
-            meta: {
-              label: 'Auftragsbearbeitung',
-            },
+            meta: { label: 'Auftragsbearbeitung' },
           },
           {
             path: 'awards',
             component: () => import('pages/Project/Awards.vue'),
-            meta: {
-              label: 'Auftragsvergabe',
-            },
+            meta: { label: 'Auftragsvergabe' },
           },
         ],
       },

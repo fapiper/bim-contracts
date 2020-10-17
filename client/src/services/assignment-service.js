@@ -34,7 +34,7 @@ class AssignmentService {
     this.assignmentdb = null;
     this.boqService = boqService;
     this.web3 = web3;
-    this.factoryContract = new web3.eth.Contract(
+    this.serviceAgreementContract = new web3.eth.Contract(
       ServiceAgreementAbi,
       ServiceAgreementAddress
     );
@@ -60,23 +60,23 @@ class AssignmentService {
   }
 
   async getAssignmentsByProject(projectId, user_address) {
-    const contracts = await this.factoryContract.methods
-      .getContractsByContractor(user_address)
+    const contracts = await this.serviceAgreementContract.methods
+      .getAgreementsByContractor(user_address)
       .call();
     return this._buildContracts(contracts, projectId);
   }
 
   async getAwardsByProject(projectId, user_address) {
-    const contracts = await this.factoryContract.methods
-      .getContractsByClient(user_address)
+    const contracts = await this.serviceAgreementContract.methods
+      .getAgreementsByClient(user_address)
       .call();
     return this._buildContracts(contracts, projectId);
   }
 
   async _buildContracts(contracts, projectId) {
     const build = async (contract) => {
-      contract.service.stage = await this.factoryContract.methods
-        .stageOf(contract.service.hash)
+      contract.service.stage = await this.serviceAgreementContract.methods
+        .stageOf(contract.hash, contract.service.hash)
         .call();
       if (contract.stage < contract.service.stage) {
         contract.stage = contract.service.stage;
@@ -88,18 +88,18 @@ class AssignmentService {
     ).then((entries) => Promise.all(entries.map(build)));
   }
 
-  async getChildren(projectId, service_hash) {
+  async getChildren(projectId, agreement_hash, service_hash) {
     const build = async (service_hash) => {
       const item = await this.boqService
         .get(projectId, service_hash)
         .then((items) => items[0]);
-      item.stage = await this.factoryContract.methods
-        .stageOf(service_hash)
+      item.stage = await this.serviceAgreementContract.methods
+        .stageOf(agreement_hash, service_hash)
         .call();
       return item;
     };
-    const services = await this.factoryContract.methods
-      .servicesOf(service_hash)
+    const services = await this.serviceAgreementContract.methods
+      .getServicesByAgreement(agreement_hash, service_hash)
       .call();
     return Promise.all(services.map(build));
   }
@@ -147,15 +147,19 @@ class AssignmentService {
   }
 
   async assign(projectId, contract) {
-    await this.factoryContract.methods
-      .create(contract.hash, contract.contractor.address)
+    await this.serviceAgreementContract.methods
+      .createAgreement(
+        contract.hash,
+        contract.service.hash,
+        contract.contractor.address
+      )
       .send({ from: contract.client.address, gas: 2000000 });
     const flat = await this.getAllServices(projectId, contract.service);
     contract.children = unflatten(flat);
     await traverseHandle(contract, async (node, children) => {
       const parent =
         node.hash === contract.hash ? node.service.parent || n32 : node.hash;
-      const res = await this.factoryContract.methods
+      const res = await this.serviceAgreementContract.methods
         .addServices(
           contract.hash,
           parent,
@@ -176,8 +180,11 @@ class AssignmentService {
     return contract;
   }
 
-  async handleTransition(user_address, service, method) {
-    return this.factoryContract.methods[method](service.hash).send({
+  async handleTransition(user_address, agreementHash, service, method) {
+    return this.serviceAgreementContract.methods[method](
+      agreementHash,
+      service.hash
+    ).send({
       from: user_address,
       gas: 2000000,
     });

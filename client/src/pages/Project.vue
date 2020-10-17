@@ -172,7 +172,7 @@ export default {
           actors: [this.$auth.user()._id],
         });
         const project = res.data;
-        await this.$services.project.put(project._id, { billing, boqs });
+        await this.$services.project.put(project, { billing, boqs });
         this.projects.push(project);
         this.dialog = false;
         this.$q.notify({

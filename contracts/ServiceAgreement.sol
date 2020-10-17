@@ -73,16 +73,20 @@ contract ServiceAgreement {
         return true;
     }
 
-    function getAgreementsByClient() external view returns (bytes32[] memory) {
-        return agreementsByClient[msg.sender];
-    }
-
-    function getAgreementsByContractor()
+    function getAgreementsByClient(address _client)
         external
         view
         returns (bytes32[] memory)
     {
-        return agreementsByClient[msg.sender];
+        return agreementsByClient[_client];
+    }
+
+    function getAgreementsByContractor(address _contractor)
+        external
+        view
+        returns (bytes32[] memory)
+    {
+        return agreementsByClient[_contractor];
     }
 
     function getAgreementsByService(bytes32 _service)

@@ -53,12 +53,6 @@ class Assignment {
           next: 4,
           type: 'award',
         },
-        {
-          text: 'Auftrag ablehnen',
-          method: 'reject',
-          next: 6,
-          type: 'award',
-        },
       ],
     },
     4: {

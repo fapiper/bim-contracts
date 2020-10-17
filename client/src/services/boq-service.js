@@ -5,41 +5,42 @@ class BoQService {
     this._assigned = '';
   }
 
-  async loadDb(project_hash) {
-    if (this._assigned !== project_hash) {
-      const boqdb = await this.orbitdb.docs(`projects.${project_hash}.boqs`, {
+  async loadDb(projectId) {
+    if (this._assigned !== projectId) {
+      console.log('load boqdb', `projects.${projectId}.boqs`);
+      const boqdb = await this.orbitdb.docs(`projects.${projectId}.boqs`, {
         indexBy: 'hash',
         create: true,
       });
       await boqdb.load();
-      this._assigned = project_hash;
+      this._assigned = projectId;
       this.boqdb = boqdb;
     }
     return this.boqdb;
   }
 
-  async get(project_hash, hash) {
-    await this.loadDb(project_hash);
+  async get(projectId, hash) {
+    await this.loadDb(projectId);
     return this.boqdb.get(hash);
   }
 
-  async getAll(project_hash) {
-    return this.query(project_hash, (item) => item);
+  async getAll(projectId) {
+    return this.query(projectId, (item) => item);
   }
 
-  async query(project_hash, queryFn) {
-    await this.loadDb(project_hash);
+  async query(projectId, queryFn) {
+    await this.loadDb(projectId);
     return this.boqdb.query(queryFn);
   }
 
-  async put(project_hash, node) {
-    await this.loadDb(project_hash);
+  async put(projectId, node) {
+    await this.loadDb(projectId);
     const hash = await this.boqdb.put(node);
     return hash;
   }
 
-  async putAll(project_hash, nodes) {
-    const boqdb = await this.loadDb(project_hash);
+  async putAll(projectId, nodes) {
+    const boqdb = await this.loadDb(projectId);
     const boq = await Promise.all(
       Object.keys(nodes).map((key) => boqdb.put(nodes[key]))
     );

@@ -51,10 +51,10 @@ export async function register(state, data) {
 }
 
 export async function login(state, { privateKey, rememberMe }) {
-  const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
-    privateKey
-  );
   try {
+    const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
+      privateKey
+    );
     const user = await _login(account, this._vm.$axios);
     state.commit('setUser', { user, privateKey });
     state.dispatch('setKey', {

@@ -141,6 +141,7 @@ export default {
         try {
           const children = await this.$services.assignment.getChildren(
             this.project,
+            this.assignment.hash,
             props.row.hash
           );
           this.children[props.row.hash] = children;

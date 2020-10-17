@@ -59,8 +59,6 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators';
-
 export default {
   name: 'PageLogin',
   mounted() {
@@ -92,20 +90,10 @@ export default {
       this.data.privateKey = val;
     },
     async login() {
-      this.$v.data.$touch();
-      if (!this.$v.data.$error) {
-        this.loading = true;
-        await this.$auth.login(this.data);
-        this.loading = false;
-        this.$router.push('/projects');
-      }
-    },
-  },
-  validations: {
-    data: {
-      privateKey: {
-        required,
-      },
+      this.loading = true;
+      await this.$auth.login(this.data);
+      this.loading = false;
+      this.$router.push('/projects');
     },
   },
 };

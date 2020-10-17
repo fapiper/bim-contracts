@@ -3,6 +3,7 @@ import OrbitDB from 'orbit-db';
 
 import BoQService from 'src/services/boq-service.js';
 import AssignmentService from 'src/services/assignment-service.js';
+import ProjectService from 'src/services/project-service.js';
 
 // types = [ 'counter', 'eventlog', 'feed', 'docstore', 'keyvalue']
 export default async ({ Vue }) => {
@@ -21,6 +22,7 @@ export default async ({ Vue }) => {
     services.boq,
     Vue.prototype.$web3
   );
+  services.project = new ProjectService(services.boq, orbitdb);
   Vue.prototype.$services = services;
   return true;
 };

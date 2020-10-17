@@ -170,6 +170,7 @@ export default {
         this.project._id,
         (item) => !item.parent
       );
+      console.log('services', this.services);
       this.boqsLoading = false;
     },
     async addActor() {

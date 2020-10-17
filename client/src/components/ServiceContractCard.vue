@@ -84,6 +84,7 @@ export default {
       try {
         await this.$services.assignment.handleTransition(
           this.$auth.user().address,
+          this.contract.hash,
           service,
           action.method
         );

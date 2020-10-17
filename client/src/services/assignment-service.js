@@ -1,5 +1,5 @@
-import { abi as ServiceContractFactoryAbi } from 'src/contracts/ServiceContractFactory.json';
-import { factoryContract as ServiceContractFactoryAddress } from 'app/../bim-contracts.config';
+import { abi as ServiceAgreementAbi } from 'src/contracts/ServiceAgreement.json';
+import { agreementContract as ServiceAgreementAddress } from 'app/../bim-contracts.config';
 
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -35,8 +35,8 @@ class AssignmentService {
     this.boqService = boqService;
     this.web3 = web3;
     this.factoryContract = new web3.eth.Contract(
-      ServiceContractFactoryAbi,
-      ServiceContractFactoryAddress
+      ServiceAgreementAbi,
+      ServiceAgreementAddress
     );
   }
 

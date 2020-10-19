@@ -24,6 +24,9 @@ class Assignment {
           method: 'start',
           next: 2,
           type: 'assignment',
+          checkForUpdate: (service, siblings) => {
+            return service.stage < 2;
+          },
         },
       ],
     },
@@ -38,6 +41,11 @@ class Assignment {
           method: 'finish',
           next: 3,
           type: 'assignment',
+          checkForUpdate: (service, siblings) => {
+            return siblings.every(
+              (s) => s.hash === service.hash || s.stage >= 3
+            );
+          },
         },
       ],
     },
@@ -52,6 +60,11 @@ class Assignment {
           method: 'approve',
           next: 4,
           type: 'award',
+          checkForUpdate: (service, siblings) => {
+            return siblings.every(
+              (s) => s.hash === service.hash || s.stage >= 4
+            );
+          },
         },
       ],
     },

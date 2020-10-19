@@ -58,7 +58,7 @@
                 outline
                 class="q-mr-xs"
                 :icon="status[action.next].icon"
-                @click="transition({ service: props.row, action })"
+                @click="transition({ services: [props.row], action })"
               >
                 <q-tooltip>
                   {{ action.text }}
@@ -96,15 +96,21 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-service-table
-            @assign="assign"
-            @transition="transition"
-            :data="children[props.row.hash] || []"
-            :project="project"
-            :assignment="assignment"
-            :type="type"
-            ref="service-table"
-          />
+          <template v-if="childrenLoaded(props.row.children)">
+            <bc-service-table
+              @assign="assign"
+              @transition="transition"
+              :data="props.row.children"
+              :project="project"
+              :assignment="assignment"
+              :type="type"
+              ref="service-table"
+          /></template>
+          <template v-else>
+            <div class="row justify-center">
+              <q-spinner color="grey-6" size="2em" />
+            </div>
+          </template>
         </q-td>
       </q-tr>
     </template>
@@ -130,29 +136,32 @@ export default {
     showDetails(service) {
       this.$emit('showDetails', service);
     },
-    transition(config) {
-      this.$emit('transition', config);
+    transition({ services, action }) {
+      const parent = this.data.find((s) => {
+        return s.children.some((child) => child.hash === services[0].hash);
+      });
+      if (parent && action.checkForUpdate(services[0], parent.children)) {
+        services.unshift(parent);
+      }
+      this.$emit('transition', { services, action });
     },
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },
+    childrenLoaded(children) {
+      return children.some((child) => typeof child !== 'string');
+    },
     async loadChildren(props) {
-      if (!this.childrenLoaded[props.row.hash]) {
+      props.expand = !props.expand;
+      if (!this.childrenLoaded(props.row.children)) {
         try {
-          const children = await this.$services.assignment.getChildren(
+          props.row.children = await this.$services.assignment.getChildren(
             this.project,
             this.assignment.hash,
             props.row.hash
           );
-          this.children[props.row.hash] = children;
-          this.childrenLoaded[props.row.hash] = true;
-        } catch (error) {
-          console.error(error);
-          this.childrenLoaded[props.row.hash] = false;
-          return;
-        }
+        } catch (error) {}
       }
-      props.expand = !props.expand;
     },
   },
   computed: {
@@ -166,7 +175,6 @@ export default {
   data() {
     return {
       children: {},
-      childrenLoaded: {},
       status: Assignment.STATUS,
       columns: [
         {

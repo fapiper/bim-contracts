@@ -56,8 +56,6 @@ export default {
   name: 'ComponentServiceContractCard',
   data() {
     return {
-      childrenLoaded: false,
-      children: [],
       service: null,
       expanded: false,
       status: Assignment.STATUS,
@@ -79,25 +77,21 @@ export default {
     assign(service) {
       this.$emit('assign', service);
     },
-    async transition({ service, action }) {
+    async transition({ services, action }) {
       this.$q.loading.show();
       try {
         await this.$services.assignment.handleTransition(
           this.$auth.user().address,
           this.contract.hash,
-          service,
+          services.slice(-1)[0],
           action.method
         );
+        services.forEach((s) => (s.stage = action.next));
         this.$q.notify({
           type: 'positive',
           message: `${action.text} war erfolgreich.`,
           position: 'bottom-right',
         });
-        if (this.contract.service.stage < action.next) {
-          const updated = this.contract.service;
-          updated.stage = action.next;
-          this.$set(this.contract, 'service', updated);
-        }
       } catch (error) {
         console.error(error);
         this.$q.notify({

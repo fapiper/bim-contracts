@@ -114,17 +114,14 @@ contract ServiceAgreement {
     }
 
     function start(bytes32 _agreement, bytes32 _service) public {
-        bytes32[] memory _related = agreementsByService[_service];
-        for (uint256 i = 0; i < _related.length; i++) {
-            bytes32 parent = agreements[_related[i]].section[_service];
-            Stages stage = stageOf(_related[i], _service);
-            if (uint256(stage) < uint256(Stages.STARTED))
-                agreements[_related[i]].stages[_service] = Stages.STARTED;
-            stage = stageOf(_related[i], parent);
+        bytes32[] memory related = agreementsByService[_service];
+        for (uint256 i = 0; i < related.length; i++) {
+            bytes32 parent = agreements[related[i]].section[_service];
             if (
-                stage != Stages.EMPTY &&
-                uint256(stage) < uint256(Stages.STARTED)
-            ) start(_related[i], parent);
+                uint256(stageOf(related[i], _service)) < uint256(Stages.STARTED)
+            ) agreements[related[i]].stages[_service] = Stages.STARTED;
+            if (atStage(related[i], parent, Stages.STARTED))
+                start(related[i], parent);
         }
     }
 
@@ -134,12 +131,7 @@ contract ServiceAgreement {
     {
         bytes32 parent = agreements[_agreement].section[_service];
         agreements[_agreement].stages[_service] = Stages.FINISHED;
-        Stages stage = stageOf(_agreement, parent);
-        if (
-            stage != Stages.EMPTY &&
-            uint256(stage) < uint256(Stages.FINISHED) &&
-            checkChildrenStage(_agreement, parent, Stages.FINISHED)
-        ) {
+        if (allChildrenAtStage(_agreement, parent, Stages.FINISHED)) {
             finish(_agreement, parent);
         }
     }
@@ -157,12 +149,7 @@ contract ServiceAgreement {
                 uint256(Stages.FINISHED)
             ) finish(_related[i], _service);
         }
-        Stages stage = stageOf(_agreement, parent);
-        if (
-            stage != Stages.EMPTY &&
-            uint256(stage) < uint256(Stages.APPROVED) &&
-            checkChildrenStage(_agreement, parent, Stages.APPROVED)
-        ) {
+        if (allChildrenAtStage(_agreement, parent, Stages.APPROVED)) {
             approve(_agreement, parent);
         }
     }
@@ -173,21 +160,27 @@ contract ServiceAgreement {
     {
         bytes32 parent = agreements[_agreement].section[_service];
         agreements[_agreement].stages[_service] = Stages.PAYED;
-        Stages stage = stageOf(_agreement, parent);
-        if (
-            stage != Stages.EMPTY &&
-            uint256(stage) < uint256(Stages.PAYED) &&
-            checkChildrenStage(_agreement, parent, Stages.PAYED)
-        ) {
+        if (allChildrenAtStage(_agreement, parent, Stages.PAYED)) {
             pay(_agreement, parent);
         }
     }
 
-    function checkChildrenStage(
+    function atStage(
+        bytes32 _agreement,
+        bytes32 _service,
+        Stages _stage
+    ) internal view returns (bool) {
+        Stages stage = stageOf(_agreement, _service);
+        if (stage != Stages.EMPTY) return false;
+        return uint256(stage) < uint256(_stage);
+    }
+
+    function allChildrenAtStage(
         bytes32 _agreement,
         bytes32 _parent,
         Stages _stage
     ) internal view returns (bool) {
+        if (!atStage(_agreement, _parent, _stage)) return false;
         bytes32[] memory children = agreements[_agreement].services[_parent];
         for (uint256 i = 0; i < children.length; i++) {
             if (uint256(stageOf(_agreement, children[i])) < uint256(_stage))

@@ -79,16 +79,20 @@ export default {
     },
     async transition({ services, action }) {
       this.$q.loading.show();
+      const next = this.status[action.next];
       try {
+        console.log('services', services);
         await this.$services.assignment.handleTransition(
           this.$auth.user().address,
           this.contract.hash,
-          services.slice(-1)[0],
+          services[services.length - 1],
           action.method
         );
         services.forEach((s) => (s.stage = action.next));
         this.$q.notify({
-          type: 'positive',
+          textColor: next.textColor,
+          color: next.color,
+          icon: next.icon,
           message: `${action.text} war erfolgreich.`,
           position: 'bottom-right',
         });

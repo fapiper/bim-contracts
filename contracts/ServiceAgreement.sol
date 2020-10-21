@@ -86,7 +86,7 @@ contract ServiceAgreement {
         view
         returns (bytes32[] memory)
     {
-        return agreementsByClient[_contractor];
+        return agreementsByContractor[_contractor];
     }
 
     function getAgreementsByService(bytes32 _service)

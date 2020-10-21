@@ -1,9 +1,9 @@
 import Web3 from 'web3';
 
 class Assignment {
-  constructor(name, service, client, contractor) {
+  constructor(name, services, client, contractor) {
     this.name = name;
-    this.service = service;
+    this.services = services;
     this.client = client;
     this.contractor = contractor;
     this.visited = false;

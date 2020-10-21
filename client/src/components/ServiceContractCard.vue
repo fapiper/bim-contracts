@@ -38,7 +38,7 @@
         <bc-service-table
           @transition="transition"
           @assign="assign"
-          :data="[contract.service]"
+          :data="contract.services"
           :assignment="contract"
           :project="project._id"
           :type="type"

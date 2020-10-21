@@ -18,7 +18,6 @@ contract ServiceAgreement {
     mapping(bytes32 => bytes32[]) agreementsByService;
 
     struct Agreement {
-        bytes32 root;
         address client;
         address contractor;
         mapping(bytes32 => Stages) stages;
@@ -42,18 +41,14 @@ contract ServiceAgreement {
         _;
     }
 
-    function createAgreement(
-        bytes32 _agreement,
-        bytes32 _root,
-        address _contractor
-    ) public returns (bool) {
+    function createAgreement(bytes32 _agreement, address _contractor)
+        public
+        returns (bool)
+    {
         agreements[_agreement].client = msg.sender;
         agreements[_agreement].contractor = _contractor;
-        agreements[_agreement].root = _root;
-        agreements[_agreement].stages[_root] = Stages.INITIALIZED;
         agreementsByContractor[_contractor].push(_agreement);
         agreementsByClient[msg.sender].push(_agreement);
-        agreementsByService[_root].push(_agreement);
         return true;
     }
 

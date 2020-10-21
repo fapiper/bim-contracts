@@ -104,7 +104,7 @@ class AssignmentService {
     return Promise.all(services.map(build));
   }
 
-  async getAllServices(projectId, service) {
+  async getAllServices(projectId, services) {
     const flatHandle = async (node, handleFn, collect = []) => {
       const children = await handleFn(node);
       const _collect = await Promise.all(
@@ -113,11 +113,16 @@ class AssignmentService {
       _collect.push(node);
       return _collect.flat();
     };
-    return flatHandle(service, (node) =>
-      this.boqService.query(projectId, (item) =>
-        node.children.some((hash) => item.hash === hash)
+    const all = await Promise.all(
+      services.map((service) =>
+        flatHandle(service, (node) => {
+          return this.boqService.query(projectId, (item) =>
+            node.children.some((hash) => item.hash === hash)
+          );
+        })
       )
     );
+    return all.flat();
   }
 
   async getSuperServices(projectId, service) {
@@ -148,33 +153,32 @@ class AssignmentService {
 
   async assign(projectId, contract) {
     await this.serviceAgreementContract.methods
-      .createAgreement(
-        contract.hash,
-        contract.service.hash,
-        contract.contractor.address
-      )
+      .createAgreement(contract.hash, contract.contractor.address)
       .send({ from: contract.client.address, gas: 2000000 });
-    const flat = await this.getAllServices(projectId, contract.service);
-    contract.children = unflatten(flat);
-    await traverseHandle(contract, async (node, children) => {
-      const parent =
-        node.hash === contract.hash ? node.service.parent || n32 : node.hash;
-      const res = await this.serviceAgreementContract.methods
-        .addServices(
-          contract.hash,
-          parent,
-          children.map((service) => service.hash),
-          children.map(
-            (service) =>
-              (service.billing_item && service.billing_item.hash) || n32
+    const flat = await this.getAllServices(projectId, contract.services);
+    console.log('assign: all services', flat);
+    const children = unflatten(flat);
+    for (const service in children) {
+      await traverseHandle(service, async (node, children) => {
+        const parent =
+          node.hash === contract.hash ? node.service.parent || n32 : node.hash;
+        const res = await this.serviceAgreementContract.methods
+          .addServices(
+            contract.hash,
+            parent,
+            children.map((service) => service.hash),
+            children.map(
+              (service) =>
+                (service.billing_item && service.billing_item.hash) || n32
+            )
           )
-        )
-        .send({
-          from: contract.client.address,
-          gas: 2000000,
-        });
-      return res;
-    });
+          .send({
+            from: contract.client.address,
+            gas: 2000000,
+          });
+        return res;
+      });
+    }
 
     await this.put(projectId, contract);
     return contract;

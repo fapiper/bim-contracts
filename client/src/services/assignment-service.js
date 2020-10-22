@@ -165,16 +165,6 @@ class AssignmentService {
     contract.children = unflatten(flat);
     await traverseHandle(contract, async (node, children) => {
       const parent = node.hash === contract.hash ? n32 : node.hash;
-      console.log(
-        'addServices',
-        contract.hash,
-        parent,
-        children.map((service) => service.hash),
-        children.map(
-          (service) =>
-            (service.billing_item && service.billing_item.hash) || n32
-        )
-      );
       const res = await this.serviceAgreementContract.methods
         .addServices(
           contract.hash,

@@ -120,10 +120,7 @@ contract ServiceAgreement {
         }
     }
 
-    function finish(bytes32 _agreement, bytes32 _service)
-        public
-        onlyContractor(_agreement)
-    {
+    function finish(bytes32 _agreement, bytes32 _service) public {
         bytes32 parent = agreements[_agreement].section[_service];
         agreements[_agreement].stages[_service] = Stages.FINISHED;
         if (allChildrenAtStage(_agreement, parent, Stages.FINISHED)) {

@@ -1,5 +1,5 @@
 module.exports = {
-  agreementContract: '0x83b7Aef5E8D9B06d7D0C92a624a98b3b9b9A9d9A',
+  agreementContract: '0xeB6190fd54CF085689eD6dA724dd29611a1a46f6',
   network: {
     host: '127.0.0.1',
     port: 7545,

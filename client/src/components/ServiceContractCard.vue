@@ -81,7 +81,7 @@ export default {
       this.$q.loading.show();
       const next = this.status[action.next];
       try {
-        console.log('services', services);
+        console.log('transition services', services);
         await this.$services.assignment.handleTransition(
           this.$auth.user().address,
           this.contract.hash,

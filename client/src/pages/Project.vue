@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <h1 class="text-h3">Bauvorhaben</h1>
+    <h1 class="text-h3">Bauprojekte</h1>
     <template v-if="loading">
       <div class="row justify-center">
         <q-spinner color="grey-6" size="3em" />
@@ -13,24 +13,30 @@
           Bislang sind noch keine Projekte vorhanden
         </h4>
       </div>
-      <div class="row q-gutter-y-md">
+      <div class="row q-gutter-md">
         <q-card
           v-for="(project, index) of projects"
           :key="index"
-          class="full-width"
+          class="project-card"
           flat
           bordered
         >
           <q-card-section>
-            <div class="text-h5">{{ project.name }}</div>
+            <div class="row items-top no-wrap">
+              <div class="col">
+                <div class="text-h6 q-pb-md">{{ project.name }}</div>
+              </div>
+
+              <div class="col-auto">
+                <q-chip dense square>
+                  {{ formatDate(project.createdAt) }}
+                </q-chip>
+              </div>
+            </div>
           </q-card-section>
           <q-separator />
-          <q-card-actions align="left" class="bg-grey-2">
-            <q-btn
-              outline
-              color="primary"
-              class="full-width"
-              :to="'projects/' + project._id + '/'"
+          <q-card-actions align="right" class="bg-grey-2">
+            <q-btn dense color="primary" :to="'projects/' + project._id + '/'"
               >Auswählen</q-btn
             >
           </q-card-actions>
@@ -120,6 +126,8 @@
 </template>
 
 <script>
+import { date } from 'quasar';
+
 import IcddParser from 'src/utils/icdd-parser.js';
 import Assignment from 'src/models/assignment-model.js';
 
@@ -148,6 +156,14 @@ export default {
     };
   },
   methods: {
+    formatDate(timeStamp) {
+      return (
+        date.formatDate(timeStamp, 'DD.MM.YYYY') +
+        ', ' +
+        date.formatDate(timeStamp, 'HH:mm') +
+        ' Uhr'
+      );
+    },
     useDemoProject() {
       this.project.name = 'Demoprojekt';
       this.container.boqs = [

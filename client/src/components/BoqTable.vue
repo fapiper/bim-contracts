@@ -1,8 +1,7 @@
 <template>
   <q-table
-    :hide-header="!isRoot"
+    hide-header
     hide-bottom
-    :title="title"
     :data="data"
     :columns="columns"
     row-key="hash"
@@ -20,7 +19,6 @@
         <q-th v-for="col in props.cols" :key="col.name" :props="props">
           {{ col.label }}
         </q-th>
-        <q-th auto-width />
       </q-tr>
     </template>
 
@@ -41,28 +39,6 @@
             {{ col.value }}
           </q-td>
         </template>
-        <q-td auto-width>
-          <q-btn
-            flat
-            round
-            dense
-            color="grey"
-            icon="more_horiz"
-            v-if="isRoot && isCtgy"
-          >
-            <q-menu>
-              <q-list style="min-width: 200px">
-                <!-- v-if="props.row.status < 1" -->
-
-                <q-item clickable v-close-popup @click="assign(props.row)">
-                  <q-item-section>
-                    <q-item-label>Auftrag vergeben</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-        </q-td>
       </q-tr>
       <q-tr
         v-if="hasChildren(props)"
@@ -79,41 +55,14 @@
 </template>
 
 <script>
-const STATUS = {
-  0: { text: 'Nicht vergeben' },
-  1: {
-    text: 'Vergeben',
-    color: 'primary',
-    textColor: 'white',
-  },
-  2: { text: 'Gestartet', color: 'teal', textColor: 'white' },
-  3: {
-    text: 'Beendet',
-    color: 'dark',
-    textColor: 'white',
-  },
-  4: {
-    text: 'Abgenommen',
-    color: 'accent',
-    textColor: 'white',
-  },
-  5: {
-    text: 'Abgelehnt',
-    color: 'negative',
-    textColor: 'white',
-  },
-};
-
 export default {
   name: 'ComponentBoqTable',
   props: {
     isRoot: Boolean,
     data: Array,
-    title: String,
     project: String,
     loading: Boolean,
   },
-  mounted() {},
   methods: {
     assign(service) {
       this.$emit('assign', service);
@@ -141,7 +90,6 @@ export default {
     return {
       children: [],
       childrenLoaded: {},
-      status: STATUS,
       columns: [
         {
           name: 'id',

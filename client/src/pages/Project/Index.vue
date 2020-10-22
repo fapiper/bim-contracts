@@ -2,8 +2,10 @@
   <q-page padding>
     <div class="row q-col-gutter-md">
       <div class="col-6">
+        <q-toolbar class="bg-primary text-white shadow-2">
+          <q-toolbar-title>Leistungen</q-toolbar-title>
+        </q-toolbar>
         <bc-boq-table
-          title="Leistungen"
           @assign="showAssignPrompt"
           :data="services"
           :loading="boqsLoading"
@@ -23,7 +25,8 @@
             class="q-my-sm"
           >
             <q-item-section avatar>
-              <q-avatar color="primary" text-color="white"> MM </q-avatar>
+              <q-avatar color="primary" text-color="white" icon="person">
+              </q-avatar>
             </q-item-section>
 
             <q-item-section>

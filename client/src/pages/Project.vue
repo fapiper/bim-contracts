@@ -180,12 +180,12 @@ export default {
         });
         const project = res.data;
         await this.$services.project.put(project, { billing, boqs });
-        const { privateKey, ...client } = this.$auth.user();
+        console.log('project', project);
         const assignment = new Assignment(
           this.project.name,
           boqs.flatMap((boq) => boq.roots.map((hash) => boq.nodes[hash])),
-          client,
-          { address: '0x3927fCE30ce3818293f245604B30C7281D7ceE27' }
+          project.actors[0],
+          project.actors[1]
         );
         await this.$services.assignment.assign(project._id, assignment);
 

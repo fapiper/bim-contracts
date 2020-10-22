@@ -18,7 +18,6 @@ contract ServiceAgreement {
     mapping(bytes32 => bytes32[]) agreementsByService;
 
     struct Agreement {
-        bytes32 root;
         address client;
         address contractor;
         mapping(bytes32 => Stages) stages;
@@ -42,18 +41,14 @@ contract ServiceAgreement {
         _;
     }
 
-    function createAgreement(
-        bytes32 _agreement,
-        bytes32 _root,
-        address _contractor
-    ) public returns (bool) {
+    function createAgreement(bytes32 _agreement, address _contractor)
+        public
+        returns (bool)
+    {
         agreements[_agreement].client = msg.sender;
         agreements[_agreement].contractor = _contractor;
-        agreements[_agreement].root = _root;
-        agreements[_agreement].stages[_root] = Stages.INITIALIZED;
         agreementsByContractor[_contractor].push(_agreement);
         agreementsByClient[msg.sender].push(_agreement);
-        agreementsByService[_root].push(_agreement);
         return true;
     }
 
@@ -64,7 +59,7 @@ contract ServiceAgreement {
         bytes32[] calldata _billings
     ) external returns (bool) {
         agreements[_agreement].services[_parent] = _children;
-        for (uint256 i = 0; i < _billings.length; i++) {
+        for (uint256 i = 0; i < _children.length; i++) {
             agreements[_agreement].section[_children[i]] = _parent;
             agreements[_agreement].stages[_children[i]] = Stages.INITIALIZED;
             agreementsByService[_children[i]].push(_agreement);
@@ -117,18 +112,16 @@ contract ServiceAgreement {
         bytes32[] memory related = agreementsByService[_service];
         for (uint256 i = 0; i < related.length; i++) {
             bytes32 parent = agreements[related[i]].section[_service];
-            if (
-                uint256(stageOf(related[i], _service)) < uint256(Stages.STARTED)
-            ) agreements[related[i]].stages[_service] = Stages.STARTED;
-            if (atStage(related[i], parent, Stages.STARTED))
+            if (atStageMax(related[i], _service, Stages.STARTED)) {
+                agreements[related[i]].stages[_service] = Stages.STARTED;
+            }
+            if (atStageMax(related[i], parent, Stages.STARTED)) {
                 start(related[i], parent);
+            }
         }
     }
 
-    function finish(bytes32 _agreement, bytes32 _service)
-        public
-        onlyContractor(_agreement)
-    {
+    function finish(bytes32 _agreement, bytes32 _service) public {
         bytes32 parent = agreements[_agreement].section[_service];
         agreements[_agreement].stages[_service] = Stages.FINISHED;
         if (allChildrenAtStage(_agreement, parent, Stages.FINISHED)) {
@@ -142,12 +135,11 @@ contract ServiceAgreement {
     {
         bytes32 parent = agreements[_agreement].section[_service];
         agreements[_agreement].stages[_service] = Stages.APPROVED;
-        bytes32[] memory _related = agreementsByService[_service];
-        for (uint256 i = 0; i < _related.length; i++) {
-            if (
-                uint256(stageOf(_related[i], _service)) <
-                uint256(Stages.FINISHED)
-            ) finish(_related[i], _service);
+        bytes32[] memory related = agreementsByService[_service];
+        for (uint256 i = 0; i < related.length; i++) {
+            if (atStageMax(related[i], _service, Stages.FINISHED)) {
+                finish(related[i], _service);
+            }
         }
         if (allChildrenAtStage(_agreement, parent, Stages.APPROVED)) {
             approve(_agreement, parent);
@@ -170,8 +162,16 @@ contract ServiceAgreement {
         bytes32 _service,
         Stages _stage
     ) internal view returns (bool) {
+        return stageOf(_agreement, _service) == _stage;
+    }
+
+    function atStageMax(
+        bytes32 _agreement,
+        bytes32 _service,
+        Stages _stage
+    ) internal view returns (bool) {
         Stages stage = stageOf(_agreement, _service);
-        if (stage != Stages.EMPTY) return false;
+        if (stage == Stages.EMPTY) return false;
         return uint256(stage) < uint256(_stage);
     }
 
@@ -180,11 +180,10 @@ contract ServiceAgreement {
         bytes32 _parent,
         Stages _stage
     ) internal view returns (bool) {
-        if (!atStage(_agreement, _parent, _stage)) return false;
+        if (!atStageMax(_agreement, _parent, _stage)) return false; // parent is empty or already at this stage
         bytes32[] memory children = agreements[_agreement].services[_parent];
         for (uint256 i = 0; i < children.length; i++) {
-            if (uint256(stageOf(_agreement, children[i])) < uint256(_stage))
-                return false;
+            if (atStageMax(_agreement, children[i], _stage)) return false;
         }
         return true;
     }

@@ -75,17 +75,23 @@ class AssignmentService {
 
   async _buildContracts(contracts, projectId) {
     const build = async (contract) => {
-      contract.service.stage = await this.serviceAgreementContract.methods
-        .stageOf(contract.hash, contract.service.hash)
-        .call();
-      if (contract.stage < contract.service.stage) {
-        contract.stage = contract.service.stage;
-      }
+      contract.stage = 0;
+      await Promise.all(
+        contract.services.map(async (service) => {
+          const stage = await this.serviceAgreementContract.methods
+            .stageOf(contract.hash, service.hash)
+            .call();
+          service.stage = parseInt(stage);
+          if (contract.stage < service.stage) contract.stage = service.stage;
+        })
+      );
       return contract;
     };
-    return this.query(projectId, (item) =>
-      contracts.includes(item.hash)
-    ).then((entries) => Promise.all(entries.map(build)));
+    return this.query(projectId, (item) => contracts.includes(item.hash)).then(
+      (entries) => {
+        return Promise.all(entries.map(build));
+      }
+    );
   }
 
   async getChildren(projectId, agreement_hash, service_hash) {
@@ -104,7 +110,7 @@ class AssignmentService {
     return Promise.all(services.map(build));
   }
 
-  async getAllServices(projectId, service) {
+  async getAllServices(projectId, services) {
     const flatHandle = async (node, handleFn, collect = []) => {
       const children = await handleFn(node);
       const _collect = await Promise.all(
@@ -113,11 +119,16 @@ class AssignmentService {
       _collect.push(node);
       return _collect.flat();
     };
-    return flatHandle(service, (node) =>
-      this.boqService.query(projectId, (item) =>
-        node.children.some((hash) => item.hash === hash)
+    const all = await Promise.all(
+      services.map((service) =>
+        flatHandle(service, (node) => {
+          return this.boqService.query(projectId, (item) =>
+            node.children.some((hash) => item.hash === hash)
+          );
+        })
       )
     );
+    return all.flat();
   }
 
   async getSuperServices(projectId, service) {
@@ -148,17 +159,12 @@ class AssignmentService {
 
   async assign(projectId, contract) {
     await this.serviceAgreementContract.methods
-      .createAgreement(
-        contract.hash,
-        contract.service.hash,
-        contract.contractor.address
-      )
+      .createAgreement(contract.hash, contract.contractor.address)
       .send({ from: contract.client.address, gas: 2000000 });
-    const flat = await this.getAllServices(projectId, contract.service);
+    const flat = await this.getAllServices(projectId, contract.services);
     contract.children = unflatten(flat);
     await traverseHandle(contract, async (node, children) => {
-      const parent =
-        node.hash === contract.hash ? node.service.parent || n32 : node.hash;
+      const parent = node.hash === contract.hash ? n32 : node.hash;
       const res = await this.serviceAgreementContract.methods
         .addServices(
           contract.hash,
@@ -171,7 +177,7 @@ class AssignmentService {
         )
         .send({
           from: contract.client.address,
-          gas: 2000000,
+          gas: 6000000,
         });
       return res;
     });

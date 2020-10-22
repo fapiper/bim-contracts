@@ -58,6 +58,11 @@
           <q-card-section>
             <div class="q-gutter-y-md">
               <q-input filled v-model="project.name" label="Name" />
+              <q-input
+                filled
+                v-model="project.contractor"
+                label="Auftragnehmer"
+              />
               <q-file
                 ref="boqs"
                 filled
@@ -116,6 +121,7 @@
 
 <script>
 import IcddParser from 'src/utils/icdd-parser.js';
+import Assignment from 'src/models/assignment-model.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -132,6 +138,7 @@ export default {
       projects: [],
       project: {
         name: '',
+        contractor: '',
       },
       container: {
         boqs: [],
@@ -169,15 +176,24 @@ export default {
         const res = await this.$axios.post(`projects`, {
           name: this.project.name,
           owner: this.$auth.user()._id,
-          actors: [this.$auth.user()._id],
+          actors: [this.$auth.user()._id, this.project.contractor],
         });
         const project = res.data;
         await this.$services.project.put(project, { billing, boqs });
+        console.log('project', project);
+        const assignment = new Assignment(
+          this.project.name,
+          boqs.flatMap((boq) => boq.roots.map((hash) => boq.nodes[hash])),
+          project.actors[0],
+          project.actors[1]
+        );
+        await this.$services.assignment.assign(project._id, assignment);
+
         this.projects.push(project);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',
-          message: `Das Bauprojekt wurde erfolgreich hinzugefügt`,
+          message: `Das Bauprojekt ${this.project.name} wurde erfolgreich hinzugefügt`,
           position: 'bottom-right',
         });
       } catch (error) {

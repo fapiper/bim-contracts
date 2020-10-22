@@ -23,7 +23,11 @@ function create(req, res, next) {
 
   project
     .save()
-    .then((savedProject) => res.json(savedProject))
+    .then((savedProject) => {
+      console.log('saved', savedProject);
+      return Project.findAndPopulate(savedProject._id);
+    })
+    .then((project) => handle(req, res, project))
     .catch((err) => handleErr(next, err, 'post()'));
 }
 

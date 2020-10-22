@@ -137,6 +137,8 @@ export default {
       this.$emit('showDetails', service);
     },
     transition({ services, action }) {
+      console.log('HERE transition services', services);
+
       const parent = this.data.find((s) => {
         return s.children.some((child) => child.hash === services[0].hash);
       });

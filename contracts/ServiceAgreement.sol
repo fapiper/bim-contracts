@@ -59,7 +59,7 @@ contract ServiceAgreement {
         bytes32[] calldata _billings
     ) external returns (bool) {
         agreements[_agreement].services[_parent] = _children;
-        for (uint256 i = 0; i < _billings.length; i++) {
+        for (uint256 i = 0; i < _children.length; i++) {
             agreements[_agreement].section[_children[i]] = _parent;
             agreements[_agreement].stages[_children[i]] = Stages.INITIALIZED;
             agreementsByService[_children[i]].push(_agreement);

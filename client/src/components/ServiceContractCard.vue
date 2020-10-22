@@ -3,12 +3,12 @@
     <q-card-section>
       <div
         class="text-overline"
-        :class="'text-' + status[contract.service.stage].color"
+        :class="'text-' + status[contract.stage].color"
       >
-        {{ status[contract.service.stage].text }}
+        {{ status[contract.stage].text }}
       </div>
       <div class="text-h5 q-mt-sm q-mb-xs">
-        {{ contract.service.name || contract.service.short_desc }}
+        {{ contract.name }}
       </div>
       <div class="">
         <q-chip
@@ -20,7 +20,7 @@
       </div>
     </q-card-section>
 
-    <q-card-actions>
+    <q-card-actions v-if="contract.services.length > 0">
       <q-btn
         flat
         round
@@ -32,7 +32,7 @@
       <q-space />
     </q-card-actions>
 
-    <q-slide-transition>
+    <q-slide-transition v-if="contract.services.length > 0">
       <div v-show="expanded">
         <q-separator />
         <bc-service-table

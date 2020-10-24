@@ -7,7 +7,9 @@ const pushPrivateKeyToLocalStorage = (privateKey) => {
   LocalStorage.set('key_history', privateKeys.toString());
 };
 
-const _login = async (account, axios) => {
+const _login = async (account, axios, web3) => {
+  web3.eth.accounts.wallet.add(account);
+  web3.eth.defaultAccount = account.address;
   const res = await axios.get('users', {
     params: { address: account.address },
   });
@@ -55,7 +57,7 @@ export async function login(state, { privateKey, rememberMe }) {
     const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
       privateKey
     );
-    const user = await _login(account, this._vm.$axios);
+    const user = await _login(account, this._vm.$axios, this._vm.$web3);
     state.commit('setUser', { user, privateKey });
     state.dispatch('setKey', {
       privateKey,
@@ -86,10 +88,8 @@ export async function fetch(state) {
     const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
       privateKey
     );
-    this._vm.$web3.eth.accounts.wallet.add(account);
-    this._vm.$web3.eth.defaultAccount = account.address;
     try {
-      const user = await _login(account, this._vm.$axios);
+      const user = await _login(account, this._vm.$axios, this._vm.$web3);
       state.commit('setUser', { user, privateKey });
       return true;
     } catch (error) {

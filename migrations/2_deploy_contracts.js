@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
-const ServiceAgreement = artifacts.require('ServiceAgreement');
+const AgreementController = artifacts.require('AgreementController');
 
 module.exports = async function (deployer) {
-  await deployer.deploy(ServiceAgreement);
+  await deployer.deploy(AgreementController);
 };

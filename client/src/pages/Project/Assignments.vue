@@ -89,7 +89,7 @@ export default {
       try {
         const { privateKey, ...client } = this.$auth.user();
         const assignment = new Assignment(
-          this.selected[0].short_desc || this.selected[0].name,
+          this.selected.short_desc || this.selected.name,
           [this.selected],
           client,
           { address: this.address }

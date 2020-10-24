@@ -58,31 +58,25 @@ class Assignment {
         {
           text: 'Auftrag abnehmen',
           method: 'approve',
-          next: 4,
+          next: 5,
           type: 'award',
           checkForUpdate: (service, siblings) => {
             return siblings.every(
-              (s) => s.hash === service.hash || s.stage >= 4
+              (s) => s.hash === service.hash || s.stage >= 5
             );
           },
+        },
+        {
+          text: 'Auftrag ablehnen',
+          method: 'reject',
+          next: 4,
+          type: 'award',
+          checkForUpdate: (service, siblings) =>
+            siblings.every((s) => s.hash === service.hash || s.stage === 4),
         },
       ],
     },
     4: {
-      text: 'Abgenommen',
-      color: 'positive',
-      textColor: 'white',
-      icon: 'done_all',
-      action: [],
-    },
-    5: {
-      text: 'Abgenommen & Bezahlt',
-      color: 'accent',
-      textColor: 'white',
-      icon: 'attach_money',
-      action: [],
-    },
-    6: {
       text: 'Abgelehnt',
       color: 'negative',
       textColor: 'white',
@@ -93,8 +87,27 @@ class Assignment {
           method: 'finish',
           next: 3,
           type: 'assignment',
+          checkForUpdate: (service, siblings) => {
+            return siblings.every(
+              (s) => s.hash === service.hash || s.stage >= 3
+            );
+          },
         },
       ],
+    },
+    5: {
+      text: 'Abgenommen',
+      color: 'positive',
+      textColor: 'white',
+      icon: 'done_all',
+      action: [],
+    },
+    6: {
+      text: 'Abgenommen & Bezahlt',
+      color: 'accent',
+      textColor: 'white',
+      icon: 'attach_money',
+      action: [],
     },
   };
 }

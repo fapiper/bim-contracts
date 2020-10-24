@@ -25,15 +25,15 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
             rootServices[j] = _services[j];
         }
 
-        _createAgreement(_agreement, _contractor, rootServices);
+        createAgreement(_agreement, _contractor, rootServices);
         return true;
     }
 
     function createAgreement(
         bytes32 _agreement,
         address _contractor,
-        bytes32[] calldata _services
-    ) external returns (bool success) {
+        bytes32[] memory _services
+    ) public returns (bool success) {
         _createAgreement(_agreement, _contractor, _services);
         return true;
     }

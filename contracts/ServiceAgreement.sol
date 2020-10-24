@@ -2,29 +2,12 @@
 pragma solidity >=0.4.21 <0.7.1;
 
 import './StateMachine.sol';
+import './ServiceRoles.sol';
 
-contract ServiceAgreement is StateMachine {
+contract ServiceAgreement is ServiceRoles, StateMachine {
     mapping(bytes32 => bytes32[]) agreements;
-    mapping(bytes32 => address) clientByAgreement;
-    mapping(bytes32 => address) contractorByAgreement;
     mapping(address => bytes32[]) agreementsByContractor;
     mapping(address => bytes32[]) agreementsByClient;
-
-    modifier onlyClient(bytes32 _service) {
-        require(
-            msg.sender == clientByAgreement[_service],
-            'Not allowed. Only client.'
-        );
-        _;
-    }
-
-    modifier onlyContractor(bytes32 _service) {
-        require(
-            msg.sender == contractorByAgreement[_service],
-            'Not allowed. Only contractor.'
-        );
-        _;
-    }
 
     modifier exists(bytes32 _agreement) {
         require(agreements[_agreement].length > 0, 'Agreement not existing.');
@@ -36,8 +19,7 @@ contract ServiceAgreement is StateMachine {
         address _contractor,
         bytes32[] memory _services
     ) internal {
-        clientByAgreement[_section] = msg.sender;
-        contractorByAgreement[_section] = _contractor;
+        _updateServiceRoles(_section, msg.sender, _contractor);
         agreements[_section] = _services;
         agreementsByContractor[_contractor].push(_section);
         agreementsByClient[msg.sender].push(_section);
@@ -79,8 +61,7 @@ contract ServiceAgreement is StateMachine {
         address[] memory _clients = new address[](_agreements.length);
         address[] memory _contractors = new address[](_agreements.length);
         for (uint256 i = 0; i < _agreements.length; i++) {
-            _clients[i] = clientByAgreement[_agreements[i]];
-            _contractors[i] = contractorByAgreement[_agreements[i]];
+            (_clients[i], _contractors[i]) = _getServiceRoles(_agreements[i]);
         }
         return (_agreements, _clients, _contractors);
     }

@@ -4,58 +4,85 @@ pragma solidity >=0.4.21 <0.7.1;
 import './StateMachine.sol';
 
 contract ServiceAgreement is StateMachine {
-    struct Agreement {
-        address client;
-        address contractor;
-        bytes32[] services;
-    }
-    mapping(bytes32 => Agreement) agreements;
-
+    mapping(bytes32 => bytes32[]) agreements;
+    mapping(bytes32 => address) clientByAgreement;
+    mapping(bytes32 => address) contractorByAgreement;
     mapping(address => bytes32[]) agreementsByContractor;
     mapping(address => bytes32[]) agreementsByClient;
 
-    modifier onlyClient(bytes32 _agreement) {
+    modifier onlyClient(bytes32 _service) {
         require(
-            msg.sender == agreements[_agreement].client,
+            msg.sender == clientByAgreement[_service],
             'Not allowed. Only client.'
         );
         _;
     }
 
-    modifier onlyContractor(bytes32 _agreement) {
+    modifier onlyContractor(bytes32 _service) {
         require(
-            msg.sender == agreements[_agreement].contractor,
+            msg.sender == contractorByAgreement[_service],
             'Not allowed. Only contractor.'
         );
         _;
     }
 
+    modifier exists(bytes32 _agreement) {
+        require(agreements[_agreement].length > 0, 'Agreement not existing.');
+        _;
+    }
+
     function _createAgreement(
-        bytes32 _agreement,
+        bytes32 _section,
         address _contractor,
         bytes32[] memory _services
     ) internal {
-        agreements[_agreement].client = msg.sender;
-        agreements[_agreement].contractor = _contractor;
-        agreements[_agreement].services = _services;
-        agreementsByContractor[_contractor].push(_agreement);
-        agreementsByClient[msg.sender].push(_agreement);
+        clientByAgreement[_section] = msg.sender;
+        contractorByAgreement[_section] = _contractor;
+        agreements[_section] = _services;
+        agreementsByContractor[_contractor].push(_section);
+        agreementsByClient[msg.sender].push(_section);
     }
 
     function _getAgreementsByClient(address _client)
         internal
         view
-        returns (bytes32[] memory)
+        returns (
+            bytes32[] memory,
+            address[] memory,
+            address[] memory
+        )
     {
-        return agreementsByClient[_client];
+        return buildAgreements(agreementsByClient[_client]);
     }
 
     function _getAgreementsByContractor(address _contractor)
         internal
         view
-        returns (bytes32[] memory)
+        returns (
+            bytes32[] memory,
+            address[] memory,
+            address[] memory
+        )
     {
-        return agreementsByContractor[_contractor];
+        return buildAgreements(agreementsByContractor[_contractor]);
+    }
+
+    function buildAgreements(bytes32[] memory _agreements)
+        internal
+        view
+        returns (
+            bytes32[] memory,
+            address[] memory,
+            address[] memory
+        )
+    {
+        address[] memory _clients = new address[](_agreements.length);
+        address[] memory _contractors = new address[](_agreements.length);
+        for (uint256 i = 0; i < _agreements.length; i++) {
+            _clients[i] = clientByAgreement[_agreements[i]];
+            _contractors[i] = contractorByAgreement[_agreements[i]];
+        }
+        return (_agreements, _clients, _contractors);
     }
 
     function _start(bytes32 _agreement, bytes32 _service)

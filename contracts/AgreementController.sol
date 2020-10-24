@@ -41,7 +41,11 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     function getAgreementsByClient(address _client)
         external
         view
-        returns (bytes32[] memory)
+        returns (
+            bytes32[] memory _agreements,
+            address[] memory _clients,
+            address[] memory _contractors
+        )
     {
         return _getAgreementsByClient(_client);
     }
@@ -49,7 +53,11 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     function getAgreementsByContractor(address _contractor)
         external
         view
-        returns (bytes32[] memory)
+        returns (
+            bytes32[] memory _agreements,
+            address[] memory _clients,
+            address[] memory _contractors
+        )
     {
         return _getAgreementsByContractor(_contractor);
     }
@@ -57,17 +65,20 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     function getServices(bytes32 _section)
         external
         view
-        returns (bytes32[] memory)
+        returns (
+            bytes32[] memory services,
+            bytes32[] memory billings,
+            Stages[] memory stages
+        )
     {
-        return _getServices(_section);
-    }
-
-    function getBilling(bytes32 _service) external view returns (bytes32) {
-        return _getBilling(_service);
-    }
-
-    function getStage(bytes32 _service) external view returns (Stages) {
-        return _stageOf(_service);
+        services = _getServices(_section);
+        billings = new bytes32[](services.length);
+        stages = new Stages[](services.length);
+        for (uint256 i = 0; i < stages.length; i++) {
+            billings[i] = _getBilling(_section);
+            stages[i] = _stageOf(services[i]);
+        }
+        return (services, billings, stages);
     }
 
     function start(bytes32 _agreement, bytes32 _service)

@@ -1,5 +1,5 @@
 module.exports = {
-  agreementContract: '0x201A76e79EB8c595078e370Da80aDFeFF435A205',
+  controllerContract: '0xbe5B6c35B25285BA62fEa6B161B266896826692e',
   network: {
     host: '127.0.0.1',
     port: 7545,
@@ -11,6 +11,5 @@ module.exports = {
   },
   mongodb: {
     uri: 'mongodb://127.0.0.1:27017',
-    autoIndex: true,
   },
 };

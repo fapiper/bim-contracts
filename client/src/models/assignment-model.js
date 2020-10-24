@@ -76,25 +76,6 @@ class Assignment {
         },
       ],
     },
-    4: {
-      text: 'Abgelehnt',
-      color: 'negative',
-      textColor: 'white',
-      icon: 'block',
-      action: [
-        {
-          text: 'Änderungen bestätigen',
-          method: 'finish',
-          next: 3,
-          type: 'assignment',
-          checkForUpdate: (service, siblings) => {
-            return siblings.every(
-              (s) => s.hash === service.hash || s.stage >= 3
-            );
-          },
-        },
-      ],
-    },
     5: {
       text: 'Abgenommen',
       color: 'positive',

@@ -203,7 +203,7 @@ export default {
           project.actors[0],
           project.actors[1]
         );
-        await this.$services.assignment.assign(project._id, assignment);
+        await this.$services.assignment.assignInitial(project._id, assignment);
 
         this.projects.push(project);
         this.dialog = false;

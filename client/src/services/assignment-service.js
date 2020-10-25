@@ -4,30 +4,6 @@ import { controllerContract as AgreementControllerAddress } from 'app/../bim-con
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
 
-const unflatten = (array) => {
-  const hashTable = Object.create(null);
-  array.forEach((node) => (hashTable[node.hash] = { ...node, children: [] }));
-  const tree = [];
-  array.forEach((node) => {
-    if (node.parent && hashTable[node.parent])
-      hashTable[node.parent].children.push(hashTable[node.hash]);
-    else tree.push(hashTable[node.hash]);
-  });
-  return tree;
-};
-
-const traverseHandle = async (node, handleFn, once = true) => {
-  const children = node.children || [];
-  for (const child of children) {
-    if (once) {
-      once = false;
-      handleFn && (await handleFn(node, children));
-    }
-    await traverseHandle(child, handleFn);
-  }
-  return node;
-};
-
 class AssignmentService {
   constructor(orbitdb, boqService, web3) {
     this.orbitdb = orbitdb;
@@ -157,17 +133,22 @@ class AssignmentService {
     return assignments;
   }
 
+  // avg cost: 28002061 gwei
   async assignInitial(projectId, contract) {
-    const services = await this.getAllServices(projectId, contract.services);
+    const services = await this.getAllServices(
+      projectId,
+      contract.services
+    ).then((list) => list);
+    const payload = [
+      contract.hash,
+      contract.contractor.address,
+      services.map((s) => s.hash),
+      services.map((s) => s.parent || n32),
+      services.map((s) => (s.billing_item ? s.billing_item.hash : n32)),
+    ];
     await this.agreementController.methods
-      .createInitialAgreement(
-        contract.hash,
-        contract.contractor.address,
-        services.map((s) => s.hash),
-        services.map((s) => s.parent),
-        services.map((s) => (s.billing_item ? s.billing_item.hash : n32))
-      )
-      .send({ from: contract.client.address, gas: 2000000 });
+      .createInitialAgreement(...payload)
+      .send({ from: contract.client.address, gas: 50000000 });
 
     return contract;
   }

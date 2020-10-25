@@ -1,16 +1,16 @@
 <template>
   <q-card flat bordered>
     <q-card-section>
-      <div
-        class="text-overline"
-        :class="'text-' + status[contract.stage].color"
-      >
-        {{ status[contract.stage].text }}
+      <div class="text-overline">
+        {{ contract.payed ? 'Bezahlt' : 'Bezahlung ausstehend' }}
       </div>
       <div class="text-h5 q-mt-sm q-mb-xs">
-        {{ contract.name }}
+        Auftraggeber: {{ contract.client }}
       </div>
-      <div class="">
+      <div class="text-h5 q-mt-sm q-mb-xs">
+        Auftragnehmer: {{ contract.contractor }}
+      </div>
+      <div>
         <q-chip
           dense
           square

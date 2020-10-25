@@ -27,7 +27,7 @@ contract ServiceRoles {
         address _contractor
     ) internal {
         clientByService[_service] = _client;
-        clientByService[_service] = _contractor;
+        contractorByService[_service] = _contractor;
     }
 
     function _getServiceRoles(bytes32 _service)

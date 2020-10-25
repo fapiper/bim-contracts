@@ -4,7 +4,7 @@
       <ServiceContractCard
         v-for="assignment in assignments"
         class="full-width"
-        :key="assignment._id"
+        :key="assignment.hash"
         :contract="assignment"
         type="assignment"
         @assign="showDialog"

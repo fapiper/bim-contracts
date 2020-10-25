@@ -4,7 +4,7 @@
       <ServiceContractCard
         v-for="award in awards"
         class="full-width"
-        :key="award._id"
+        :key="award.hash"
         :contract="award"
         type="award"
       />

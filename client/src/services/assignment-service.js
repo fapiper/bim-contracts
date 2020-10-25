@@ -36,54 +36,74 @@ class AssignmentService {
   }
 
   async getAssignmentsByProject(projectId, user_address) {
-    const asignments = await this.agreementController.methods
+    const assignments = await this.agreementController.methods
       .getAgreementsByContractor(user_address)
       .call();
-    return this._buildContracts(asignments, projectId);
+    return this._buildContracts(projectId, assignments);
   }
 
   async getAwardsByProject(projectId, user_address) {
     const awards = await this.agreementController.methods
       .getAgreementsByClient(user_address)
       .call();
-    return this._buildContracts(awards, projectId);
+    return this._buildContracts(projectId, awards);
   }
 
-  async _buildContracts(contracts, projectId) {
-    const build = async (contract) => {
-      contract.stage = 0;
-      await Promise.all(
-        contract.services.map(async (service) => {
-          const stage = await this.agreementController.methods
-            .getStage(contract.hash, service.hash)
-            .call();
-          service.stage = parseInt(stage);
-          if (contract.stage < service.stage) contract.stage = service.stage;
-        })
-      );
-      return contract;
-    };
-    return this.query(projectId, (item) => contracts.includes(item.hash)).then(
-      (entries) => {
-        return Promise.all(entries.map(build));
-      }
+  async _buildContracts(projectId, contracts) {
+    return Promise.all(
+      contracts.map((contractHash) =>
+        this.agreementController.methods
+          .getAgreement(contractHash)
+          .call()
+          .then((agreement) => ({
+            hash: contractHash,
+            payed: agreement[0],
+            client: agreement[1],
+            contractor: agreement[2],
+            services: agreement[3],
+          }))
+          .then(async (agreement) => {
+            agreement.services = await Promise.all(
+              agreement.services.map(async (serviceHash) => {
+                const data = await this.agreementController.methods
+                  .getService(serviceHash)
+                  .call();
+                const service = await this.boqService
+                  .get(projectId, serviceHash)
+                  .then((items) => items[0]);
+                service.client = data[0];
+                service.contractor = data[1];
+                service.billing = data[2];
+                service.stage = data[3];
+                return service;
+              })
+            );
+            console.log('agreement', agreement);
+            return agreement;
+          })
+      )
     );
   }
 
-  async getChildren(projectId, agreement_hash, service_hash) {
-    const build = async (service_hash) => {
-      const item = await this.boqService
-        .get(projectId, service_hash)
-        .then((items) => items[0]);
-      item.stage = await this.agreementController.methods
-        .getStage(agreement_hash, service_hash)
-        .call();
-      return item;
-    };
-    const services = await this.agreementController.methods
-      .getServicesByAgreement(agreement_hash, service_hash)
+  async getChildren(projectId, agreement_hash, serviceHash) {
+    const data = await this.agreementController.methods
+      .getServices(serviceHash)
       .call();
-    return Promise.all(services.map(build));
+
+    const services = await Promise.all(
+      data[0].map(async (hash, i) => {
+        const service = await this.boqService
+          .get(projectId, hash)
+          .then((items) => items[0]);
+        service.client = data[1][i];
+        service.contractor = data[2][i];
+        service.billing = data[3][i];
+        service.stage = data[4][i];
+        return service;
+      })
+    );
+
+    return services;
   }
 
   async getAllServices(projectId, services) {
@@ -134,20 +154,19 @@ class AssignmentService {
   }
 
   async assignInitial(projectId, contract) {
-    const services = await this.getAllServices(
-      projectId,
-      contract.services
-    ).then((list) => list);
+    const services = await this.getAllServices(projectId, contract.services);
     const payload = [
       contract.hash,
       contract.contractor.address,
+      services.filter((s) => !s.parent).map((s) => s.hash),
       services.map((s) => s.hash),
       services.map((s) => s.parent || n32),
       services.map((s) => (s.billing_item ? s.billing_item.hash : n32)),
     ];
+    console.log('assignInitial', ...payload);
     await this.agreementController.methods
       .createInitialAgreement(...payload)
-      .send({ from: contract.client.address, gas: 50000000 });
+      .send({ from: contract.client.address, gas: 90000000 });
 
     return contract;
   }

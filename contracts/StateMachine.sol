@@ -7,8 +7,7 @@ contract StateMachine {
         INITIALIZED, // 1
         STARTED, // 2
         FINISHED, // 3
-        APPROVED, // 4
-        PAYED // 5
+        APPROVED // 4
     }
 
     mapping(bytes32 => Stages) stages;
@@ -60,10 +59,6 @@ contract StateMachine {
 
     function _setStage(bytes32 _item, Stages _stage) internal {
         stages[_item] = _stage;
-    }
-
-    function _initStage(bytes32 _item) internal {
-        _setStage(_item, Stages.INITIALIZED);
     }
 
     function _nextStage(bytes32 _item) internal {

@@ -8,24 +8,15 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     function createInitialAgreement(
         bytes32 _agreement,
         address _contractor,
+        bytes32[] calldata _roots,
         bytes32[] calldata _services,
         bytes32[] calldata _sections,
         bytes32[] calldata _billings
     ) external returns (bool success) {
-        uint256 len = 0;
         for (uint256 i = 0; i < _services.length; i++) {
-            _initStage(_services[i]);
-            if (_sections[i] != 0)
-                _addService(_sections[i], _services[i], _billings[i]);
-            else len++;
+            _addService(_sections[i], _services[i], _billings[i]);
         }
-
-        bytes32[] memory rootServices = new bytes32[](len);
-        for (uint256 j = 0; j < len; j++) {
-            rootServices[j] = _services[j];
-        }
-
-        createAgreement(_agreement, _contractor, rootServices);
+        createAgreement(_agreement, _contractor, _roots);
         return true;
     }
 
@@ -43,9 +34,8 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         internal
     {
         for (uint256 i = 0; i < _services.length; i++) {
-            if (!_isServiceItem(_services[i]))
-                _updateServiceRoles(_services[i], msg.sender, _contractor);
-            _deepUpdateRoles(_getServices(_services[i]), _contractor);
+            _updateServiceRoles(_services[i], msg.sender, _contractor);
+            _deepUpdateRoles(_getServicesOf(_services[i]), _contractor);
         }
     }
 
@@ -65,68 +55,63 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         return _getAgreementsByContractor(_contractor);
     }
 
+    function getAgreement(bytes32 _agreement)
+        external
+        view
+        returns (
+            bool payed,
+            address _client,
+            address _contractor,
+            bytes32[] memory _services
+        )
+    {
+        return _getAgreement(_agreement);
+    }
+
+    function getService(bytes32 _service)
+        external
+        view
+        returns (
+            address _client,
+            address _contractor,
+            bytes32 _billing,
+            Stages _stage
+        )
+    {
+        return _getService(_service);
+    }
+
     function getServices(bytes32 _section)
         external
         view
         returns (
-            address client,
-            address contractor,
-            bytes32[] memory services,
-            bytes32[] memory billings,
-            Stages[] memory stages
+            bytes32[] memory _services,
+            address[] memory _clients,
+            address[] memory _contractors,
+            bytes32[] memory _billings,
+            Stages[] memory _stages
         )
     {
-        (client, contractor) = _getServiceRoles(_section);
-        services = _getServices(_section);
-        billings = new bytes32[](services.length);
-        stages = new Stages[](services.length);
-        for (uint256 i = 0; i < stages.length; i++) {
-            billings[i] = _getBilling(_section);
-            stages[i] = _stageOf(services[i]);
-        }
-        return (client, contractor, services, billings, stages);
+        return _getServices(_section);
     }
 
-    function start(bytes32 _agreement, bytes32 _service)
-        external
-        returns (bool success)
-    {
-        _start(_agreement, _service);
+    function start(bytes32 _service) external returns (bool success) {
+        _start(_service);
         return true;
     }
 
-    function finish(bytes32 _agreement, bytes32 _service)
-        external
-        returns (bool success)
-    {
-        _finish(_agreement, _service);
+    function finish(bytes32 _service) external returns (bool success) {
+        _finish(_service);
         return true;
     }
 
-    function approve(bytes32 _agreement, bytes32 _service)
-        external
-        atStageAll(_getServices(_service), Stages.APPROVED)
-        returns (bool success)
-    {
-        _finish(_agreement, _service);
+    function approve(bytes32 _service) external returns (bool success) {
+        _finish(_service);
         return true;
     }
 
-    function reject(bytes32 _agreement, bytes32 _service)
-        external
-        atStageAll(_getServices(_service), Stages.STARTED)
-        returns (bool success)
-    {
-        _reject(_agreement, _service);
-        return true;
-    }
-
-    function pay(bytes32 _agreement, bytes32 _service)
-        external
-        atStageAll(_getServices(_service), Stages.PAYED)
-        returns (bool success)
-    {
-        _finish(_agreement, _service);
+    function reject(bytes32 _service) external returns (bool success) {
+        _reject(_service);
         return true;
     }
 }

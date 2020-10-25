@@ -19,7 +19,6 @@ contract ServiceAgreement is ServiceRoles, StateMachine {
         address _contractor,
         bytes32[] memory _services
     ) internal {
-        _updateServiceRoles(_section, msg.sender, _contractor);
         agreements[_section] = _services;
         agreementsByContractor[_contractor].push(_section);
         agreementsByClient[msg.sender].push(_section);
@@ -28,42 +27,17 @@ contract ServiceAgreement is ServiceRoles, StateMachine {
     function _getAgreementsByClient(address _client)
         internal
         view
-        returns (
-            bytes32[] memory,
-            address[] memory,
-            address[] memory
-        )
+        returns (bytes32[] memory)
     {
-        return buildAgreements(agreementsByClient[_client]);
+        return agreementsByClient[_client];
     }
 
     function _getAgreementsByContractor(address _contractor)
         internal
         view
-        returns (
-            bytes32[] memory,
-            address[] memory,
-            address[] memory
-        )
+        returns (bytes32[] memory)
     {
-        return buildAgreements(agreementsByContractor[_contractor]);
-    }
-
-    function buildAgreements(bytes32[] memory _agreements)
-        internal
-        view
-        returns (
-            bytes32[] memory,
-            address[] memory,
-            address[] memory
-        )
-    {
-        address[] memory _clients = new address[](_agreements.length);
-        address[] memory _contractors = new address[](_agreements.length);
-        for (uint256 i = 0; i < _agreements.length; i++) {
-            (_clients[i], _contractors[i]) = _getServiceRoles(_agreements[i]);
-        }
-        return (_agreements, _clients, _contractors);
+        return agreementsByContractor[_contractor];
     }
 
     function _start(bytes32 _agreement, bytes32 _service)

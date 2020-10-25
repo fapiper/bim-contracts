@@ -35,17 +35,24 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         bytes32[] memory _services
     ) public returns (bool success) {
         _createAgreement(_agreement, _contractor, _services);
+        _deepUpdateRoles(_services, _contractor);
         return true;
+    }
+
+    function _deepUpdateRoles(bytes32[] memory _services, address _contractor)
+        internal
+    {
+        for (uint256 i = 0; i < _services.length; i++) {
+            if (!_isServiceItem(_services[i]))
+                _updateServiceRoles(_services[i], msg.sender, _contractor);
+            _deepUpdateRoles(_getServices(_services[i]), _contractor);
+        }
     }
 
     function getAgreementsByClient(address _client)
         external
         view
-        returns (
-            bytes32[] memory _agreements,
-            address[] memory _clients,
-            address[] memory _contractors
-        )
+        returns (bytes32[] memory _agreements)
     {
         return _getAgreementsByClient(_client);
     }
@@ -53,11 +60,7 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     function getAgreementsByContractor(address _contractor)
         external
         view
-        returns (
-            bytes32[] memory _agreements,
-            address[] memory _clients,
-            address[] memory _contractors
-        )
+        returns (bytes32[] memory _agreements)
     {
         return _getAgreementsByContractor(_contractor);
     }
@@ -66,11 +69,14 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         external
         view
         returns (
+            address client,
+            address contractor,
             bytes32[] memory services,
             bytes32[] memory billings,
             Stages[] memory stages
         )
     {
+        (client, contractor) = _getServiceRoles(_section);
         services = _getServices(_section);
         billings = new bytes32[](services.length);
         stages = new Stages[](services.length);
@@ -78,7 +84,7 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
             billings[i] = _getBilling(_section);
             stages[i] = _stageOf(services[i]);
         }
-        return (services, billings, stages);
+        return (client, contractor, services, billings, stages);
     }
 
     function start(bytes32 _agreement, bytes32 _service)

@@ -13,6 +13,10 @@ contract ServiceStorage {
         return services[_section];
     }
 
+    function _isServiceItem(bytes32 _section) internal view returns (bool) {
+        return services[_section].length > 0;
+    }
+
     function _getBilling(bytes32 _section) internal view returns (bytes32) {
         return billing[_section];
     }

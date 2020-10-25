@@ -133,7 +133,6 @@ class AssignmentService {
     return assignments;
   }
 
-  // avg cost: 28002061 gwei
   async assignInitial(projectId, contract) {
     const services = await this.getAllServices(
       projectId,

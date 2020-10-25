@@ -35,7 +35,7 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         bytes32[] memory _services
     ) public returns (bool success) {
         _createAgreement(_agreement, _contractor, _services);
-        // _deepUpdateRoles(_services, _contractor);
+        _deepUpdateRoles(_services, _contractor);
         return true;
     }
 

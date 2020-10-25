@@ -80,14 +80,15 @@ export default {
     async transition({ services, action }) {
       this.$q.loading.show();
       const next = this.status[action.next];
+      console.log('services', services);
       try {
-        console.log('transition services', services);
-        await this.$services.assignment.handleTransition(
-          this.$auth.user().address,
-          this.contract.hash,
-          services[services.length - 1],
-          action.method
-        );
+        for (const service of services) {
+          await this.$services.assignment.handleTransition(
+            this.$auth.user().address,
+            service,
+            action.method
+          );
+        }
         services.forEach((s) => (s.stage = action.next));
         this.$q.notify({
           textColor: next.textColor,

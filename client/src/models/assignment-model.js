@@ -24,8 +24,8 @@ class Assignment {
           method: 'start',
           next: 2,
           type: 'assignment',
-          checkForUpdate: (service, siblings) => {
-            return service.stage < 2;
+          checkForUpdate: (service, parent, siblings) => {
+            return parent.stage < 2;
           },
         },
       ],
@@ -41,7 +41,7 @@ class Assignment {
           method: 'finish',
           next: 3,
           type: 'assignment',
-          checkForUpdate: (service, siblings) => {
+          checkForUpdate: (service, parent, siblings) => {
             return siblings.every(
               (s) => s.hash === service.hash || s.stage >= 3
             );
@@ -58,36 +58,35 @@ class Assignment {
         {
           text: 'Auftrag abnehmen',
           method: 'approve',
-          next: 5,
+          next: 4,
           type: 'award',
-          checkForUpdate: (service, siblings) => {
+          checkForUpdate: (service, parent, siblings) => {
             return siblings.every(
-              (s) => s.hash === service.hash || s.stage >= 5
+              (s) => s.hash === service.hash || s.stage >= 4
             );
           },
         },
         {
           text: 'Auftrag ablehnen',
           method: 'reject',
-          next: 4,
+          next: 5,
           type: 'award',
-          checkForUpdate: (service, siblings) =>
-            siblings.every((s) => s.hash === service.hash || s.stage === 4),
+          checkForUpdate: (service, parent, siblings) => false,
         },
       ],
     },
-    5: {
+    4: {
       text: 'Abgenommen',
       color: 'positive',
       textColor: 'white',
       icon: 'done_all',
       action: [],
     },
-    6: {
-      text: 'Abgenommen & Bezahlt',
-      color: 'accent',
+    5: {
+      text: 'Abgelehnt',
+      color: 'negative',
       textColor: 'white',
-      icon: 'attach_money',
+      icon: 'block',
       action: [],
     },
   };

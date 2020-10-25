@@ -97,7 +97,7 @@ contract ServiceStorage is ServiceRoles, StateMachine {
         internal
         onlyClient(_service)
         atStage(_service, Stages.FINISHED)
-        atStageAll(services[_service], Stages.FINISHED)
+        atStageAll(services[_service], Stages.APPROVED)
         transitionNext(_service)
     {}
 
@@ -105,7 +105,7 @@ contract ServiceStorage is ServiceRoles, StateMachine {
         internal
         onlyClient(_service)
         atStage(_service, Stages.FINISHED)
-        atStageAll(services[_service], Stages.FINISHED)
+        // atStageAll(services[_service], Stages.FINISHED)
         transitionTo(_service, Stages.STARTED)
     {}
 }

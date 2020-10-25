@@ -1,21 +1,21 @@
 {
   "contractName": "ServiceStorage",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceStorage.sol\":\"ServiceStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceRoles.sol\":{\"keccak256\":\"0x0958de9b20ad1d011859b91c83f31fa3a831a4e340c4974ece2a72c5625f9c42\",\"urls\":[\"bzz-raw://1c26355e644c86318b82e68246a6b2c9f5be04a333ab61a5773837b63e729270\",\"dweb:/ipfs/QmZmowqJfZSTTLPVa8AUSF2fHJL6kPvcVu5zcNzczn5Gim\"]},\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceStorage.sol\":{\"keccak256\":\"0xc61eff4cb8d7b41f16e5de75ef1291b0b49204f55947d05860eb46821ea36a62\",\"urls\":[\"bzz-raw://1ed4b598b7c1c26cabb953ce4804d741aca7524cf37ef4f540d0ad2e09d2c9ec\",\"dweb:/ipfs/QmUBBc7qyBJpQA6Naq5o5ybrMfwSATTUn1Amx4rMgWRLeB\"]},\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/StateMachine.sol\":{\"keccak256\":\"0x941d5afe55034ab4c5295efa4c7e44d856c46984762e8b2b3f9733ab06b009ce\",\"urls\":[\"bzz-raw://e6fd21b9d8e7346b8521b393acbb72ee6ca30a359b3aea86aae6b5690429b199\",\"dweb:/ipfs/QmWRELSaoNh56iW17qavHJadiMWMgCDrSrSuotf62w52TE\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820930aa1193f68a8b492b88556f3d34fb087e420861e9a68017861f93459082d7264736f6c63430005100032",
-  "deployedBytecode": "0x6080604052600080fdfea265627a7a72315820930aa1193f68a8b492b88556f3d34fb087e420861e9a68017861f93459082d7264736f6c63430005100032",
-  "sourceMap": "125:2970:4:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;125:2970:4;;;;;;;",
-  "deployedSourceMap": "125:2970:4:-;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.21 <0.7.1;\n\nimport './StateMachine.sol';\nimport './ServiceRoles.sol';\n\ncontract ServiceStorage is ServiceRoles, StateMachine {\n    mapping(bytes32 => bytes32[]) services;\n    mapping(bytes32 => bytes32) billing;\n\n    function _getService(bytes32 _service)\n        internal\n        view\n        returns (\n            address _client,\n            address _contractor,\n            bytes32 _billing,\n            Stages _stage\n        )\n    {\n        (_client, _contractor) = _getServiceRoles(_service);\n        _billing = _getBilling(_service);\n        _stage = _stageOf(_service);\n        return (_client, _contractor, _billing, _stage);\n    }\n\n    function _getServicesOf(bytes32 _section)\n        internal\n        view\n        returns (bytes32[] memory _services)\n    {\n        return services[_section];\n    }\n\n    function _getServices(bytes32 _section)\n        internal\n        view\n        returns (\n            bytes32[] memory _services,\n            address[] memory _clients,\n            address[] memory _contractors,\n            bytes32[] memory _billings,\n            Stages[] memory _stages\n        )\n    {\n        _services = services[_section];\n        _clients = new address[](_services.length);\n        _clients = new address[](_services.length);\n        _contractors = new address[](_services.length);\n        _billings = new bytes32[](_services.length);\n        _stages = new Stages[](_services.length);\n\n        for (uint256 i = 0; i < _services.length; i++) {\n            (\n                _clients[i],\n                _contractors[i],\n                _billings[i],\n                _stages[i]\n            ) = _getService(_services[i]);\n        }\n        return (_services, _clients, _contractors, _billings, _stages);\n    }\n\n    function _isServiceItem(bytes32 _section) internal view returns (bool) {\n        return services[_section].length > 0;\n    }\n\n    function _getBilling(bytes32 _section) internal view returns (bytes32) {\n        return billing[_section];\n    }\n\n    function _addService(\n        bytes32 _section,\n        bytes32 _service,\n        bytes32 _billing\n    ) internal {\n        _nextStage(_service);\n        services[_section].push(_service);\n        billing[_service] = _billing;\n    }\n\n    function _start(bytes32 _service)\n        internal\n        onlyContractor(_service)\n        atStage(_service, Stages.INITIALIZED)\n        transitionNext(_service)\n    {}\n\n    function _finish(bytes32 _service)\n        internal\n        onlyContractor(_service)\n        atStage(_service, Stages.STARTED)\n        transitionNext(_service)\n    {}\n\n    function _approve(bytes32 _service)\n        internal\n        onlyClient(_service)\n        atStage(_service, Stages.FINISHED)\n        atStageAll(services[_service], Stages.FINISHED)\n        transitionNext(_service)\n    {}\n\n    function _reject(bytes32 _service)\n        internal\n        onlyClient(_service)\n        atStage(_service, Stages.FINISHED)\n        atStageAll(services[_service], Stages.FINISHED)\n        transitionTo(_service, Stages.STARTED)\n    {}\n}\n",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceStorage.sol\":\"ServiceStorage\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceRoles.sol\":{\"keccak256\":\"0x0958de9b20ad1d011859b91c83f31fa3a831a4e340c4974ece2a72c5625f9c42\",\"urls\":[\"bzz-raw://1c26355e644c86318b82e68246a6b2c9f5be04a333ab61a5773837b63e729270\",\"dweb:/ipfs/QmZmowqJfZSTTLPVa8AUSF2fHJL6kPvcVu5zcNzczn5Gim\"]},\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceStorage.sol\":{\"keccak256\":\"0x877541cb4cf846fd89e79edc5d0649d12bb52afb13bdaca2d43f926a29b7358f\",\"urls\":[\"bzz-raw://a0330dffedb256fb4648debb2572b7090731e89e921b9f3175cebf038671fbfe\",\"dweb:/ipfs/Qma7JVDmsCzB7W5APxZrgHdqcdscUUiLAoXGc5b3ggDAv7\"]},\"/C/Users/fabia/WebstormProjects/bim-contracts/contracts/StateMachine.sol\":{\"keccak256\":\"0x941d5afe55034ab4c5295efa4c7e44d856c46984762e8b2b3f9733ab06b009ce\",\"urls\":[\"bzz-raw://e6fd21b9d8e7346b8521b393acbb72ee6ca30a359b3aea86aae6b5690429b199\",\"dweb:/ipfs/QmWRELSaoNh56iW17qavHJadiMWMgCDrSrSuotf62w52TE\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a7231582023095f500a4f5f53ce17091b1841482e6e8683e27a4d7428d153800e66bec10064736f6c63430005100032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a7231582023095f500a4f5f53ce17091b1841482e6e8683e27a4d7428d153800e66bec10064736f6c63430005100032",
+  "sourceMap": "125:2973:4:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;125:2973:4;;;;;;;",
+  "deployedSourceMap": "125:2973:4:-;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\npragma solidity >=0.4.21 <0.7.1;\n\nimport './StateMachine.sol';\nimport './ServiceRoles.sol';\n\ncontract ServiceStorage is ServiceRoles, StateMachine {\n    mapping(bytes32 => bytes32[]) services;\n    mapping(bytes32 => bytes32) billing;\n\n    function _getService(bytes32 _service)\n        internal\n        view\n        returns (\n            address _client,\n            address _contractor,\n            bytes32 _billing,\n            Stages _stage\n        )\n    {\n        (_client, _contractor) = _getServiceRoles(_service);\n        _billing = _getBilling(_service);\n        _stage = _stageOf(_service);\n        return (_client, _contractor, _billing, _stage);\n    }\n\n    function _getServicesOf(bytes32 _section)\n        internal\n        view\n        returns (bytes32[] memory _services)\n    {\n        return services[_section];\n    }\n\n    function _getServices(bytes32 _section)\n        internal\n        view\n        returns (\n            bytes32[] memory _services,\n            address[] memory _clients,\n            address[] memory _contractors,\n            bytes32[] memory _billings,\n            Stages[] memory _stages\n        )\n    {\n        _services = services[_section];\n        _clients = new address[](_services.length);\n        _clients = new address[](_services.length);\n        _contractors = new address[](_services.length);\n        _billings = new bytes32[](_services.length);\n        _stages = new Stages[](_services.length);\n\n        for (uint256 i = 0; i < _services.length; i++) {\n            (\n                _clients[i],\n                _contractors[i],\n                _billings[i],\n                _stages[i]\n            ) = _getService(_services[i]);\n        }\n        return (_services, _clients, _contractors, _billings, _stages);\n    }\n\n    function _isServiceItem(bytes32 _section) internal view returns (bool) {\n        return services[_section].length > 0;\n    }\n\n    function _getBilling(bytes32 _section) internal view returns (bytes32) {\n        return billing[_section];\n    }\n\n    function _addService(\n        bytes32 _section,\n        bytes32 _service,\n        bytes32 _billing\n    ) internal {\n        _nextStage(_service);\n        services[_section].push(_service);\n        billing[_service] = _billing;\n    }\n\n    function _start(bytes32 _service)\n        internal\n        onlyContractor(_service)\n        atStage(_service, Stages.INITIALIZED)\n        transitionNext(_service)\n    {}\n\n    function _finish(bytes32 _service)\n        internal\n        onlyContractor(_service)\n        atStage(_service, Stages.STARTED)\n        transitionNext(_service)\n    {}\n\n    function _approve(bytes32 _service)\n        internal\n        onlyClient(_service)\n        atStage(_service, Stages.FINISHED)\n        atStageAll(services[_service], Stages.APPROVED)\n        transitionNext(_service)\n    {}\n\n    function _reject(bytes32 _service)\n        internal\n        onlyClient(_service)\n        atStage(_service, Stages.FINISHED)\n        // atStageAll(services[_service], Stages.FINISHED)\n        transitionTo(_service, Stages.STARTED)\n    {}\n}\n",
   "sourcePath": "C:\\Users\\fabia\\WebstormProjects\\bim-contracts\\contracts\\ServiceStorage.sol",
   "ast": {
     "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceStorage.sol",
     "exportedSymbols": {
       "ServiceStorage": [
-        878
+        871
       ]
     },
-    "id": 879,
+    "id": 872,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -37,8 +37,8 @@
         "file": "./StateMachine.sol",
         "id": 560,
         "nodeType": "ImportDirective",
-        "scope": 879,
-        "sourceUnit": 1045,
+        "scope": 872,
+        "sourceUnit": 1038,
         "src": "66:28:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -48,7 +48,7 @@
         "file": "./ServiceRoles.sol",
         "id": 561,
         "nodeType": "ImportDirective",
-        "scope": 879,
+        "scope": 872,
         "sourceUnit": 558,
         "src": "95:28:4",
         "symbolAliases": [],
@@ -81,10 +81,10 @@
               "id": 564,
               "name": "StateMachine",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1044,
+              "referencedDeclaration": 1037,
               "src": "166:12:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StateMachine_$1044",
+                "typeIdentifier": "t_contract$_StateMachine_$1037",
                 "typeString": "contract StateMachine"
               }
             },
@@ -95,15 +95,15 @@
         ],
         "contractDependencies": [
           557,
-          1044
+          1037
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 878,
+        "id": 871,
         "linearizedBaseContracts": [
-          878,
-          1044,
+          871,
+          1037,
           557
         ],
         "name": "ServiceStorage",
@@ -114,7 +114,7 @@
             "id": 570,
             "name": "services",
             "nodeType": "VariableDeclaration",
-            "scope": 878,
+            "scope": 871,
             "src": "185:38:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -169,7 +169,7 @@
             "id": 574,
             "name": "billing",
             "nodeType": "VariableDeclaration",
-            "scope": 878,
+            "scope": 871,
             "src": "229:35:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -426,7 +426,7 @@
                       "referencedDeclaration": 585,
                       "src": "603:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_Stages_$886",
+                        "typeIdentifier": "t_enum$_Stages_$879",
                         "typeString": "enum StateMachine.Stages"
                       }
                     },
@@ -460,10 +460,10 @@
                         "name": "_stageOf",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1043,
+                        "referencedDeclaration": 1036,
                         "src": "612:8:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_enum$_Stages_$886_$",
+                          "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_enum$_Stages_$879_$",
                           "typeString": "function (bytes32) view returns (enum StateMachine.Stages)"
                         }
                       },
@@ -477,13 +477,13 @@
                       "nodeType": "FunctionCall",
                       "src": "612:18:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_Stages_$886",
+                        "typeIdentifier": "t_enum$_Stages_$879",
                         "typeString": "enum StateMachine.Stages"
                       }
                     },
                     "src": "603:27:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   },
@@ -543,7 +543,7 @@
                         "referencedDeclaration": 585,
                         "src": "680:6:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_enum$_Stages_$886",
+                          "typeIdentifier": "t_enum$_Stages_$879",
                           "typeString": "enum StateMachine.Stages"
                         }
                       }
@@ -557,7 +557,7 @@
                     "nodeType": "TupleExpression",
                     "src": "647:40:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                      "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                       "typeString": "tuple(address,address,bytes32,enum StateMachine.Stages)"
                     }
                   },
@@ -702,7 +702,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_Stages_$886",
+                    "typeIdentifier": "t_enum$_Stages_$879",
                     "typeString": "enum StateMachine.Stages"
                   },
                   "typeName": {
@@ -710,10 +710,10 @@
                     "id": 584,
                     "name": "Stages",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 886,
+                    "referencedDeclaration": 879,
                     "src": "462:6:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   },
@@ -723,7 +723,7 @@
               ],
               "src": "356:129:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "271:423:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -866,7 +866,7 @@
               ],
               "src": "788:28:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "700:163:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -1447,7 +1447,7 @@
                       "referencedDeclaration": 645,
                       "src": "1432:7:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                        "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                         "typeString": "enum StateMachine.Stages[] memory"
                       }
                     },
@@ -1501,7 +1501,7 @@
                         "nodeType": "NewExpression",
                         "src": "1442:12:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_enum$_Stages_$886_$dyn_memory_$",
+                          "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_enum$_Stages_$879_$dyn_memory_$",
                           "typeString": "function (uint256) pure returns (enum StateMachine.Stages[] memory)"
                         },
                         "typeName": {
@@ -1510,10 +1510,10 @@
                             "id": 690,
                             "name": "Stages",
                             "nodeType": "UserDefinedTypeName",
-                            "referencedDeclaration": 886,
+                            "referencedDeclaration": 879,
                             "src": "1446:6:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_enum$_Stages_$886",
+                              "typeIdentifier": "t_enum$_Stages_$879",
                               "typeString": "enum StateMachine.Stages"
                             }
                           },
@@ -1522,7 +1522,7 @@
                           "nodeType": "ArrayTypeName",
                           "src": "1446:8:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_storage_ptr",
+                            "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_storage_ptr",
                             "typeString": "enum StateMachine.Stages[]"
                           }
                         }
@@ -1537,13 +1537,13 @@
                       "nodeType": "FunctionCall",
                       "src": "1442:30:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory",
+                        "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory",
                         "typeString": "enum StateMachine.Stages[] memory"
                       }
                     },
                     "src": "1432:40:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                      "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                       "typeString": "enum StateMachine.Stages[] memory"
                     }
                   },
@@ -1699,7 +1699,7 @@
                                   "referencedDeclaration": 645,
                                   "src": "1654:7:4",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                                    "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                                     "typeString": "enum StateMachine.Stages[] memory"
                                   }
                                 },
@@ -1724,7 +1724,7 @@
                                 "nodeType": "IndexAccess",
                                 "src": "1654:10:4",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_enum$_Stages_$886",
+                                  "typeIdentifier": "t_enum$_Stages_$879",
                                   "typeString": "enum StateMachine.Stages"
                                 }
                               }
@@ -1738,7 +1738,7 @@
                             "nodeType": "TupleExpression",
                             "src": "1544:134:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                               "typeString": "tuple(address,address,bytes32,enum StateMachine.Stages)"
                             }
                           },
@@ -1802,7 +1802,7 @@
                               "referencedDeclaration": 614,
                               "src": "1681:11:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                                "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                                 "typeString": "function (bytes32) view returns (address,address,bytes32,enum StateMachine.Stages)"
                               }
                             },
@@ -1816,7 +1816,7 @@
                             "nodeType": "FunctionCall",
                             "src": "1681:25:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                               "typeString": "tuple(address,address,bytes32,enum StateMachine.Stages)"
                             }
                           },
@@ -2050,7 +2050,7 @@
                         "referencedDeclaration": 645,
                         "src": "1780:7:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                          "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                           "typeString": "enum StateMachine.Stages[] memory"
                         }
                       }
@@ -2064,7 +2064,7 @@
                     "nodeType": "TupleExpression",
                     "src": "1733:55:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_enum$_Stages_$886_$dyn_memory_ptr_$",
+                      "typeIdentifier": "t_tuple$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_enum$_Stages_$879_$dyn_memory_ptr_$",
                       "typeString": "tuple(bytes32[] memory,address[] memory,address[] memory,bytes32[] memory,enum StateMachine.Stages[] memory)"
                     }
                   },
@@ -2275,7 +2275,7 @@
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                    "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                     "typeString": "enum StateMachine.Stages[]"
                   },
                   "typeName": {
@@ -2284,10 +2284,10 @@
                       "id": 643,
                       "name": "Stages",
                       "nodeType": "UserDefinedTypeName",
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "1131:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_Stages_$886",
+                        "typeIdentifier": "t_enum$_Stages_$879",
                         "typeString": "enum StateMachine.Stages"
                       }
                     },
@@ -2296,7 +2296,7 @@
                     "nodeType": "ArrayTypeName",
                     "src": "1131:8:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_storage_ptr",
+                      "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_storage_ptr",
                       "typeString": "enum StateMachine.Stages[]"
                     }
                   },
@@ -2306,7 +2306,7 @@
               ],
               "src": "955:209:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "869:926:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2492,7 +2492,7 @@
               ],
               "src": "1865:6:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "1801:124:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2625,7 +2625,7 @@
               ],
               "src": "1992:9:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "1931:112:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -2666,7 +2666,7 @@
                       "name": "_nextStage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1031,
+                      "referencedDeclaration": 1024,
                       "src": "2173:10:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_bytes32_$returns$__$",
@@ -2961,7 +2961,7 @@
               "parameters": [],
               "src": "2163:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2049:232:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3035,10 +3035,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2397:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3052,7 +3052,7 @@
                     "referencedDeclaration": null,
                     "src": "2397:18:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3064,10 +3064,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2379:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3097,7 +3097,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 900,
+                  "referencedDeclaration": 893,
                   "src": "2425:14:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3149,7 +3149,7 @@
               "parameters": [],
               "src": "2454:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2287:169:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3223,10 +3223,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2573:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3240,7 +3240,7 @@
                     "referencedDeclaration": null,
                     "src": "2573:14:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3252,10 +3252,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2555:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3285,7 +3285,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 900,
+                  "referencedDeclaration": 893,
                   "src": "2597:14:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3337,7 +3337,7 @@
               "parameters": [],
               "src": "2626:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2462:166:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3411,10 +3411,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2742:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3428,7 +3428,7 @@
                     "referencedDeclaration": null,
                     "src": "2742:15:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3440,10 +3440,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2724:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3500,10 +3500,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2798:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3512,12 +3512,12 @@
                     "isLValue": false,
                     "isPure": true,
                     "lValueRequested": false,
-                    "memberName": "FINISHED",
+                    "memberName": "APPROVED",
                     "nodeType": "MemberAccess",
                     "referencedDeclaration": null,
                     "src": "2798:15:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3529,10 +3529,10 @@
                   "name": "atStageAll",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 946,
+                  "referencedDeclaration": 939,
                   "src": "2767:10:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32[] memory,enum StateMachine.Stages)"
                   }
                 },
@@ -3562,7 +3562,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 900,
+                  "referencedDeclaration": 893,
                   "src": "2823:14:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -3614,7 +3614,7 @@
               "parameters": [],
               "src": "2852:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2634:220:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3622,13 +3622,13 @@
           },
           {
             "body": {
-              "id": 876,
+              "id": 869,
               "nodeType": "Block",
-              "src": "3091:2:4",
+              "src": "3094:2:4",
               "statements": []
             },
             "documentation": null,
-            "id": 877,
+            "id": 870,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -3688,10 +3688,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2967:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -3705,7 +3705,7 @@
                     "referencedDeclaration": null,
                     "src": "2967:15:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -3717,10 +3717,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2949:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -3731,101 +3731,12 @@
                 "arguments": [
                   {
                     "argumentTypes": null,
-                    "baseExpression": {
-                      "argumentTypes": null,
-                      "id": 864,
-                      "name": "services",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 570,
-                      "src": "3003:8:4",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_bytes32_$dyn_storage_$",
-                        "typeString": "mapping(bytes32 => bytes32[] storage ref)"
-                      }
-                    },
-                    "id": 866,
-                    "indexExpression": {
-                      "argumentTypes": null,
-                      "id": 865,
-                      "name": "_service",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 853,
-                      "src": "3012:8:4",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_bytes32",
-                        "typeString": "bytes32"
-                      }
-                    },
-                    "isConstant": false,
-                    "isLValue": true,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "nodeType": "IndexAccess",
-                    "src": "3003:18:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
-                      "typeString": "bytes32[] storage ref"
-                    }
-                  },
-                  {
-                    "argumentTypes": null,
-                    "expression": {
-                      "argumentTypes": null,
-                      "id": 867,
-                      "name": "Stages",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
-                      "src": "3023:6:4",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
-                        "typeString": "type(enum StateMachine.Stages)"
-                      }
-                    },
-                    "id": 868,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": true,
-                    "lValueRequested": false,
-                    "memberName": "FINISHED",
-                    "nodeType": "MemberAccess",
-                    "referencedDeclaration": null,
-                    "src": "3023:15:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
-                      "typeString": "enum StateMachine.Stages"
-                    }
-                  }
-                ],
-                "id": 869,
-                "modifierName": {
-                  "argumentTypes": null,
-                  "id": 863,
-                  "name": "atStageAll",
-                  "nodeType": "Identifier",
-                  "overloadedDeclarations": [],
-                  "referencedDeclaration": 946,
-                  "src": "2992:10:4",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_enum$_Stages_$886_$",
-                    "typeString": "modifier (bytes32[] memory,enum StateMachine.Stages)"
-                  }
-                },
-                "nodeType": "ModifierInvocation",
-                "src": "2992:47:4"
-              },
-              {
-                "arguments": [
-                  {
-                    "argumentTypes": null,
-                    "id": 871,
+                    "id": 864,
                     "name": "_service",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
                     "referencedDeclaration": 853,
-                    "src": "3061:8:4",
+                    "src": "3064:8:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -3835,18 +3746,18 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 872,
+                      "id": 865,
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
-                      "src": "3071:6:4",
+                      "referencedDeclaration": 879,
+                      "src": "3074:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
-                    "id": 873,
+                    "id": 866,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -3854,29 +3765,29 @@
                     "memberName": "STARTED",
                     "nodeType": "MemberAccess",
                     "referencedDeclaration": null,
-                    "src": "3071:14:4",
+                    "src": "3074:14:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
                 ],
-                "id": 874,
+                "id": 867,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 870,
+                  "id": 863,
                   "name": "transitionTo",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 913,
-                  "src": "3048:12:4",
+                  "referencedDeclaration": 906,
+                  "src": "3051:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "3048:38:4"
+                "src": "3051:38:4"
               }
             ],
             "name": "_reject",
@@ -3890,7 +3801,7 @@
                   "id": 853,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 877,
+                  "scope": 870,
                   "src": "2877:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3915,32 +3826,32 @@
               "src": "2876:18:4"
             },
             "returnParameters": {
-              "id": 875,
+              "id": 868,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "3091:0:4"
+              "src": "3094:0:4"
             },
-            "scope": 878,
-            "src": "2860:233:4",
+            "scope": 871,
+            "src": "2860:236:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 879,
-        "src": "125:2970:4"
+        "scope": 872,
+        "src": "125:2973:4"
       }
     ],
-    "src": "32:3064:4"
+    "src": "32:3067:4"
   },
   "legacyAST": {
     "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceStorage.sol",
     "exportedSymbols": {
       "ServiceStorage": [
-        878
+        871
       ]
     },
-    "id": 879,
+    "id": 872,
     "nodeType": "SourceUnit",
     "nodes": [
       {
@@ -3962,8 +3873,8 @@
         "file": "./StateMachine.sol",
         "id": 560,
         "nodeType": "ImportDirective",
-        "scope": 879,
-        "sourceUnit": 1045,
+        "scope": 872,
+        "sourceUnit": 1038,
         "src": "66:28:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3973,7 +3884,7 @@
         "file": "./ServiceRoles.sol",
         "id": 561,
         "nodeType": "ImportDirective",
-        "scope": 879,
+        "scope": 872,
         "sourceUnit": 558,
         "src": "95:28:4",
         "symbolAliases": [],
@@ -4006,10 +3917,10 @@
               "id": 564,
               "name": "StateMachine",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1044,
+              "referencedDeclaration": 1037,
               "src": "166:12:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StateMachine_$1044",
+                "typeIdentifier": "t_contract$_StateMachine_$1037",
                 "typeString": "contract StateMachine"
               }
             },
@@ -4020,15 +3931,15 @@
         ],
         "contractDependencies": [
           557,
-          1044
+          1037
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 878,
+        "id": 871,
         "linearizedBaseContracts": [
-          878,
-          1044,
+          871,
+          1037,
           557
         ],
         "name": "ServiceStorage",
@@ -4039,7 +3950,7 @@
             "id": 570,
             "name": "services",
             "nodeType": "VariableDeclaration",
-            "scope": 878,
+            "scope": 871,
             "src": "185:38:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -4094,7 +4005,7 @@
             "id": 574,
             "name": "billing",
             "nodeType": "VariableDeclaration",
-            "scope": 878,
+            "scope": 871,
             "src": "229:35:4",
             "stateVariable": true,
             "storageLocation": "default",
@@ -4351,7 +4262,7 @@
                       "referencedDeclaration": 585,
                       "src": "603:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_Stages_$886",
+                        "typeIdentifier": "t_enum$_Stages_$879",
                         "typeString": "enum StateMachine.Stages"
                       }
                     },
@@ -4385,10 +4296,10 @@
                         "name": "_stageOf",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1043,
+                        "referencedDeclaration": 1036,
                         "src": "612:8:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_enum$_Stages_$886_$",
+                          "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_enum$_Stages_$879_$",
                           "typeString": "function (bytes32) view returns (enum StateMachine.Stages)"
                         }
                       },
@@ -4402,13 +4313,13 @@
                       "nodeType": "FunctionCall",
                       "src": "612:18:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_Stages_$886",
+                        "typeIdentifier": "t_enum$_Stages_$879",
                         "typeString": "enum StateMachine.Stages"
                       }
                     },
                     "src": "603:27:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   },
@@ -4468,7 +4379,7 @@
                         "referencedDeclaration": 585,
                         "src": "680:6:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_enum$_Stages_$886",
+                          "typeIdentifier": "t_enum$_Stages_$879",
                           "typeString": "enum StateMachine.Stages"
                         }
                       }
@@ -4482,7 +4393,7 @@
                     "nodeType": "TupleExpression",
                     "src": "647:40:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                      "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                       "typeString": "tuple(address,address,bytes32,enum StateMachine.Stages)"
                     }
                   },
@@ -4627,7 +4538,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_Stages_$886",
+                    "typeIdentifier": "t_enum$_Stages_$879",
                     "typeString": "enum StateMachine.Stages"
                   },
                   "typeName": {
@@ -4635,10 +4546,10 @@
                     "id": 584,
                     "name": "Stages",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 886,
+                    "referencedDeclaration": 879,
                     "src": "462:6:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   },
@@ -4648,7 +4559,7 @@
               ],
               "src": "356:129:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "271:423:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -4791,7 +4702,7 @@
               ],
               "src": "788:28:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "700:163:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -5372,7 +5283,7 @@
                       "referencedDeclaration": 645,
                       "src": "1432:7:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                        "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                         "typeString": "enum StateMachine.Stages[] memory"
                       }
                     },
@@ -5426,7 +5337,7 @@
                         "nodeType": "NewExpression",
                         "src": "1442:12:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_enum$_Stages_$886_$dyn_memory_$",
+                          "typeIdentifier": "t_function_objectcreation_pure$_t_uint256_$returns$_t_array$_t_enum$_Stages_$879_$dyn_memory_$",
                           "typeString": "function (uint256) pure returns (enum StateMachine.Stages[] memory)"
                         },
                         "typeName": {
@@ -5435,10 +5346,10 @@
                             "id": 690,
                             "name": "Stages",
                             "nodeType": "UserDefinedTypeName",
-                            "referencedDeclaration": 886,
+                            "referencedDeclaration": 879,
                             "src": "1446:6:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_enum$_Stages_$886",
+                              "typeIdentifier": "t_enum$_Stages_$879",
                               "typeString": "enum StateMachine.Stages"
                             }
                           },
@@ -5447,7 +5358,7 @@
                           "nodeType": "ArrayTypeName",
                           "src": "1446:8:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_storage_ptr",
+                            "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_storage_ptr",
                             "typeString": "enum StateMachine.Stages[]"
                           }
                         }
@@ -5462,13 +5373,13 @@
                       "nodeType": "FunctionCall",
                       "src": "1442:30:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory",
+                        "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory",
                         "typeString": "enum StateMachine.Stages[] memory"
                       }
                     },
                     "src": "1432:40:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                      "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                       "typeString": "enum StateMachine.Stages[] memory"
                     }
                   },
@@ -5624,7 +5535,7 @@
                                   "referencedDeclaration": 645,
                                   "src": "1654:7:4",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                                    "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                                     "typeString": "enum StateMachine.Stages[] memory"
                                   }
                                 },
@@ -5649,7 +5560,7 @@
                                 "nodeType": "IndexAccess",
                                 "src": "1654:10:4",
                                 "typeDescriptions": {
-                                  "typeIdentifier": "t_enum$_Stages_$886",
+                                  "typeIdentifier": "t_enum$_Stages_$879",
                                   "typeString": "enum StateMachine.Stages"
                                 }
                               }
@@ -5663,7 +5574,7 @@
                             "nodeType": "TupleExpression",
                             "src": "1544:134:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                               "typeString": "tuple(address,address,bytes32,enum StateMachine.Stages)"
                             }
                           },
@@ -5727,7 +5638,7 @@
                               "referencedDeclaration": 614,
                               "src": "1681:11:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                                "typeIdentifier": "t_function_internal_view$_t_bytes32_$returns$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                                 "typeString": "function (bytes32) view returns (address,address,bytes32,enum StateMachine.Stages)"
                               }
                             },
@@ -5741,7 +5652,7 @@
                             "nodeType": "FunctionCall",
                             "src": "1681:25:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$886_$",
+                              "typeIdentifier": "t_tuple$_t_address_$_t_address_$_t_bytes32_$_t_enum$_Stages_$879_$",
                               "typeString": "tuple(address,address,bytes32,enum StateMachine.Stages)"
                             }
                           },
@@ -5975,7 +5886,7 @@
                         "referencedDeclaration": 645,
                         "src": "1780:7:4",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                          "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                           "typeString": "enum StateMachine.Stages[] memory"
                         }
                       }
@@ -5989,7 +5900,7 @@
                     "nodeType": "TupleExpression",
                     "src": "1733:55:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_tuple$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_enum$_Stages_$886_$dyn_memory_ptr_$",
+                      "typeIdentifier": "t_tuple$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_address_$dyn_memory_ptr_$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_array$_t_enum$_Stages_$879_$dyn_memory_ptr_$",
                       "typeString": "tuple(bytes32[] memory,address[] memory,address[] memory,bytes32[] memory,enum StateMachine.Stages[] memory)"
                     }
                   },
@@ -6200,7 +6111,7 @@
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_memory_ptr",
+                    "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_memory_ptr",
                     "typeString": "enum StateMachine.Stages[]"
                   },
                   "typeName": {
@@ -6209,10 +6120,10 @@
                       "id": 643,
                       "name": "Stages",
                       "nodeType": "UserDefinedTypeName",
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "1131:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_Stages_$886",
+                        "typeIdentifier": "t_enum$_Stages_$879",
                         "typeString": "enum StateMachine.Stages"
                       }
                     },
@@ -6221,7 +6132,7 @@
                     "nodeType": "ArrayTypeName",
                     "src": "1131:8:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_enum$_Stages_$886_$dyn_storage_ptr",
+                      "typeIdentifier": "t_array$_t_enum$_Stages_$879_$dyn_storage_ptr",
                       "typeString": "enum StateMachine.Stages[]"
                     }
                   },
@@ -6231,7 +6142,7 @@
               ],
               "src": "955:209:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "869:926:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -6417,7 +6328,7 @@
               ],
               "src": "1865:6:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "1801:124:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -6550,7 +6461,7 @@
               ],
               "src": "1992:9:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "1931:112:4",
             "stateMutability": "view",
             "superFunction": null,
@@ -6591,7 +6502,7 @@
                       "name": "_nextStage",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1031,
+                      "referencedDeclaration": 1024,
                       "src": "2173:10:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_bytes32_$returns$__$",
@@ -6886,7 +6797,7 @@
               "parameters": [],
               "src": "2163:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2049:232:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -6960,10 +6871,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2397:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -6977,7 +6888,7 @@
                     "referencedDeclaration": null,
                     "src": "2397:18:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -6989,10 +6900,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2379:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -7022,7 +6933,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 900,
+                  "referencedDeclaration": 893,
                   "src": "2425:14:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -7074,7 +6985,7 @@
               "parameters": [],
               "src": "2454:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2287:169:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -7148,10 +7059,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2573:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -7165,7 +7076,7 @@
                     "referencedDeclaration": null,
                     "src": "2573:14:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -7177,10 +7088,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2555:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -7210,7 +7121,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 900,
+                  "referencedDeclaration": 893,
                   "src": "2597:14:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -7262,7 +7173,7 @@
               "parameters": [],
               "src": "2626:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2462:166:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -7336,10 +7247,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2742:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -7353,7 +7264,7 @@
                     "referencedDeclaration": null,
                     "src": "2742:15:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -7365,10 +7276,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2724:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -7425,10 +7336,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2798:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -7437,12 +7348,12 @@
                     "isLValue": false,
                     "isPure": true,
                     "lValueRequested": false,
-                    "memberName": "FINISHED",
+                    "memberName": "APPROVED",
                     "nodeType": "MemberAccess",
                     "referencedDeclaration": null,
                     "src": "2798:15:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -7454,10 +7365,10 @@
                   "name": "atStageAll",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 946,
+                  "referencedDeclaration": 939,
                   "src": "2767:10:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32[] memory,enum StateMachine.Stages)"
                   }
                 },
@@ -7487,7 +7398,7 @@
                   "name": "transitionNext",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 900,
+                  "referencedDeclaration": 893,
                   "src": "2823:14:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$_t_bytes32_$",
@@ -7539,7 +7450,7 @@
               "parameters": [],
               "src": "2852:0:4"
             },
-            "scope": 878,
+            "scope": 871,
             "src": "2634:220:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -7547,13 +7458,13 @@
           },
           {
             "body": {
-              "id": 876,
+              "id": 869,
               "nodeType": "Block",
-              "src": "3091:2:4",
+              "src": "3094:2:4",
               "statements": []
             },
             "documentation": null,
-            "id": 877,
+            "id": 870,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -7613,10 +7524,10 @@
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
+                      "referencedDeclaration": 879,
                       "src": "2967:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
@@ -7630,7 +7541,7 @@
                     "referencedDeclaration": null,
                     "src": "2967:15:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
@@ -7642,10 +7553,10 @@
                   "name": "atStage",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 929,
+                  "referencedDeclaration": 922,
                   "src": "2949:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
@@ -7656,101 +7567,12 @@
                 "arguments": [
                   {
                     "argumentTypes": null,
-                    "baseExpression": {
-                      "argumentTypes": null,
-                      "id": 864,
-                      "name": "services",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 570,
-                      "src": "3003:8:4",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_bytes32_$_t_array$_t_bytes32_$dyn_storage_$",
-                        "typeString": "mapping(bytes32 => bytes32[] storage ref)"
-                      }
-                    },
-                    "id": 866,
-                    "indexExpression": {
-                      "argumentTypes": null,
-                      "id": 865,
-                      "name": "_service",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 853,
-                      "src": "3012:8:4",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_bytes32",
-                        "typeString": "bytes32"
-                      }
-                    },
-                    "isConstant": false,
-                    "isLValue": true,
-                    "isPure": false,
-                    "lValueRequested": false,
-                    "nodeType": "IndexAccess",
-                    "src": "3003:18:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
-                      "typeString": "bytes32[] storage ref"
-                    }
-                  },
-                  {
-                    "argumentTypes": null,
-                    "expression": {
-                      "argumentTypes": null,
-                      "id": 867,
-                      "name": "Stages",
-                      "nodeType": "Identifier",
-                      "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
-                      "src": "3023:6:4",
-                      "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
-                        "typeString": "type(enum StateMachine.Stages)"
-                      }
-                    },
-                    "id": 868,
-                    "isConstant": false,
-                    "isLValue": false,
-                    "isPure": true,
-                    "lValueRequested": false,
-                    "memberName": "FINISHED",
-                    "nodeType": "MemberAccess",
-                    "referencedDeclaration": null,
-                    "src": "3023:15:4",
-                    "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
-                      "typeString": "enum StateMachine.Stages"
-                    }
-                  }
-                ],
-                "id": 869,
-                "modifierName": {
-                  "argumentTypes": null,
-                  "id": 863,
-                  "name": "atStageAll",
-                  "nodeType": "Identifier",
-                  "overloadedDeclarations": [],
-                  "referencedDeclaration": 946,
-                  "src": "2992:10:4",
-                  "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_array$_t_bytes32_$dyn_memory_ptr_$_t_enum$_Stages_$886_$",
-                    "typeString": "modifier (bytes32[] memory,enum StateMachine.Stages)"
-                  }
-                },
-                "nodeType": "ModifierInvocation",
-                "src": "2992:47:4"
-              },
-              {
-                "arguments": [
-                  {
-                    "argumentTypes": null,
-                    "id": 871,
+                    "id": 864,
                     "name": "_service",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
                     "referencedDeclaration": 853,
-                    "src": "3061:8:4",
+                    "src": "3064:8:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes32",
                       "typeString": "bytes32"
@@ -7760,18 +7582,18 @@
                     "argumentTypes": null,
                     "expression": {
                       "argumentTypes": null,
-                      "id": 872,
+                      "id": 865,
                       "name": "Stages",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 886,
-                      "src": "3071:6:4",
+                      "referencedDeclaration": 879,
+                      "src": "3074:6:4",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_Stages_$886_$",
+                        "typeIdentifier": "t_type$_t_enum$_Stages_$879_$",
                         "typeString": "type(enum StateMachine.Stages)"
                       }
                     },
-                    "id": 873,
+                    "id": 866,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -7779,29 +7601,29 @@
                     "memberName": "STARTED",
                     "nodeType": "MemberAccess",
                     "referencedDeclaration": null,
-                    "src": "3071:14:4",
+                    "src": "3074:14:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_Stages_$886",
+                      "typeIdentifier": "t_enum$_Stages_$879",
                       "typeString": "enum StateMachine.Stages"
                     }
                   }
                 ],
-                "id": 874,
+                "id": 867,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 870,
+                  "id": 863,
                   "name": "transitionTo",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 913,
-                  "src": "3048:12:4",
+                  "referencedDeclaration": 906,
+                  "src": "3051:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$886_$",
+                    "typeIdentifier": "t_modifier$_t_bytes32_$_t_enum$_Stages_$879_$",
                     "typeString": "modifier (bytes32,enum StateMachine.Stages)"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "3048:38:4"
+                "src": "3051:38:4"
               }
             ],
             "name": "_reject",
@@ -7815,7 +7637,7 @@
                   "id": 853,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 877,
+                  "scope": 870,
                   "src": "2877:16:4",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -7840,23 +7662,23 @@
               "src": "2876:18:4"
             },
             "returnParameters": {
-              "id": 875,
+              "id": 868,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "3091:0:4"
+              "src": "3094:0:4"
             },
-            "scope": 878,
-            "src": "2860:233:4",
+            "scope": 871,
+            "src": "2860:236:4",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 879,
-        "src": "125:2970:4"
+        "scope": 872,
+        "src": "125:2973:4"
       }
     ],
-    "src": "32:3064:4"
+    "src": "32:3067:4"
   },
   "compiler": {
     "name": "solc",
@@ -7864,7 +7686,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-25T21:22:12.715Z",
+  "updatedAt": "2020-10-25T22:37:25.579Z",
   "devdoc": {
     "methods": {}
   },

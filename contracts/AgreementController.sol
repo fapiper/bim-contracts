@@ -106,7 +106,7 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     }
 
     function approve(bytes32 _service) external returns (bool success) {
-        _finish(_service);
+        _approve(_service);
         return true;
     }
 

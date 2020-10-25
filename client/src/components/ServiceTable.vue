@@ -137,13 +137,12 @@ export default {
       this.$emit('showDetails', service);
     },
     transition({ services, action }) {
-      console.log('HERE transition services', services);
-
+      const node = services[0];
       const parent = this.data.find((s) => {
-        return s.children.some((child) => child.hash === services[0].hash);
+        return s.children.some((child) => child.hash === node.hash);
       });
-      if (parent && action.checkForUpdate(services[0], parent.children)) {
-        services.unshift(parent);
+      if (parent && action.checkForUpdate(node, parent, parent.children)) {
+        services.push(parent);
       }
       this.$emit('transition', { services, action });
     },

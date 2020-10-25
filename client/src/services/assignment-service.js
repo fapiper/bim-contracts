@@ -74,7 +74,7 @@ class AssignmentService {
                 service.client = data[0];
                 service.contractor = data[1];
                 service.billing = data[2];
-                service.stage = data[3];
+                service.stage = parseInt(data[3]);
                 return service;
               })
             );
@@ -98,7 +98,8 @@ class AssignmentService {
         service.client = data[1][i];
         service.contractor = data[2][i];
         service.billing = data[3][i];
-        service.stage = data[4][i];
+        service.stage = parseInt(data[4][i]);
+        if (service.stage !== 1) console.log('service stage ', service);
         return service;
       })
     );
@@ -163,7 +164,6 @@ class AssignmentService {
       services.map((s) => s.parent || n32),
       services.map((s) => (s.billing_item ? s.billing_item.hash : n32)),
     ];
-    console.log('assignInitial', ...payload);
     await this.agreementController.methods
       .createInitialAgreement(...payload)
       .send({ from: contract.client.address, gas: 90000000 });
@@ -183,12 +183,9 @@ class AssignmentService {
     return contract;
   }
 
-  async handleTransition(user_address, agreementHash, service, method) {
-    return this.agreementController.methods[method](
-      agreementHash,
-      service.hash
-    ).send({
-      from: user_address,
+  async handleTransition(userAddress, service, method) {
+    return this.agreementController.methods[method](service.hash).send({
+      from: userAddress,
       gas: 2000000,
     });
   }

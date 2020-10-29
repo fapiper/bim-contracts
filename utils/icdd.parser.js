@@ -1,6 +1,6 @@
 import xml2js from 'xml2js';
-import BoQ from 'src/models/boq-model.js';
-import BillingModel from 'src/models/billing-model.js';
+import BoQ from './models/boq.model.js';
+import BillingModel from './models/billing.model.js';
 
 const nameProcessor = (name) =>
   name

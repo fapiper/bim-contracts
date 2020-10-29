@@ -1,4 +1,4 @@
-import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
+import { FlatTree, FlatNode } from '../tree.utils.js';
 import Web3 from 'web3';
 
 class BoQ extends FlatTree {

@@ -1,33 +1,9 @@
-const config = require('../../../bim-contracts.config');
-const IcddParser = require('../utils/icdd-parser.js');
-const { abi } = require('../src/contracts/AgreementController.json');
+const config = require('../bim-contracts.config');
 
-const OrbitDB = require('orbit-db');
+const { abi } = require('../client/src/contracts/AgreementController.json');
+
+const { getOrbitDB, parseIcdd } = require('./helpers');
 const Web3 = require('web3');
-const IPFS = require('ipfs');
-
-// Metrics output function
-const outputMetrics = (name, db, metrics) => {
-  metrics.seconds++;
-  console.log(
-    `[${name}] ${metrics.queriesPerSecond} queries per second, ${metrics.totalQueries} queries in ${metrics.seconds} seconds (Oplog: ${db._oplog.length})`
-  );
-  metrics.queriesPerSecond = 0;
-
-  if (metrics.seconds % 10 === 0) {
-    console.log(
-      `[${name}] --> Average of ${
-        metrics.lastTenSeconds / 10
-      } q/s in the last 10 seconds`
-    );
-    metrics.lastTenSeconds = 0;
-  }
-};
-
-const getOrbitInstance = async () => {
-  const ipfs = await IPFS.create(config.ipfs);
-  return OrbitDB.createInstance(ipfs);
-};
 
 const persistBilling = async (orbitdb, projectId, billing) => {
   const billingdb = await orbitdb.keyvalue(`projects.${projectId}.billings`);
@@ -70,26 +46,7 @@ const sendInitialAgreement = (agreement, agreementController) => {
     .send({ from: agreement.client.address, gas: 90000000 });
 };
 
-const loadDemoFile = (path) => {
-  const BoQFile = require(`${path}/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml`);
-  const BillingModelFile = require(`${path}/BillingModelShortSzenario2/Payload Documents/BillingModel.xml`);
-
-  const project = {
-    name: 'Demoprojekt',
-    contractor: '',
-  };
-  const container = {
-    boqs: [new File([BoQFile], 'Demo-Leistungsverzeichnis.x83')],
-    billingModel: new File([BillingModelFile], 'Demo-BillingModel.xml'),
-  };
-
-  return {
-    project,
-    container,
-  };
-};
-
-const run = async (path = 'assets/demo/') => {
+const run = async (path = '/files/3/') => {
   try {
     console.log('[upload-services.benchmark] RUN');
     const web3 = new Web3(
@@ -102,21 +59,26 @@ const run = async (path = 'assets/demo/') => {
     );
 
     const projectId = '';
-    const file = loadDemoFile(path);
-    const icdd = await IcddParser.parseFromFiles(
-      file.container.billingModel,
-      file.container.boqs
-    );
-    const orbitdb = await getOrbitInstance();
-    await persistBilling(orbitdb, projectId, icdd.billing);
-    await persistBoQs(orbitdb, projectId, icdd.boqs);
-    const agreement = await createInitialAgreement(web3, icdd);
+    const icdd = await parseIcdd(path);
+    const orbitdb = await getOrbitDB({
+      repo: './benchmark/.ipfs',
+    });
 
+    const billingRes = await persistBilling(orbitdb, projectId, icdd.billing);
+    console.log('stored billing', billingRes);
+    const boqRes = await persistBoQs(orbitdb, projectId, icdd.boqs);
+    console.log('stored boqs', boqRes);
+
+    const agreement = await createInitialAgreement(web3, icdd);
+    console.log('sending initial Agreement...');
     const res = await sendInitialAgreement(agreement, agreementController);
-    console.log('[upload-services.benchmark] FINISHED', res);
+    console.log('sent initial Agreement', res);
+
+    console.log('[upload-services.benchmark] FINISHED');
+    return true;
   } catch (error) {
     console.error('[upload-services.benchmark] ERROR', error);
   }
 };
 
-module.exports = run;
+return run();

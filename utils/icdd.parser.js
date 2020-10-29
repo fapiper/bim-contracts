@@ -1,6 +1,7 @@
-import xml2js from 'xml2js';
-import BoQ from './models/boq.model.js';
-import BillingModel from './models/billing.model.js';
+const xml2js = require('xml2js');
+
+const BoQ = require('./models/boq.model.js');
+const BillingModel = require('./models/billing.model.js');
 
 const nameProcessor = (name) =>
   name
@@ -18,7 +19,7 @@ const parserOptions = {
 };
 
 class IcddParser {
-  static _read(file) {
+  static read(file) {
     const reader = new FileReader();
     return new Promise(function (resolve) {
       reader.onload = async () => {
@@ -28,20 +29,21 @@ class IcddParser {
     });
   }
 
-  static async _parseFromFile(billingModel) {
-    const raw = await this._read(billingModel);
+  static async parseFromFile(file, isBrowser) {
+    const raw = isBrowser ? await this.read(file) : file;
     const parser = new xml2js.Parser(parserOptions);
-    return parser.parseStringPromise(raw);
+    const parsed = await parser.parseStringPromise(raw);
+    return parsed;
   }
 
-  static async parseBillingFile(billingModel) {
-    const parsed = await this._parseFromFile(billingModel);
+  static async parseBillingFile(billingModel, isBrowser = true) {
+    const parsed = await this.parseFromFile(billingModel, isBrowser);
     return BillingModel.fromXml(parsed);
   }
 
-  static parseBoQFiles(boqs, billing) {
+  static parseBoQFiles(boqs, billing, isBrowser = true) {
     const parse = async (boq, i) => {
-      const parsed = await this._parseFromFile(boq);
+      const parsed = await this.parseFromFile(boq, isBrowser);
       return BoQ.fromGAEB(parsed, billing);
     };
     return Promise.all(boqs.map(parse.bind(this)));
@@ -54,4 +56,4 @@ class IcddParser {
   }
 }
 
-export default IcddParser;
+module.exports = IcddParser;

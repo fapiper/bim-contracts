@@ -1,5 +1,5 @@
-import { FlatTree, FlatNode } from '../tree.utils.js';
-import Web3 from 'web3';
+const { FlatTree, FlatNode } = require('../tree.utils.js');
+const Web3 = require('web3');
 
 class BillingModel extends FlatTree {
   constructor(currency, roots, nodes) {
@@ -97,4 +97,4 @@ class BillingItem extends FlatNode {
   }
 }
 
-export default BillingModel;
+module.exports = BillingModel;

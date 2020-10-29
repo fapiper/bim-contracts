@@ -9,9 +9,7 @@ module.exports = {
       network_id: network.id || '*',
     },
   },
-
   mocha: {},
-
   compilers: {
     solc: {},
   },

@@ -4,6 +4,9 @@ node_modules
 /dist
 build/
 
+# Benchmark OrbitDB meta
+/benchmark/.store/
+
 # Quasar core related directories
 .quasar
 

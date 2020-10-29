@@ -1,10 +1,14 @@
 const OrbitDB = require('orbit-db');
 const IPFS = require('ipfs');
 
-const getOrbitDB = async (config) => {
+const getOrbitDB = async () => {
   try {
-    const ipfs = await IPFS.create(config);
-    const orbitdb = await OrbitDB.createInstance(ipfs);
+    const ipfs = await IPFS.create({
+      repo: './benchmark/.store/ipfs',
+    });
+    const orbitdb = await OrbitDB.createInstance(ipfs, {
+      directory: './benchmark/.store/orbitdb',
+    });
     return orbitdb;
   } catch (err) {
     console.error('Error creating OrbitDB instance', err);

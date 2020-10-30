@@ -1,5 +1,5 @@
 module.exports = {
-  controllerContract: '0xbb613e3f9f3798d99C31033788F42E08165626c3',
+  controllerContract: '0x8A0800bA29708E2e696fFd3De201E1C62c39a038',
   network: {
     host: '127.0.0.1',
     port: 7545,

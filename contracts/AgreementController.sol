@@ -10,11 +10,10 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         address _contractor,
         bytes32[] calldata _roots,
         bytes32[] calldata _services,
-        bytes32[] calldata _sections,
-        bytes32[] calldata _billings
+        bytes32[] calldata _sections
     ) external returns (bool success) {
         for (uint256 i = 0; i < _services.length; i++) {
-            _addService(_sections[i], _services[i], _billings[i]);
+            _addService(_sections[i], _services[i]);
         }
         createAgreement(_agreement, _contractor, _roots);
         return true;
@@ -74,7 +73,6 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         returns (
             address _client,
             address _contractor,
-            bytes32 _billing,
             Stages _stage
         )
     {
@@ -88,7 +86,6 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
             bytes32[] memory _services,
             address[] memory _clients,
             address[] memory _contractors,
-            bytes32[] memory _billings,
             Stages[] memory _stages
         )
     {

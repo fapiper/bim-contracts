@@ -12,14 +12,14 @@
     "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceAgreement.sol",
     "exportedSymbols": {
       "ServiceAgreement": [
-        474
+        463
       ]
     },
-    "id": 475,
+    "id": 464,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 312,
+        "id": 301,
         "literals": [
           "solidity",
           ">=",
@@ -38,23 +38,23 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 474,
+        "id": 463,
         "linearizedBaseContracts": [
-          474
+          463
         ],
         "name": "ServiceAgreement",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "ServiceAgreement.Agreement",
-            "id": 324,
+            "id": 313,
             "members": [
               {
                 "constant": false,
-                "id": 314,
+                "id": 303,
                 "name": "exists",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "125:11:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -63,7 +63,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 313,
+                  "id": 302,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "125:4:2",
@@ -77,10 +77,10 @@
               },
               {
                 "constant": false,
-                "id": 316,
+                "id": 305,
                 "name": "payed",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "146:10:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -89,7 +89,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 315,
+                  "id": 304,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "146:4:2",
@@ -103,10 +103,10 @@
               },
               {
                 "constant": false,
-                "id": 318,
+                "id": 307,
                 "name": "client",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "166:14:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -115,7 +115,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 317,
+                  "id": 306,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "166:7:2",
@@ -130,10 +130,10 @@
               },
               {
                 "constant": false,
-                "id": 320,
+                "id": 309,
                 "name": "contractor",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "190:18:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -142,7 +142,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 319,
+                  "id": 308,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "190:7:2",
@@ -157,10 +157,10 @@
               },
               {
                 "constant": false,
-                "id": 323,
+                "id": 312,
                 "name": "services",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "218:18:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -170,7 +170,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 321,
+                    "id": 310,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "218:7:2",
@@ -179,7 +179,7 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "id": 322,
+                  "id": 311,
                   "length": null,
                   "nodeType": "ArrayTypeName",
                   "src": "218:9:2",
@@ -194,27 +194,27 @@
             ],
             "name": "Agreement",
             "nodeType": "StructDefinition",
-            "scope": 474,
+            "scope": 463,
             "src": "98:145:2",
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 328,
+            "id": 317,
             "name": "agreements",
             "nodeType": "VariableDeclaration",
-            "scope": 474,
+            "scope": 463,
             "src": "249:40:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement)"
             },
             "typeName": {
-              "id": 327,
+              "id": 316,
               "keyType": {
-                "id": 325,
+                "id": 314,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "257:7:2",
@@ -226,18 +226,18 @@
               "nodeType": "Mapping",
               "src": "249:29:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                 "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 326,
+                "id": 315,
                 "name": "Agreement",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 324,
+                "referencedDeclaration": 313,
                 "src": "268:9:2",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Agreement_$324_storage_ptr",
+                  "typeIdentifier": "t_struct$_Agreement_$313_storage_ptr",
                   "typeString": "struct ServiceAgreement.Agreement"
                 }
               }
@@ -247,10 +247,10 @@
           },
           {
             "constant": false,
-            "id": 333,
+            "id": 322,
             "name": "agreementsByContractor",
             "nodeType": "VariableDeclaration",
-            "scope": 474,
+            "scope": 463,
             "src": "295:52:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -259,9 +259,9 @@
               "typeString": "mapping(address => bytes32[])"
             },
             "typeName": {
-              "id": 332,
+              "id": 321,
               "keyType": {
-                "id": 329,
+                "id": 318,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "303:7:2",
@@ -278,7 +278,7 @@
               },
               "valueType": {
                 "baseType": {
-                  "id": 330,
+                  "id": 319,
                   "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
                   "src": "314:7:2",
@@ -287,7 +287,7 @@
                     "typeString": "bytes32"
                   }
                 },
-                "id": 331,
+                "id": 320,
                 "length": null,
                 "nodeType": "ArrayTypeName",
                 "src": "314:9:2",
@@ -302,10 +302,10 @@
           },
           {
             "constant": false,
-            "id": 338,
+            "id": 327,
             "name": "agreementsByClient",
             "nodeType": "VariableDeclaration",
-            "scope": 474,
+            "scope": 463,
             "src": "353:48:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -314,9 +314,9 @@
               "typeString": "mapping(address => bytes32[])"
             },
             "typeName": {
-              "id": 337,
+              "id": 326,
               "keyType": {
-                "id": 334,
+                "id": 323,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "361:7:2",
@@ -333,7 +333,7 @@
               },
               "valueType": {
                 "baseType": {
-                  "id": 335,
+                  "id": 324,
                   "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
                   "src": "372:7:2",
@@ -342,7 +342,7 @@
                     "typeString": "bytes32"
                   }
                 },
-                "id": 336,
+                "id": 325,
                 "length": null,
                 "nodeType": "ArrayTypeName",
                 "src": "372:9:2",
@@ -357,7 +357,7 @@
           },
           {
             "body": {
-              "id": 351,
+              "id": 340,
               "nodeType": "Block",
               "src": "444:93:2",
               "statements": [
@@ -371,25 +371,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 343,
+                            "id": 332,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "462:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 345,
+                          "id": 334,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 344,
+                            "id": 333,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 340,
+                            "referencedDeclaration": 329,
                             "src": "473:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -403,18 +403,18 @@
                           "nodeType": "IndexAccess",
                           "src": "462:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 346,
+                        "id": 335,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "exists",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 314,
+                        "referencedDeclaration": 303,
                         "src": "462:29:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -424,7 +424,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "41677265656d656e74206e6f74206578697374696e672e",
-                        "id": 347,
+                        "id": 336,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -451,21 +451,21 @@
                           "typeString": "literal_string \"Agreement not existing.\""
                         }
                       ],
-                      "id": 342,
+                      "id": 331,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1055,
-                        1056
+                        995,
+                        996
                       ],
-                      "referencedDeclaration": 1056,
+                      "referencedDeclaration": 996,
                       "src": "454:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 348,
+                    "id": 337,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -479,31 +479,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 349,
+                  "id": 338,
                   "nodeType": "ExpressionStatement",
                   "src": "454:65:2"
                 },
                 {
-                  "id": 350,
+                  "id": 339,
                   "nodeType": "PlaceholderStatement",
                   "src": "529:1:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 352,
+            "id": 341,
             "name": "exists",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 341,
+              "id": 330,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 340,
+                  "id": 329,
                   "name": "_agreement",
                   "nodeType": "VariableDeclaration",
-                  "scope": 352,
+                  "scope": 341,
                   "src": "424:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -512,7 +512,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 339,
+                    "id": 328,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "424:7:2",
@@ -532,14 +532,14 @@
           },
           {
             "body": {
-              "id": 413,
+              "id": 402,
               "nodeType": "Block",
               "src": "675:366:2",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 367,
+                    "id": 356,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -550,25 +550,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 362,
+                          "id": 351,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "685:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 364,
+                        "id": 353,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 363,
+                          "id": 352,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "696:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -582,18 +582,18 @@
                         "nodeType": "IndexAccess",
                         "src": "685:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 365,
+                      "id": 354,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "exists",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 314,
+                      "referencedDeclaration": 303,
                       "src": "685:27:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -605,7 +605,7 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "74727565",
-                      "id": 366,
+                      "id": 355,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -626,14 +626,14 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 368,
+                  "id": 357,
                   "nodeType": "ExpressionStatement",
                   "src": "685:34:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 374,
+                    "id": 363,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -644,25 +644,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 369,
+                          "id": 358,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "729:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 371,
+                        "id": 360,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 370,
+                          "id": 359,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "740:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -676,18 +676,18 @@
                         "nodeType": "IndexAccess",
                         "src": "729:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 372,
+                      "id": 361,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "payed",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 316,
+                      "referencedDeclaration": 305,
                       "src": "729:26:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -699,7 +699,7 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "66616c7365",
-                      "id": 373,
+                      "id": 362,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -720,14 +720,14 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 375,
+                  "id": 364,
                   "nodeType": "ExpressionStatement",
                   "src": "729:34:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 382,
+                    "id": 371,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -738,25 +738,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 376,
+                          "id": 365,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "773:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 378,
+                        "id": 367,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 377,
+                          "id": 366,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "784:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -770,18 +770,18 @@
                         "nodeType": "IndexAccess",
                         "src": "773:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 379,
+                      "id": 368,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "client",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 318,
+                      "referencedDeclaration": 307,
                       "src": "773:27:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -794,18 +794,18 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 380,
+                        "id": 369,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1052,
+                        "referencedDeclaration": 992,
                         "src": "803:3:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
                           "typeString": "msg"
                         }
                       },
-                      "id": 381,
+                      "id": 370,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -825,14 +825,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 383,
+                  "id": 372,
                   "nodeType": "ExpressionStatement",
                   "src": "773:40:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 389,
+                    "id": 378,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -843,25 +843,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 384,
+                          "id": 373,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "823:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 386,
+                        "id": 375,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 385,
+                          "id": 374,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "834:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -875,18 +875,18 @@
                         "nodeType": "IndexAccess",
                         "src": "823:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 387,
+                      "id": 376,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "contractor",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 320,
+                      "referencedDeclaration": 309,
                       "src": "823:31:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -897,11 +897,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 388,
+                      "id": 377,
                       "name": "_contractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 356,
+                      "referencedDeclaration": 345,
                       "src": "857:11:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -914,14 +914,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 390,
+                  "id": 379,
                   "nodeType": "ExpressionStatement",
                   "src": "823:45:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 396,
+                    "id": 385,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -932,25 +932,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 391,
+                          "id": 380,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "878:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 393,
+                        "id": 382,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 392,
+                          "id": 381,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "889:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -964,18 +964,18 @@
                         "nodeType": "IndexAccess",
                         "src": "878:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 394,
+                      "id": 383,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "services",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 323,
+                      "referencedDeclaration": 312,
                       "src": "878:29:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
@@ -986,11 +986,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 395,
+                      "id": 384,
                       "name": "_services",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 359,
+                      "referencedDeclaration": 348,
                       "src": "910:9:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_bytes32_$dyn_memory_ptr",
@@ -1003,7 +1003,7 @@
                       "typeString": "bytes32[] storage ref"
                     }
                   },
-                  "id": 397,
+                  "id": 386,
                   "nodeType": "ExpressionStatement",
                   "src": "878:41:2"
                 },
@@ -1013,11 +1013,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 402,
+                        "id": 391,
                         "name": "_section",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 354,
+                        "referencedDeclaration": 343,
                         "src": "970:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -1036,25 +1036,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 398,
+                          "id": 387,
                           "name": "agreementsByContractor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 333,
+                          "referencedDeclaration": 322,
                           "src": "929:22:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                             "typeString": "mapping(address => bytes32[] storage ref)"
                           }
                         },
-                        "id": 400,
+                        "id": 389,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 399,
+                          "id": 388,
                           "name": "_contractor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 356,
+                          "referencedDeclaration": 345,
                           "src": "952:11:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -1072,7 +1072,7 @@
                           "typeString": "bytes32[] storage ref"
                         }
                       },
-                      "id": 401,
+                      "id": 390,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1086,7 +1086,7 @@
                         "typeString": "function (bytes32) returns (uint256)"
                       }
                     },
-                    "id": 403,
+                    "id": 392,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1100,7 +1100,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 404,
+                  "id": 393,
                   "nodeType": "ExpressionStatement",
                   "src": "929:50:2"
                 },
@@ -1110,11 +1110,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 410,
+                        "id": 399,
                         "name": "_section",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 354,
+                        "referencedDeclaration": 343,
                         "src": "1025:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -1133,34 +1133,34 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 405,
+                          "id": 394,
                           "name": "agreementsByClient",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 338,
+                          "referencedDeclaration": 327,
                           "src": "989:18:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                             "typeString": "mapping(address => bytes32[] storage ref)"
                           }
                         },
-                        "id": 408,
+                        "id": 397,
                         "indexExpression": {
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 406,
+                            "id": 395,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1052,
+                            "referencedDeclaration": 992,
                             "src": "1008:3:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 407,
+                          "id": 396,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1185,7 +1185,7 @@
                           "typeString": "bytes32[] storage ref"
                         }
                       },
-                      "id": 409,
+                      "id": 398,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -1199,7 +1199,7 @@
                         "typeString": "function (bytes32) returns (uint256)"
                       }
                     },
-                    "id": 411,
+                    "id": 400,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1213,29 +1213,29 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 412,
+                  "id": 401,
                   "nodeType": "ExpressionStatement",
                   "src": "989:45:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 414,
+            "id": 403,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_createAgreement",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 360,
+              "id": 349,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 354,
+                  "id": 343,
                   "name": "_section",
                   "nodeType": "VariableDeclaration",
-                  "scope": 414,
+                  "scope": 403,
                   "src": "578:16:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1244,7 +1244,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 353,
+                    "id": 342,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "578:7:2",
@@ -1258,10 +1258,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 356,
+                  "id": 345,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 414,
+                  "scope": 403,
                   "src": "604:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1270,7 +1270,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 355,
+                    "id": 344,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "604:7:2",
@@ -1285,10 +1285,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 359,
+                  "id": 348,
                   "name": "_services",
                   "nodeType": "VariableDeclaration",
-                  "scope": 414,
+                  "scope": 403,
                   "src": "633:26:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1298,7 +1298,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 357,
+                      "id": 346,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "633:7:2",
@@ -1307,7 +1307,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 358,
+                    "id": 347,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "633:9:2",
@@ -1323,12 +1323,12 @@
               "src": "568:97:2"
             },
             "returnParameters": {
-              "id": 361,
+              "id": 350,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "675:0:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "543:498:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1336,7 +1336,7 @@
           },
           {
             "body": {
-              "id": 426,
+              "id": 415,
               "nodeType": "Block",
               "src": "1165:51:2",
               "statements": [
@@ -1345,25 +1345,25 @@
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 422,
+                      "id": 411,
                       "name": "agreementsByClient",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 338,
+                      "referencedDeclaration": 327,
                       "src": "1182:18:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                         "typeString": "mapping(address => bytes32[] storage ref)"
                       }
                     },
-                    "id": 424,
+                    "id": 413,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 423,
+                      "id": 412,
                       "name": "_client",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 416,
+                      "referencedDeclaration": 405,
                       "src": "1201:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1381,30 +1381,30 @@
                       "typeString": "bytes32[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 421,
-                  "id": 425,
+                  "functionReturnParameters": 410,
+                  "id": 414,
                   "nodeType": "Return",
                   "src": "1175:34:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 427,
+            "id": 416,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getAgreementsByClient",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 417,
+              "id": 406,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 416,
+                  "id": 405,
                   "name": "_client",
                   "nodeType": "VariableDeclaration",
-                  "scope": 427,
+                  "scope": 416,
                   "src": "1079:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1413,7 +1413,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 415,
+                    "id": 404,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1079:7:2",
@@ -1430,15 +1430,15 @@
               "src": "1078:17:2"
             },
             "returnParameters": {
-              "id": 421,
+              "id": 410,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 420,
+                  "id": 409,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 427,
+                  "scope": 416,
                   "src": "1143:16:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1448,7 +1448,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 418,
+                      "id": 407,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "1143:7:2",
@@ -1457,7 +1457,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 419,
+                    "id": 408,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1143:9:2",
@@ -1472,7 +1472,7 @@
               ],
               "src": "1142:18:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "1047:169:2",
             "stateMutability": "view",
             "superFunction": null,
@@ -1480,7 +1480,7 @@
           },
           {
             "body": {
-              "id": 439,
+              "id": 428,
               "nodeType": "Block",
               "src": "1348:59:2",
               "statements": [
@@ -1489,25 +1489,25 @@
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 435,
+                      "id": 424,
                       "name": "agreementsByContractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 333,
+                      "referencedDeclaration": 322,
                       "src": "1365:22:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                         "typeString": "mapping(address => bytes32[] storage ref)"
                       }
                     },
-                    "id": 437,
+                    "id": 426,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 436,
+                      "id": 425,
                       "name": "_contractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 429,
+                      "referencedDeclaration": 418,
                       "src": "1388:11:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1525,30 +1525,30 @@
                       "typeString": "bytes32[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 434,
-                  "id": 438,
+                  "functionReturnParameters": 423,
+                  "id": 427,
                   "nodeType": "Return",
                   "src": "1358:42:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 440,
+            "id": 429,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getAgreementsByContractor",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 430,
+              "id": 419,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 429,
+                  "id": 418,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 440,
+                  "scope": 429,
                   "src": "1258:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1557,7 +1557,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 428,
+                    "id": 417,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1258:7:2",
@@ -1574,15 +1574,15 @@
               "src": "1257:21:2"
             },
             "returnParameters": {
-              "id": 434,
+              "id": 423,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 433,
+                  "id": 422,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 440,
+                  "scope": 429,
                   "src": "1326:16:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1592,7 +1592,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 431,
+                      "id": 420,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "1326:7:2",
@@ -1601,7 +1601,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 432,
+                    "id": 421,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1326:9:2",
@@ -1616,7 +1616,7 @@
               ],
               "src": "1325:18:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "1222:185:2",
             "stateMutability": "view",
             "superFunction": null,
@@ -1624,7 +1624,7 @@
           },
           {
             "body": {
-              "id": 472,
+              "id": 461,
               "nodeType": "Block",
               "src": "1643:211:2",
               "statements": [
@@ -1638,25 +1638,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 454,
+                            "id": 443,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1674:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 456,
+                          "id": 445,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 455,
+                            "id": 444,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1685:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -1670,18 +1670,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1674:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 457,
+                        "id": 446,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "payed",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 316,
+                        "referencedDeclaration": 305,
                         "src": "1674:28:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -1694,25 +1694,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 458,
+                            "id": 447,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1716:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 460,
+                          "id": 449,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 459,
+                            "id": 448,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1727:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -1726,18 +1726,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1716:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 461,
+                        "id": 450,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "client",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 318,
+                        "referencedDeclaration": 307,
                         "src": "1716:29:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1750,25 +1750,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 462,
+                            "id": 451,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1759:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 464,
+                          "id": 453,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 463,
+                            "id": 452,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1770:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -1782,18 +1782,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1759:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 465,
+                        "id": 454,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "contractor",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 320,
+                        "referencedDeclaration": 309,
                         "src": "1759:33:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1806,25 +1806,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 466,
+                            "id": 455,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1806:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 468,
+                          "id": 457,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 467,
+                            "id": 456,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1817:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -1838,18 +1838,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1806:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 469,
+                        "id": 458,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "services",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 323,
+                        "referencedDeclaration": 312,
                         "src": "1806:31:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
@@ -1857,7 +1857,7 @@
                         }
                       }
                     ],
-                    "id": 470,
+                    "id": 459,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -1870,30 +1870,30 @@
                       "typeString": "tuple(bool,address,address,bytes32[] storage ref)"
                     }
                   },
-                  "functionReturnParameters": 453,
-                  "id": 471,
+                  "functionReturnParameters": 442,
+                  "id": 460,
                   "nodeType": "Return",
                   "src": "1653:194:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 473,
+            "id": 462,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getAgreement",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 443,
+              "id": 432,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 442,
+                  "id": 431,
                   "name": "_agreement",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1436:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1902,7 +1902,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 441,
+                    "id": 430,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1436:7:2",
@@ -1918,15 +1918,15 @@
               "src": "1435:20:2"
             },
             "returnParameters": {
-              "id": 453,
+              "id": 442,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 445,
+                  "id": 434,
                   "name": "payed",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1516:10:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1935,7 +1935,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 444,
+                    "id": 433,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1516:4:2",
@@ -1949,10 +1949,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 447,
+                  "id": 436,
                   "name": "_client",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1540:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1961,7 +1961,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 446,
+                    "id": 435,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1540:7:2",
@@ -1976,10 +1976,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 449,
+                  "id": 438,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1569:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1988,7 +1988,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 448,
+                    "id": 437,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1569:7:2",
@@ -2003,10 +2003,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 452,
+                  "id": 441,
                   "name": "_services",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1602:26:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2016,7 +2016,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 450,
+                      "id": 439,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "1602:7:2",
@@ -2025,7 +2025,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 451,
+                    "id": 440,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1602:9:2",
@@ -2040,14 +2040,14 @@
               ],
               "src": "1502:136:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "1413:441:2",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 475,
+        "scope": 464,
         "src": "66:1790:2"
       }
     ],
@@ -2057,14 +2057,14 @@
     "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceAgreement.sol",
     "exportedSymbols": {
       "ServiceAgreement": [
-        474
+        463
       ]
     },
-    "id": 475,
+    "id": 464,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 312,
+        "id": 301,
         "literals": [
           "solidity",
           ">=",
@@ -2083,23 +2083,23 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 474,
+        "id": 463,
         "linearizedBaseContracts": [
-          474
+          463
         ],
         "name": "ServiceAgreement",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "ServiceAgreement.Agreement",
-            "id": 324,
+            "id": 313,
             "members": [
               {
                 "constant": false,
-                "id": 314,
+                "id": 303,
                 "name": "exists",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "125:11:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -2108,7 +2108,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 313,
+                  "id": 302,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "125:4:2",
@@ -2122,10 +2122,10 @@
               },
               {
                 "constant": false,
-                "id": 316,
+                "id": 305,
                 "name": "payed",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "146:10:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -2134,7 +2134,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 315,
+                  "id": 304,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "146:4:2",
@@ -2148,10 +2148,10 @@
               },
               {
                 "constant": false,
-                "id": 318,
+                "id": 307,
                 "name": "client",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "166:14:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -2160,7 +2160,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 317,
+                  "id": 306,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "166:7:2",
@@ -2175,10 +2175,10 @@
               },
               {
                 "constant": false,
-                "id": 320,
+                "id": 309,
                 "name": "contractor",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "190:18:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -2187,7 +2187,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 319,
+                  "id": 308,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "190:7:2",
@@ -2202,10 +2202,10 @@
               },
               {
                 "constant": false,
-                "id": 323,
+                "id": 312,
                 "name": "services",
                 "nodeType": "VariableDeclaration",
-                "scope": 324,
+                "scope": 313,
                 "src": "218:18:2",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -2215,7 +2215,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 321,
+                    "id": 310,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "218:7:2",
@@ -2224,7 +2224,7 @@
                       "typeString": "bytes32"
                     }
                   },
-                  "id": 322,
+                  "id": 311,
                   "length": null,
                   "nodeType": "ArrayTypeName",
                   "src": "218:9:2",
@@ -2239,27 +2239,27 @@
             ],
             "name": "Agreement",
             "nodeType": "StructDefinition",
-            "scope": 474,
+            "scope": 463,
             "src": "98:145:2",
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 328,
+            "id": 317,
             "name": "agreements",
             "nodeType": "VariableDeclaration",
-            "scope": 474,
+            "scope": 463,
             "src": "249:40:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement)"
             },
             "typeName": {
-              "id": 327,
+              "id": 316,
               "keyType": {
-                "id": 325,
+                "id": 314,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "257:7:2",
@@ -2271,18 +2271,18 @@
               "nodeType": "Mapping",
               "src": "249:29:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                 "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 326,
+                "id": 315,
                 "name": "Agreement",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 324,
+                "referencedDeclaration": 313,
                 "src": "268:9:2",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Agreement_$324_storage_ptr",
+                  "typeIdentifier": "t_struct$_Agreement_$313_storage_ptr",
                   "typeString": "struct ServiceAgreement.Agreement"
                 }
               }
@@ -2292,10 +2292,10 @@
           },
           {
             "constant": false,
-            "id": 333,
+            "id": 322,
             "name": "agreementsByContractor",
             "nodeType": "VariableDeclaration",
-            "scope": 474,
+            "scope": 463,
             "src": "295:52:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2304,9 +2304,9 @@
               "typeString": "mapping(address => bytes32[])"
             },
             "typeName": {
-              "id": 332,
+              "id": 321,
               "keyType": {
-                "id": 329,
+                "id": 318,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "303:7:2",
@@ -2323,7 +2323,7 @@
               },
               "valueType": {
                 "baseType": {
-                  "id": 330,
+                  "id": 319,
                   "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
                   "src": "314:7:2",
@@ -2332,7 +2332,7 @@
                     "typeString": "bytes32"
                   }
                 },
-                "id": 331,
+                "id": 320,
                 "length": null,
                 "nodeType": "ArrayTypeName",
                 "src": "314:9:2",
@@ -2347,10 +2347,10 @@
           },
           {
             "constant": false,
-            "id": 338,
+            "id": 327,
             "name": "agreementsByClient",
             "nodeType": "VariableDeclaration",
-            "scope": 474,
+            "scope": 463,
             "src": "353:48:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2359,9 +2359,9 @@
               "typeString": "mapping(address => bytes32[])"
             },
             "typeName": {
-              "id": 337,
+              "id": 326,
               "keyType": {
-                "id": 334,
+                "id": 323,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "361:7:2",
@@ -2378,7 +2378,7 @@
               },
               "valueType": {
                 "baseType": {
-                  "id": 335,
+                  "id": 324,
                   "name": "bytes32",
                   "nodeType": "ElementaryTypeName",
                   "src": "372:7:2",
@@ -2387,7 +2387,7 @@
                     "typeString": "bytes32"
                   }
                 },
-                "id": 336,
+                "id": 325,
                 "length": null,
                 "nodeType": "ArrayTypeName",
                 "src": "372:9:2",
@@ -2402,7 +2402,7 @@
           },
           {
             "body": {
-              "id": 351,
+              "id": 340,
               "nodeType": "Block",
               "src": "444:93:2",
               "statements": [
@@ -2416,25 +2416,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 343,
+                            "id": 332,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "462:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 345,
+                          "id": 334,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 344,
+                            "id": 333,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 340,
+                            "referencedDeclaration": 329,
                             "src": "473:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -2448,18 +2448,18 @@
                           "nodeType": "IndexAccess",
                           "src": "462:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 346,
+                        "id": 335,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "exists",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 314,
+                        "referencedDeclaration": 303,
                         "src": "462:29:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -2469,7 +2469,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "41677265656d656e74206e6f74206578697374696e672e",
-                        "id": 347,
+                        "id": 336,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2496,21 +2496,21 @@
                           "typeString": "literal_string \"Agreement not existing.\""
                         }
                       ],
-                      "id": 342,
+                      "id": 331,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1055,
-                        1056
+                        995,
+                        996
                       ],
-                      "referencedDeclaration": 1056,
+                      "referencedDeclaration": 996,
                       "src": "454:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 348,
+                    "id": 337,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2524,31 +2524,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 349,
+                  "id": 338,
                   "nodeType": "ExpressionStatement",
                   "src": "454:65:2"
                 },
                 {
-                  "id": 350,
+                  "id": 339,
                   "nodeType": "PlaceholderStatement",
                   "src": "529:1:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 352,
+            "id": 341,
             "name": "exists",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 341,
+              "id": 330,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 340,
+                  "id": 329,
                   "name": "_agreement",
                   "nodeType": "VariableDeclaration",
-                  "scope": 352,
+                  "scope": 341,
                   "src": "424:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2557,7 +2557,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 339,
+                    "id": 328,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "424:7:2",
@@ -2577,14 +2577,14 @@
           },
           {
             "body": {
-              "id": 413,
+              "id": 402,
               "nodeType": "Block",
               "src": "675:366:2",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 367,
+                    "id": 356,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2595,25 +2595,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 362,
+                          "id": 351,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "685:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 364,
+                        "id": 353,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 363,
+                          "id": 352,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "696:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -2627,18 +2627,18 @@
                         "nodeType": "IndexAccess",
                         "src": "685:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 365,
+                      "id": 354,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "exists",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 314,
+                      "referencedDeclaration": 303,
                       "src": "685:27:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -2650,7 +2650,7 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "74727565",
-                      "id": 366,
+                      "id": 355,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2671,14 +2671,14 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 368,
+                  "id": 357,
                   "nodeType": "ExpressionStatement",
                   "src": "685:34:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 374,
+                    "id": 363,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2689,25 +2689,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 369,
+                          "id": 358,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "729:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 371,
+                        "id": 360,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 370,
+                          "id": 359,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "740:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -2721,18 +2721,18 @@
                         "nodeType": "IndexAccess",
                         "src": "729:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 372,
+                      "id": 361,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "payed",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 316,
+                      "referencedDeclaration": 305,
                       "src": "729:26:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_bool",
@@ -2744,7 +2744,7 @@
                     "rightHandSide": {
                       "argumentTypes": null,
                       "hexValue": "66616c7365",
-                      "id": 373,
+                      "id": 362,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -2765,14 +2765,14 @@
                       "typeString": "bool"
                     }
                   },
-                  "id": 375,
+                  "id": 364,
                   "nodeType": "ExpressionStatement",
                   "src": "729:34:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 382,
+                    "id": 371,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2783,25 +2783,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 376,
+                          "id": 365,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "773:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 378,
+                        "id": 367,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 377,
+                          "id": 366,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "784:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -2815,18 +2815,18 @@
                         "nodeType": "IndexAccess",
                         "src": "773:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 379,
+                      "id": 368,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "client",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 318,
+                      "referencedDeclaration": 307,
                       "src": "773:27:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2839,18 +2839,18 @@
                       "argumentTypes": null,
                       "expression": {
                         "argumentTypes": null,
-                        "id": 380,
+                        "id": 369,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1052,
+                        "referencedDeclaration": 992,
                         "src": "803:3:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
                           "typeString": "msg"
                         }
                       },
-                      "id": 381,
+                      "id": 370,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -2870,14 +2870,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 383,
+                  "id": 372,
                   "nodeType": "ExpressionStatement",
                   "src": "773:40:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 389,
+                    "id": 378,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2888,25 +2888,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 384,
+                          "id": 373,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "823:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 386,
+                        "id": 375,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 385,
+                          "id": 374,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "834:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -2920,18 +2920,18 @@
                         "nodeType": "IndexAccess",
                         "src": "823:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 387,
+                      "id": 376,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "contractor",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 320,
+                      "referencedDeclaration": 309,
                       "src": "823:31:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2942,11 +2942,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 388,
+                      "id": 377,
                       "name": "_contractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 356,
+                      "referencedDeclaration": 345,
                       "src": "857:11:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -2959,14 +2959,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 390,
+                  "id": 379,
                   "nodeType": "ExpressionStatement",
                   "src": "823:45:2"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 396,
+                    "id": 385,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2977,25 +2977,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 391,
+                          "id": 380,
                           "name": "agreements",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 328,
+                          "referencedDeclaration": 317,
                           "src": "878:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                            "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                             "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                           }
                         },
-                        "id": 393,
+                        "id": 382,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 392,
+                          "id": 381,
                           "name": "_section",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 354,
+                          "referencedDeclaration": 343,
                           "src": "889:8:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -3009,18 +3009,18 @@
                         "nodeType": "IndexAccess",
                         "src": "878:20:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                          "typeIdentifier": "t_struct$_Agreement_$313_storage",
                           "typeString": "struct ServiceAgreement.Agreement storage ref"
                         }
                       },
-                      "id": 394,
+                      "id": 383,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "services",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 323,
+                      "referencedDeclaration": 312,
                       "src": "878:29:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
@@ -3031,11 +3031,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 395,
+                      "id": 384,
                       "name": "_services",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 359,
+                      "referencedDeclaration": 348,
                       "src": "910:9:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_array$_t_bytes32_$dyn_memory_ptr",
@@ -3048,7 +3048,7 @@
                       "typeString": "bytes32[] storage ref"
                     }
                   },
-                  "id": 397,
+                  "id": 386,
                   "nodeType": "ExpressionStatement",
                   "src": "878:41:2"
                 },
@@ -3058,11 +3058,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 402,
+                        "id": 391,
                         "name": "_section",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 354,
+                        "referencedDeclaration": 343,
                         "src": "970:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -3081,25 +3081,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 398,
+                          "id": 387,
                           "name": "agreementsByContractor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 333,
+                          "referencedDeclaration": 322,
                           "src": "929:22:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                             "typeString": "mapping(address => bytes32[] storage ref)"
                           }
                         },
-                        "id": 400,
+                        "id": 389,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 399,
+                          "id": 388,
                           "name": "_contractor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 356,
+                          "referencedDeclaration": 345,
                           "src": "952:11:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
@@ -3117,7 +3117,7 @@
                           "typeString": "bytes32[] storage ref"
                         }
                       },
-                      "id": 401,
+                      "id": 390,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3131,7 +3131,7 @@
                         "typeString": "function (bytes32) returns (uint256)"
                       }
                     },
-                    "id": 403,
+                    "id": 392,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3145,7 +3145,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 404,
+                  "id": 393,
                   "nodeType": "ExpressionStatement",
                   "src": "929:50:2"
                 },
@@ -3155,11 +3155,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 410,
+                        "id": 399,
                         "name": "_section",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 354,
+                        "referencedDeclaration": 343,
                         "src": "1025:8:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -3178,34 +3178,34 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 405,
+                          "id": 394,
                           "name": "agreementsByClient",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 338,
+                          "referencedDeclaration": 327,
                           "src": "989:18:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                             "typeString": "mapping(address => bytes32[] storage ref)"
                           }
                         },
-                        "id": 408,
+                        "id": 397,
                         "indexExpression": {
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 406,
+                            "id": 395,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1052,
+                            "referencedDeclaration": 992,
                             "src": "1008:3:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 407,
+                          "id": 396,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -3230,7 +3230,7 @@
                           "typeString": "bytes32[] storage ref"
                         }
                       },
-                      "id": 409,
+                      "id": 398,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3244,7 +3244,7 @@
                         "typeString": "function (bytes32) returns (uint256)"
                       }
                     },
-                    "id": 411,
+                    "id": 400,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3258,29 +3258,29 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 412,
+                  "id": 401,
                   "nodeType": "ExpressionStatement",
                   "src": "989:45:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 414,
+            "id": 403,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_createAgreement",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 360,
+              "id": 349,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 354,
+                  "id": 343,
                   "name": "_section",
                   "nodeType": "VariableDeclaration",
-                  "scope": 414,
+                  "scope": 403,
                   "src": "578:16:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3289,7 +3289,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 353,
+                    "id": 342,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "578:7:2",
@@ -3303,10 +3303,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 356,
+                  "id": 345,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 414,
+                  "scope": 403,
                   "src": "604:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3315,7 +3315,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 355,
+                    "id": 344,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "604:7:2",
@@ -3330,10 +3330,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 359,
+                  "id": 348,
                   "name": "_services",
                   "nodeType": "VariableDeclaration",
-                  "scope": 414,
+                  "scope": 403,
                   "src": "633:26:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3343,7 +3343,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 357,
+                      "id": 346,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "633:7:2",
@@ -3352,7 +3352,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 358,
+                    "id": 347,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "633:9:2",
@@ -3368,12 +3368,12 @@
               "src": "568:97:2"
             },
             "returnParameters": {
-              "id": 361,
+              "id": 350,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "675:0:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "543:498:2",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3381,7 +3381,7 @@
           },
           {
             "body": {
-              "id": 426,
+              "id": 415,
               "nodeType": "Block",
               "src": "1165:51:2",
               "statements": [
@@ -3390,25 +3390,25 @@
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 422,
+                      "id": 411,
                       "name": "agreementsByClient",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 338,
+                      "referencedDeclaration": 327,
                       "src": "1182:18:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                         "typeString": "mapping(address => bytes32[] storage ref)"
                       }
                     },
-                    "id": 424,
+                    "id": 413,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 423,
+                      "id": 412,
                       "name": "_client",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 416,
+                      "referencedDeclaration": 405,
                       "src": "1201:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -3426,30 +3426,30 @@
                       "typeString": "bytes32[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 421,
-                  "id": 425,
+                  "functionReturnParameters": 410,
+                  "id": 414,
                   "nodeType": "Return",
                   "src": "1175:34:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 427,
+            "id": 416,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getAgreementsByClient",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 417,
+              "id": 406,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 416,
+                  "id": 405,
                   "name": "_client",
                   "nodeType": "VariableDeclaration",
-                  "scope": 427,
+                  "scope": 416,
                   "src": "1079:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3458,7 +3458,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 415,
+                    "id": 404,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1079:7:2",
@@ -3475,15 +3475,15 @@
               "src": "1078:17:2"
             },
             "returnParameters": {
-              "id": 421,
+              "id": 410,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 420,
+                  "id": 409,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 427,
+                  "scope": 416,
                   "src": "1143:16:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3493,7 +3493,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 418,
+                      "id": 407,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "1143:7:2",
@@ -3502,7 +3502,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 419,
+                    "id": 408,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1143:9:2",
@@ -3517,7 +3517,7 @@
               ],
               "src": "1142:18:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "1047:169:2",
             "stateMutability": "view",
             "superFunction": null,
@@ -3525,7 +3525,7 @@
           },
           {
             "body": {
-              "id": 439,
+              "id": 428,
               "nodeType": "Block",
               "src": "1348:59:2",
               "statements": [
@@ -3534,25 +3534,25 @@
                     "argumentTypes": null,
                     "baseExpression": {
                       "argumentTypes": null,
-                      "id": 435,
+                      "id": 424,
                       "name": "agreementsByContractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 333,
+                      "referencedDeclaration": 322,
                       "src": "1365:22:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_mapping$_t_address_$_t_array$_t_bytes32_$dyn_storage_$",
                         "typeString": "mapping(address => bytes32[] storage ref)"
                       }
                     },
-                    "id": 437,
+                    "id": 426,
                     "indexExpression": {
                       "argumentTypes": null,
-                      "id": 436,
+                      "id": 425,
                       "name": "_contractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 429,
+                      "referencedDeclaration": 418,
                       "src": "1388:11:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -3570,30 +3570,30 @@
                       "typeString": "bytes32[] storage ref"
                     }
                   },
-                  "functionReturnParameters": 434,
-                  "id": 438,
+                  "functionReturnParameters": 423,
+                  "id": 427,
                   "nodeType": "Return",
                   "src": "1358:42:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 440,
+            "id": 429,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getAgreementsByContractor",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 430,
+              "id": 419,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 429,
+                  "id": 418,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 440,
+                  "scope": 429,
                   "src": "1258:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3602,7 +3602,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 428,
+                    "id": 417,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1258:7:2",
@@ -3619,15 +3619,15 @@
               "src": "1257:21:2"
             },
             "returnParameters": {
-              "id": 434,
+              "id": 423,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 433,
+                  "id": 422,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 440,
+                  "scope": 429,
                   "src": "1326:16:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -3637,7 +3637,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 431,
+                      "id": 420,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "1326:7:2",
@@ -3646,7 +3646,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 432,
+                    "id": 421,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1326:9:2",
@@ -3661,7 +3661,7 @@
               ],
               "src": "1325:18:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "1222:185:2",
             "stateMutability": "view",
             "superFunction": null,
@@ -3669,7 +3669,7 @@
           },
           {
             "body": {
-              "id": 472,
+              "id": 461,
               "nodeType": "Block",
               "src": "1643:211:2",
               "statements": [
@@ -3683,25 +3683,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 454,
+                            "id": 443,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1674:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 456,
+                          "id": 445,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 455,
+                            "id": 444,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1685:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -3715,18 +3715,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1674:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 457,
+                        "id": 446,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "payed",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 316,
+                        "referencedDeclaration": 305,
                         "src": "1674:28:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -3739,25 +3739,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 458,
+                            "id": 447,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1716:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 460,
+                          "id": 449,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 459,
+                            "id": 448,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1727:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -3771,18 +3771,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1716:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 461,
+                        "id": 450,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "client",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 318,
+                        "referencedDeclaration": 307,
                         "src": "1716:29:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -3795,25 +3795,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 462,
+                            "id": 451,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1759:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 464,
+                          "id": 453,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 463,
+                            "id": 452,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1770:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -3827,18 +3827,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1759:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 465,
+                        "id": 454,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "contractor",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 320,
+                        "referencedDeclaration": 309,
                         "src": "1759:33:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -3851,25 +3851,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 466,
+                            "id": 455,
                             "name": "agreements",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 328,
+                            "referencedDeclaration": 317,
                             "src": "1806:10:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$324_storage_$",
+                              "typeIdentifier": "t_mapping$_t_bytes32_$_t_struct$_Agreement_$313_storage_$",
                               "typeString": "mapping(bytes32 => struct ServiceAgreement.Agreement storage ref)"
                             }
                           },
-                          "id": 468,
+                          "id": 457,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 467,
+                            "id": 456,
                             "name": "_agreement",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 442,
+                            "referencedDeclaration": 431,
                             "src": "1817:10:2",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -3883,18 +3883,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1806:22:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Agreement_$324_storage",
+                            "typeIdentifier": "t_struct$_Agreement_$313_storage",
                             "typeString": "struct ServiceAgreement.Agreement storage ref"
                           }
                         },
-                        "id": 469,
+                        "id": 458,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "services",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 323,
+                        "referencedDeclaration": 312,
                         "src": "1806:31:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_array$_t_bytes32_$dyn_storage",
@@ -3902,7 +3902,7 @@
                         }
                       }
                     ],
-                    "id": 470,
+                    "id": 459,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -3915,30 +3915,30 @@
                       "typeString": "tuple(bool,address,address,bytes32[] storage ref)"
                     }
                   },
-                  "functionReturnParameters": 453,
-                  "id": 471,
+                  "functionReturnParameters": 442,
+                  "id": 460,
                   "nodeType": "Return",
                   "src": "1653:194:2"
                 }
               ]
             },
             "documentation": null,
-            "id": 473,
+            "id": 462,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getAgreement",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 443,
+              "id": 432,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 442,
+                  "id": 431,
                   "name": "_agreement",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1436:18:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3947,7 +3947,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 441,
+                    "id": 430,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1436:7:2",
@@ -3963,15 +3963,15 @@
               "src": "1435:20:2"
             },
             "returnParameters": {
-              "id": 453,
+              "id": 442,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 445,
+                  "id": 434,
                   "name": "payed",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1516:10:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3980,7 +3980,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 444,
+                    "id": 433,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "1516:4:2",
@@ -3994,10 +3994,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 447,
+                  "id": 436,
                   "name": "_client",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1540:15:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4006,7 +4006,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 446,
+                    "id": 435,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1540:7:2",
@@ -4021,10 +4021,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 449,
+                  "id": 438,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1569:19:2",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4033,7 +4033,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 448,
+                    "id": 437,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1569:7:2",
@@ -4048,10 +4048,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 452,
+                  "id": 441,
                   "name": "_services",
                   "nodeType": "VariableDeclaration",
-                  "scope": 473,
+                  "scope": 462,
                   "src": "1602:26:2",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -4061,7 +4061,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 450,
+                      "id": 439,
                       "name": "bytes32",
                       "nodeType": "ElementaryTypeName",
                       "src": "1602:7:2",
@@ -4070,7 +4070,7 @@
                         "typeString": "bytes32"
                       }
                     },
-                    "id": 451,
+                    "id": 440,
                     "length": null,
                     "nodeType": "ArrayTypeName",
                     "src": "1602:9:2",
@@ -4085,14 +4085,14 @@
               ],
               "src": "1502:136:2"
             },
-            "scope": 474,
+            "scope": 463,
             "src": "1413:441:2",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 475,
+        "scope": 464,
         "src": "66:1790:2"
       }
     ],
@@ -4104,7 +4104,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-28T13:17:31.243Z",
+  "updatedAt": "2020-10-30T13:34:10.993Z",
   "devdoc": {
     "methods": {}
   },

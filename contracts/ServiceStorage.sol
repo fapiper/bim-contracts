@@ -6,7 +6,6 @@ import './ServiceRoles.sol';
 
 contract ServiceStorage is ServiceRoles, StateMachine {
     mapping(bytes32 => bytes32[]) services;
-    mapping(bytes32 => bytes32) billing;
 
     function _getService(bytes32 _service)
         internal
@@ -14,14 +13,12 @@ contract ServiceStorage is ServiceRoles, StateMachine {
         returns (
             address _client,
             address _contractor,
-            bytes32 _billing,
             Stages _stage
         )
     {
         (_client, _contractor) = _getServiceRoles(_service);
-        _billing = _getBilling(_service);
         _stage = _stageOf(_service);
-        return (_client, _contractor, _billing, _stage);
+        return (_client, _contractor, _stage);
     }
 
     function _getServicesOf(bytes32 _section)
@@ -39,7 +36,6 @@ contract ServiceStorage is ServiceRoles, StateMachine {
             bytes32[] memory _services,
             address[] memory _clients,
             address[] memory _contractors,
-            bytes32[] memory _billings,
             Stages[] memory _stages
         )
     {
@@ -47,36 +43,23 @@ contract ServiceStorage is ServiceRoles, StateMachine {
         _clients = new address[](_services.length);
         _clients = new address[](_services.length);
         _contractors = new address[](_services.length);
-        _billings = new bytes32[](_services.length);
         _stages = new Stages[](_services.length);
 
         for (uint256 i = 0; i < _services.length; i++) {
-            (
-                _clients[i],
-                _contractors[i],
-                _billings[i],
-                _stages[i]
-            ) = _getService(_services[i]);
+            (_clients[i], _contractors[i], _stages[i]) = _getService(
+                _services[i]
+            );
         }
-        return (_services, _clients, _contractors, _billings, _stages);
+        return (_services, _clients, _contractors, _stages);
     }
 
     function _isServiceItem(bytes32 _section) internal view returns (bool) {
         return services[_section].length > 0;
     }
 
-    function _getBilling(bytes32 _section) internal view returns (bytes32) {
-        return billing[_section];
-    }
-
-    function _addService(
-        bytes32 _section,
-        bytes32 _service,
-        bytes32 _billing
-    ) internal {
+    function _addService(bytes32 _section, bytes32 _service) internal {
         _nextStage(_service);
         services[_section].push(_service);
-        billing[_service] = _billing;
     }
 
     function _start(bytes32 _service)

@@ -1,34 +1,45 @@
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const config = require('../bim-contracts.config');
+const { abi } = require('../client/src/contracts/AgreementController.json');
+
+const {
+  getOrbitDB,
+  parseIcdd,
+  getTransactionReceiptMined,
+} = require('./helpers');
+const Web3 = require('web3');
+
+const n = 60;
+const file = 2;
+
+let start = 0;
+let end = 0;
+let offStart = 0;
+let offEnd = 0;
+let onStart = 0;
+let onEnd = 0;
+
 const csvWriter = createCsvWriter({
-  path: './benchmark/res_latency.csv',
+  path: `./benchmark/LV-${file}_latency.csv`,
   header: [
     { id: 'index', title: 'INDEX' },
+    { id: 'gasUsed', title: 'GAS_USED' },
+    { id: 'servicesCount', title: 'COUNT_SERVICES' },
+    { id: 'serviceSectionCount', title: 'COUNT_SERVICE_SECTION' },
+    { id: 'serviceItemCount', title: 'COUNT_SERVICE_ITEM' },
+    { id: 'billingCount', title: 'COUNT_BILLING' },
     { id: 'total', title: 'TOTAL' },
-    { id: 'billing', title: 'BILLING' },
-    { id: 'boq', title: 'BOQ' },
-    { id: 'agreement', title: 'AGREEMENT' },
+    { id: 'off', title: 'OFF_CHAIN' },
+    { id: 'on', title: 'ON_CHAIN' },
   ],
 });
 
-const config = require('../bim-contracts.config');
-
-const { abi } = require('../client/src/contracts/AgreementController.json');
-
-const { getOrbitDB, parseIcdd } = require('./helpers');
-const Web3 = require('web3');
-
-const persistBilling = async (orbitdb, projectId, billing) => {
-  const billingdb = await orbitdb.docs(`projects.${projectId}.billings`, {
-    indexBy: 'hash',
-  });
-  return billingdb.putAll(Object.values(billing.nodes));
-};
-
-const persistBoQs = async (orbitdb, projectId, boqs) => {
+const persistServices = async (orbitdb, projectId, boqs) => {
+  const nodes = boqs.map((boq) => Object.values(boq.nodes));
   const boqdb = await orbitdb.docs(`projects.${projectId}.boqs`, {
     indexBy: 'hash',
   });
-  return Promise.all(boqs.map((boq) => boqdb.putAll(Object.values(boq.nodes))));
+  return Promise.all(nodes.map((node) => boqdb.putAll(node)));
 };
 
 const createInitialAgreement = async (web3, icdd) => {
@@ -52,7 +63,6 @@ const sendInitialAgreement = (agreement, agreementController) => {
     agreement.services.filter((s) => !s.parent).map((s) => s.hash),
     agreement.services.map((s) => s.hash),
     agreement.services.map((s) => s.parent || n32),
-    agreement.services.map((s) => (s.billing_item ? s.billing_item.hash : n32)),
   ];
 
   return agreementController.methods
@@ -60,10 +70,7 @@ const sendInitialAgreement = (agreement, agreementController) => {
     .send({ from: agreement.client.address, gas: 90000000 });
 };
 
-(async (path = '/files/3/') => {
-  const n = 9;
-
-  console.log('RUN');
+(async (path = `/files/${file}/`) => {
   const metrics = [];
   try {
     const web3 = new Web3(
@@ -79,29 +86,36 @@ const sendInitialAgreement = (agreement, agreementController) => {
     const icdd = await parseIcdd(path);
     const orbitdb = await getOrbitDB();
     for (let i = 0; i < n; i++) {
-      console.log('starting round', i);
-      const start = Date.now();
+      console.log('-----> Starting round', i);
+      start = Date.now();
 
-      const billingStart = Date.now();
-      await persistBilling(orbitdb, projectId, icdd.billing);
-      const billingEnd = Date.now();
+      offStart = Date.now();
+      await persistServices(orbitdb, projectId, icdd.boqs);
+      offEnd = Date.now();
 
-      const boqStart = Date.now();
-      await persistBoQs(orbitdb, projectId, icdd.boqs);
-      const boqEnd = Date.now();
-
-      await createInitialAgreement(web3, icdd);
-      const agreementStart = Date.now();
-      // await sendInitialAgreement(agreement, agreementController);
-      const agreementEnd = Date.now();
-
-      const end = Date.now();
+      const agreement = await createInitialAgreement(web3, icdd);
+      onStart = Date.now();
+      console.log('sending transaction...');
+      const res = await sendInitialAgreement(agreement, agreementController);
+      console.log('success sent transaction', res);
+      onEnd = Date.now();
+      await getTransactionReceiptMined(web3, res.transactionHash, 500);
+      end = Date.now();
       metrics.push({
         index: i,
+        gasUsed: res.gasUsed,
+        servicesCount: agreement.services.length,
+        serviceSectionCount: agreement.services.filter(
+          (service) => !service.qty
+        ).length,
+        serviceItemCount: agreement.services.filter((service) => service.qty)
+          .length,
+        billingCount: agreement.services.filter(
+          (service) => service.billing_item
+        ).length,
         total: end - start,
-        boq: boqEnd - boqStart,
-        billing: billingEnd - billingStart,
-        agreement: agreementEnd - agreementStart,
+        off: offEnd - offStart,
+        on: onEnd - onStart,
       });
     }
 

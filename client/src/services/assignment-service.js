@@ -39,6 +39,7 @@ class AssignmentService {
     const assignments = await this.agreementController.methods
       .getAgreementsByContractor(user_address)
       .call();
+    console.log('assignments', assignments);
     return this._buildContracts(projectId, assignments);
   }
 
@@ -46,6 +47,7 @@ class AssignmentService {
     const awards = await this.agreementController.methods
       .getAgreementsByClient(user_address)
       .call();
+    console.log('awards', awards);
     return this._buildContracts(projectId, awards);
   }
 
@@ -73,8 +75,7 @@ class AssignmentService {
                   .then((items) => items[0]);
                 service.client = data[0];
                 service.contractor = data[1];
-                service.billing = data[2];
-                service.stage = parseInt(data[3]);
+                service.stage = parseInt(data[2]);
                 return service;
               })
             );
@@ -97,8 +98,7 @@ class AssignmentService {
           .then((items) => items[0]);
         service.client = data[1][i];
         service.contractor = data[2][i];
-        service.billing = data[3][i];
-        service.stage = parseInt(data[4][i]);
+        service.stage = parseInt(data[3][i]);
         if (service.stage !== 1) console.log('service stage ', service);
         return service;
       })
@@ -162,7 +162,6 @@ class AssignmentService {
       services.filter((s) => !s.parent).map((s) => s.hash),
       services.map((s) => s.hash),
       services.map((s) => s.parent || n32),
-      services.map((s) => (s.billing_item ? s.billing_item.hash : n32)),
     ];
     await this.agreementController.methods
       .createInitialAgreement(...payload)

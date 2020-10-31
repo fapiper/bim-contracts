@@ -12,14 +12,14 @@
     "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceRoles.sol",
     "exportedSymbols": {
       "ServiceRoles": [
-        557
+        546
       ]
     },
-    "id": 558,
+    "id": 547,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 476,
+        "id": 465,
         "literals": [
           "solidity",
           ">=",
@@ -38,19 +38,19 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 557,
+        "id": 546,
         "linearizedBaseContracts": [
-          557
+          546
         ],
         "name": "ServiceRoles",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 480,
+            "id": 469,
             "name": "clientByService",
             "nodeType": "VariableDeclaration",
-            "scope": 557,
+            "scope": 546,
             "src": "94:43:3",
             "stateVariable": true,
             "storageLocation": "default",
@@ -59,9 +59,9 @@
               "typeString": "mapping(bytes32 => address)"
             },
             "typeName": {
-              "id": 479,
+              "id": 468,
               "keyType": {
-                "id": 477,
+                "id": 466,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "102:7:3",
@@ -77,7 +77,7 @@
                 "typeString": "mapping(bytes32 => address)"
               },
               "valueType": {
-                "id": 478,
+                "id": 467,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "113:7:3",
@@ -93,10 +93,10 @@
           },
           {
             "constant": false,
-            "id": 484,
+            "id": 473,
             "name": "contractorByService",
             "nodeType": "VariableDeclaration",
-            "scope": 557,
+            "scope": 546,
             "src": "143:47:3",
             "stateVariable": true,
             "storageLocation": "default",
@@ -105,9 +105,9 @@
               "typeString": "mapping(bytes32 => address)"
             },
             "typeName": {
-              "id": 483,
+              "id": 472,
               "keyType": {
-                "id": 481,
+                "id": 470,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "151:7:3",
@@ -123,7 +123,7 @@
                 "typeString": "mapping(bytes32 => address)"
               },
               "valueType": {
-                "id": 482,
+                "id": 471,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "162:7:3",
@@ -139,7 +139,7 @@
           },
           {
             "body": {
-              "id": 499,
+              "id": 488,
               "nodeType": "Block",
               "src": "235:151:3",
               "statements": [
@@ -153,7 +153,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 494,
+                        "id": 483,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -162,18 +162,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 489,
+                            "id": 478,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1052,
+                            "referencedDeclaration": 992,
                             "src": "266:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 490,
+                          "id": 479,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -193,25 +193,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 491,
+                            "id": 480,
                             "name": "clientByService",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 480,
+                            "referencedDeclaration": 469,
                             "src": "280:15:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                               "typeString": "mapping(bytes32 => address)"
                             }
                           },
-                          "id": 493,
+                          "id": 482,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 492,
+                            "id": 481,
                             "name": "_service",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 486,
+                            "referencedDeclaration": 475,
                             "src": "296:8:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -238,7 +238,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "4e6f7420616c6c6f7765642e204f6e6c7920726573706f6e7369626c6520636c69656e742e",
-                        "id": 495,
+                        "id": 484,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -265,21 +265,21 @@
                           "typeString": "literal_string \"Not allowed. Only responsible client.\""
                         }
                       ],
-                      "id": 488,
+                      "id": 477,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1055,
-                        1056
+                        995,
+                        996
                       ],
-                      "referencedDeclaration": 1056,
+                      "referencedDeclaration": 996,
                       "src": "245:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 496,
+                    "id": 485,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -293,31 +293,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 497,
+                  "id": 486,
                   "nodeType": "ExpressionStatement",
                   "src": "245:123:3"
                 },
                 {
-                  "id": 498,
+                  "id": 487,
                   "nodeType": "PlaceholderStatement",
                   "src": "378:1:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 500,
+            "id": 489,
             "name": "onlyClient",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 487,
+              "id": 476,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 486,
+                  "id": 475,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 500,
+                  "scope": 489,
                   "src": "217:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -326,7 +326,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 485,
+                    "id": 474,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "217:7:3",
@@ -346,7 +346,7 @@
           },
           {
             "body": {
-              "id": 515,
+              "id": 504,
               "nodeType": "Block",
               "src": "434:159:3",
               "statements": [
@@ -360,7 +360,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 510,
+                        "id": 499,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -369,18 +369,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 505,
+                            "id": 494,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1052,
+                            "referencedDeclaration": 992,
                             "src": "465:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 506,
+                          "id": 495,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -400,25 +400,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 507,
+                            "id": 496,
                             "name": "contractorByService",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 484,
+                            "referencedDeclaration": 473,
                             "src": "479:19:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                               "typeString": "mapping(bytes32 => address)"
                             }
                           },
-                          "id": 509,
+                          "id": 498,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 508,
+                            "id": 497,
                             "name": "_service",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 502,
+                            "referencedDeclaration": 491,
                             "src": "499:8:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -445,7 +445,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "4e6f7420616c6c6f7765642e204f6e6c7920726573706f6e7369626c6520636f6e74726163746f722e",
-                        "id": 511,
+                        "id": 500,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -472,21 +472,21 @@
                           "typeString": "literal_string \"Not allowed. Only responsible contractor.\""
                         }
                       ],
-                      "id": 504,
+                      "id": 493,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1055,
-                        1056
+                        995,
+                        996
                       ],
-                      "referencedDeclaration": 1056,
+                      "referencedDeclaration": 996,
                       "src": "444:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 512,
+                    "id": 501,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -500,31 +500,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 513,
+                  "id": 502,
                   "nodeType": "ExpressionStatement",
                   "src": "444:131:3"
                 },
                 {
-                  "id": 514,
+                  "id": 503,
                   "nodeType": "PlaceholderStatement",
                   "src": "585:1:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 516,
+            "id": 505,
             "name": "onlyContractor",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 503,
+              "id": 492,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 502,
+                  "id": 491,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 516,
+                  "scope": 505,
                   "src": "416:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -533,7 +533,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 501,
+                    "id": 490,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "416:7:3",
@@ -553,14 +553,14 @@
           },
           {
             "body": {
-              "id": 537,
+              "id": 526,
               "nodeType": "Block",
               "src": "723:105:3",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 529,
+                    "id": 518,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -569,25 +569,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 525,
+                        "id": 514,
                         "name": "clientByService",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 480,
+                        "referencedDeclaration": 469,
                         "src": "733:15:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                           "typeString": "mapping(bytes32 => address)"
                         }
                       },
-                      "id": 527,
+                      "id": 516,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 526,
+                        "id": 515,
                         "name": "_service",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 518,
+                        "referencedDeclaration": 507,
                         "src": "749:8:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -609,11 +609,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 528,
+                      "id": 517,
                       "name": "_client",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 520,
+                      "referencedDeclaration": 509,
                       "src": "761:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -626,14 +626,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 530,
+                  "id": 519,
                   "nodeType": "ExpressionStatement",
                   "src": "733:35:3"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 535,
+                    "id": 524,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -642,25 +642,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 531,
+                        "id": 520,
                         "name": "contractorByService",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 484,
+                        "referencedDeclaration": 473,
                         "src": "778:19:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                           "typeString": "mapping(bytes32 => address)"
                         }
                       },
-                      "id": 533,
+                      "id": 522,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 532,
+                        "id": 521,
                         "name": "_service",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 518,
+                        "referencedDeclaration": 507,
                         "src": "798:8:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -682,11 +682,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 534,
+                      "id": 523,
                       "name": "_contractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 522,
+                      "referencedDeclaration": 511,
                       "src": "810:11:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -699,29 +699,29 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 536,
+                  "id": 525,
                   "nodeType": "ExpressionStatement",
                   "src": "778:43:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 538,
+            "id": 527,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_updateServiceRoles",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 523,
+              "id": 512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 518,
+                  "id": 507,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 538,
+                  "scope": 527,
                   "src": "637:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -730,7 +730,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 517,
+                    "id": 506,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "637:7:3",
@@ -744,10 +744,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 520,
+                  "id": 509,
                   "name": "_client",
                   "nodeType": "VariableDeclaration",
-                  "scope": 538,
+                  "scope": 527,
                   "src": "663:15:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -756,7 +756,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 519,
+                    "id": 508,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "663:7:3",
@@ -771,10 +771,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 522,
+                  "id": 511,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 538,
+                  "scope": 527,
                   "src": "688:19:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -783,7 +783,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 521,
+                    "id": 510,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "688:7:3",
@@ -800,12 +800,12 @@
               "src": "627:86:3"
             },
             "returnParameters": {
-              "id": 524,
+              "id": 513,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "723:0:3"
             },
-            "scope": 557,
+            "scope": 546,
             "src": "599:229:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -813,7 +813,7 @@
           },
           {
             "body": {
-              "id": 555,
+              "id": 544,
               "nodeType": "Block",
               "src": "947:82:3",
               "statements": [
@@ -825,25 +825,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 547,
+                          "id": 536,
                           "name": "clientByService",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 480,
+                          "referencedDeclaration": 469,
                           "src": "965:15:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                             "typeString": "mapping(bytes32 => address)"
                           }
                         },
-                        "id": 549,
+                        "id": 538,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 548,
+                          "id": 537,
                           "name": "_service",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 540,
+                          "referencedDeclaration": 529,
                           "src": "981:8:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -865,25 +865,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 550,
+                          "id": 539,
                           "name": "contractorByService",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 484,
+                          "referencedDeclaration": 473,
                           "src": "992:19:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                             "typeString": "mapping(bytes32 => address)"
                           }
                         },
-                        "id": 552,
+                        "id": 541,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 551,
+                          "id": 540,
                           "name": "_service",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 540,
+                          "referencedDeclaration": 529,
                           "src": "1012:8:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -902,7 +902,7 @@
                         }
                       }
                     ],
-                    "id": 553,
+                    "id": 542,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -915,30 +915,30 @@
                       "typeString": "tuple(address,address)"
                     }
                   },
-                  "functionReturnParameters": 546,
-                  "id": 554,
+                  "functionReturnParameters": 535,
+                  "id": 543,
                   "nodeType": "Return",
                   "src": "957:65:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 556,
+            "id": 545,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getServiceRoles",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 541,
+              "id": 530,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 540,
+                  "id": 529,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 556,
+                  "scope": 545,
                   "src": "860:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -947,7 +947,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 539,
+                    "id": 528,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "860:7:3",
@@ -963,15 +963,15 @@
               "src": "859:18:3"
             },
             "returnParameters": {
-              "id": 546,
+              "id": 535,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 543,
+                  "id": 532,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 556,
+                  "scope": 545,
                   "src": "925:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -980,7 +980,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 542,
+                    "id": 531,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "925:7:3",
@@ -995,10 +995,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 545,
+                  "id": 534,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 556,
+                  "scope": 545,
                   "src": "934:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1007,7 +1007,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 544,
+                    "id": 533,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "934:7:3",
@@ -1023,14 +1023,14 @@
               ],
               "src": "924:18:3"
             },
-            "scope": 557,
+            "scope": 546,
             "src": "834:195:3",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 558,
+        "scope": 547,
         "src": "66:965:3"
       }
     ],
@@ -1040,14 +1040,14 @@
     "absolutePath": "/C/Users/fabia/WebstormProjects/bim-contracts/contracts/ServiceRoles.sol",
     "exportedSymbols": {
       "ServiceRoles": [
-        557
+        546
       ]
     },
-    "id": 558,
+    "id": 547,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 476,
+        "id": 465,
         "literals": [
           "solidity",
           ">=",
@@ -1066,19 +1066,19 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 557,
+        "id": 546,
         "linearizedBaseContracts": [
-          557
+          546
         ],
         "name": "ServiceRoles",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 480,
+            "id": 469,
             "name": "clientByService",
             "nodeType": "VariableDeclaration",
-            "scope": 557,
+            "scope": 546,
             "src": "94:43:3",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1087,9 +1087,9 @@
               "typeString": "mapping(bytes32 => address)"
             },
             "typeName": {
-              "id": 479,
+              "id": 468,
               "keyType": {
-                "id": 477,
+                "id": 466,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "102:7:3",
@@ -1105,7 +1105,7 @@
                 "typeString": "mapping(bytes32 => address)"
               },
               "valueType": {
-                "id": 478,
+                "id": 467,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "113:7:3",
@@ -1121,10 +1121,10 @@
           },
           {
             "constant": false,
-            "id": 484,
+            "id": 473,
             "name": "contractorByService",
             "nodeType": "VariableDeclaration",
-            "scope": 557,
+            "scope": 546,
             "src": "143:47:3",
             "stateVariable": true,
             "storageLocation": "default",
@@ -1133,9 +1133,9 @@
               "typeString": "mapping(bytes32 => address)"
             },
             "typeName": {
-              "id": 483,
+              "id": 472,
               "keyType": {
-                "id": 481,
+                "id": 470,
                 "name": "bytes32",
                 "nodeType": "ElementaryTypeName",
                 "src": "151:7:3",
@@ -1151,7 +1151,7 @@
                 "typeString": "mapping(bytes32 => address)"
               },
               "valueType": {
-                "id": 482,
+                "id": 471,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "162:7:3",
@@ -1167,7 +1167,7 @@
           },
           {
             "body": {
-              "id": 499,
+              "id": 488,
               "nodeType": "Block",
               "src": "235:151:3",
               "statements": [
@@ -1181,7 +1181,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 494,
+                        "id": 483,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1190,18 +1190,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 489,
+                            "id": 478,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1052,
+                            "referencedDeclaration": 992,
                             "src": "266:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 490,
+                          "id": 479,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1221,25 +1221,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 491,
+                            "id": 480,
                             "name": "clientByService",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 480,
+                            "referencedDeclaration": 469,
                             "src": "280:15:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                               "typeString": "mapping(bytes32 => address)"
                             }
                           },
-                          "id": 493,
+                          "id": 482,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 492,
+                            "id": 481,
                             "name": "_service",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 486,
+                            "referencedDeclaration": 475,
                             "src": "296:8:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -1266,7 +1266,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "4e6f7420616c6c6f7765642e204f6e6c7920726573706f6e7369626c6520636c69656e742e",
-                        "id": 495,
+                        "id": 484,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1293,21 +1293,21 @@
                           "typeString": "literal_string \"Not allowed. Only responsible client.\""
                         }
                       ],
-                      "id": 488,
+                      "id": 477,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1055,
-                        1056
+                        995,
+                        996
                       ],
-                      "referencedDeclaration": 1056,
+                      "referencedDeclaration": 996,
                       "src": "245:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 496,
+                    "id": 485,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1321,31 +1321,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 497,
+                  "id": 486,
                   "nodeType": "ExpressionStatement",
                   "src": "245:123:3"
                 },
                 {
-                  "id": 498,
+                  "id": 487,
                   "nodeType": "PlaceholderStatement",
                   "src": "378:1:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 500,
+            "id": 489,
             "name": "onlyClient",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 487,
+              "id": 476,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 486,
+                  "id": 475,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 500,
+                  "scope": 489,
                   "src": "217:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1354,7 +1354,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 485,
+                    "id": 474,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "217:7:3",
@@ -1374,7 +1374,7 @@
           },
           {
             "body": {
-              "id": 515,
+              "id": 504,
               "nodeType": "Block",
               "src": "434:159:3",
               "statements": [
@@ -1388,7 +1388,7 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 510,
+                        "id": 499,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1397,18 +1397,18 @@
                           "argumentTypes": null,
                           "expression": {
                             "argumentTypes": null,
-                            "id": 505,
+                            "id": 494,
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1052,
+                            "referencedDeclaration": 992,
                             "src": "465:3:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
                               "typeString": "msg"
                             }
                           },
-                          "id": 506,
+                          "id": 495,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
@@ -1428,25 +1428,25 @@
                           "argumentTypes": null,
                           "baseExpression": {
                             "argumentTypes": null,
-                            "id": 507,
+                            "id": 496,
                             "name": "contractorByService",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 484,
+                            "referencedDeclaration": 473,
                             "src": "479:19:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                               "typeString": "mapping(bytes32 => address)"
                             }
                           },
-                          "id": 509,
+                          "id": 498,
                           "indexExpression": {
                             "argumentTypes": null,
-                            "id": 508,
+                            "id": 497,
                             "name": "_service",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 502,
+                            "referencedDeclaration": 491,
                             "src": "499:8:3",
                             "typeDescriptions": {
                               "typeIdentifier": "t_bytes32",
@@ -1473,7 +1473,7 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "4e6f7420616c6c6f7765642e204f6e6c7920726573706f6e7369626c6520636f6e74726163746f722e",
-                        "id": 511,
+                        "id": 500,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -1500,21 +1500,21 @@
                           "typeString": "literal_string \"Not allowed. Only responsible contractor.\""
                         }
                       ],
-                      "id": 504,
+                      "id": 493,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1055,
-                        1056
+                        995,
+                        996
                       ],
-                      "referencedDeclaration": 1056,
+                      "referencedDeclaration": 996,
                       "src": "444:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 512,
+                    "id": 501,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1528,31 +1528,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 513,
+                  "id": 502,
                   "nodeType": "ExpressionStatement",
                   "src": "444:131:3"
                 },
                 {
-                  "id": 514,
+                  "id": 503,
                   "nodeType": "PlaceholderStatement",
                   "src": "585:1:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 516,
+            "id": 505,
             "name": "onlyContractor",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 503,
+              "id": 492,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 502,
+                  "id": 491,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 516,
+                  "scope": 505,
                   "src": "416:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1561,7 +1561,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 501,
+                    "id": 490,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "416:7:3",
@@ -1581,14 +1581,14 @@
           },
           {
             "body": {
-              "id": 537,
+              "id": 526,
               "nodeType": "Block",
               "src": "723:105:3",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 529,
+                    "id": 518,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1597,25 +1597,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 525,
+                        "id": 514,
                         "name": "clientByService",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 480,
+                        "referencedDeclaration": 469,
                         "src": "733:15:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                           "typeString": "mapping(bytes32 => address)"
                         }
                       },
-                      "id": 527,
+                      "id": 516,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 526,
+                        "id": 515,
                         "name": "_service",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 518,
+                        "referencedDeclaration": 507,
                         "src": "749:8:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -1637,11 +1637,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 528,
+                      "id": 517,
                       "name": "_client",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 520,
+                      "referencedDeclaration": 509,
                       "src": "761:7:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1654,14 +1654,14 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 530,
+                  "id": 519,
                   "nodeType": "ExpressionStatement",
                   "src": "733:35:3"
                 },
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 535,
+                    "id": 524,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1670,25 +1670,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 531,
+                        "id": 520,
                         "name": "contractorByService",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 484,
+                        "referencedDeclaration": 473,
                         "src": "778:19:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                           "typeString": "mapping(bytes32 => address)"
                         }
                       },
-                      "id": 533,
+                      "id": 522,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 532,
+                        "id": 521,
                         "name": "_service",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 518,
+                        "referencedDeclaration": 507,
                         "src": "798:8:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bytes32",
@@ -1710,11 +1710,11 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 534,
+                      "id": 523,
                       "name": "_contractor",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 522,
+                      "referencedDeclaration": 511,
                       "src": "810:11:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -1727,29 +1727,29 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 536,
+                  "id": 525,
                   "nodeType": "ExpressionStatement",
                   "src": "778:43:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 538,
+            "id": 527,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_updateServiceRoles",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 523,
+              "id": 512,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 518,
+                  "id": 507,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 538,
+                  "scope": 527,
                   "src": "637:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1758,7 +1758,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 517,
+                    "id": 506,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "637:7:3",
@@ -1772,10 +1772,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 520,
+                  "id": 509,
                   "name": "_client",
                   "nodeType": "VariableDeclaration",
-                  "scope": 538,
+                  "scope": 527,
                   "src": "663:15:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1784,7 +1784,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 519,
+                    "id": 508,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "663:7:3",
@@ -1799,10 +1799,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 522,
+                  "id": 511,
                   "name": "_contractor",
                   "nodeType": "VariableDeclaration",
-                  "scope": 538,
+                  "scope": 527,
                   "src": "688:19:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1811,7 +1811,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 521,
+                    "id": 510,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "688:7:3",
@@ -1828,12 +1828,12 @@
               "src": "627:86:3"
             },
             "returnParameters": {
-              "id": 524,
+              "id": 513,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "723:0:3"
             },
-            "scope": 557,
+            "scope": 546,
             "src": "599:229:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1841,7 +1841,7 @@
           },
           {
             "body": {
-              "id": 555,
+              "id": 544,
               "nodeType": "Block",
               "src": "947:82:3",
               "statements": [
@@ -1853,25 +1853,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 547,
+                          "id": 536,
                           "name": "clientByService",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 480,
+                          "referencedDeclaration": 469,
                           "src": "965:15:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                             "typeString": "mapping(bytes32 => address)"
                           }
                         },
-                        "id": 549,
+                        "id": 538,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 548,
+                          "id": 537,
                           "name": "_service",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 540,
+                          "referencedDeclaration": 529,
                           "src": "981:8:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -1893,25 +1893,25 @@
                         "argumentTypes": null,
                         "baseExpression": {
                           "argumentTypes": null,
-                          "id": 550,
+                          "id": 539,
                           "name": "contractorByService",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 484,
+                          "referencedDeclaration": 473,
                           "src": "992:19:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
                             "typeString": "mapping(bytes32 => address)"
                           }
                         },
-                        "id": 552,
+                        "id": 541,
                         "indexExpression": {
                           "argumentTypes": null,
-                          "id": 551,
+                          "id": 540,
                           "name": "_service",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 540,
+                          "referencedDeclaration": 529,
                           "src": "1012:8:3",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bytes32",
@@ -1930,7 +1930,7 @@
                         }
                       }
                     ],
-                    "id": 553,
+                    "id": 542,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -1943,30 +1943,30 @@
                       "typeString": "tuple(address,address)"
                     }
                   },
-                  "functionReturnParameters": 546,
-                  "id": 554,
+                  "functionReturnParameters": 535,
+                  "id": 543,
                   "nodeType": "Return",
                   "src": "957:65:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 556,
+            "id": 545,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "_getServiceRoles",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 541,
+              "id": 530,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 540,
+                  "id": 529,
                   "name": "_service",
                   "nodeType": "VariableDeclaration",
-                  "scope": 556,
+                  "scope": 545,
                   "src": "860:16:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1975,7 +1975,7 @@
                     "typeString": "bytes32"
                   },
                   "typeName": {
-                    "id": 539,
+                    "id": 528,
                     "name": "bytes32",
                     "nodeType": "ElementaryTypeName",
                     "src": "860:7:3",
@@ -1991,15 +1991,15 @@
               "src": "859:18:3"
             },
             "returnParameters": {
-              "id": 546,
+              "id": 535,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 543,
+                  "id": 532,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 556,
+                  "scope": 545,
                   "src": "925:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2008,7 +2008,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 542,
+                    "id": 531,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "925:7:3",
@@ -2023,10 +2023,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 545,
+                  "id": 534,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 556,
+                  "scope": 545,
                   "src": "934:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2035,7 +2035,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 544,
+                    "id": 533,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "934:7:3",
@@ -2051,14 +2051,14 @@
               ],
               "src": "924:18:3"
             },
-            "scope": 557,
+            "scope": 546,
             "src": "834:195:3",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 558,
+        "scope": 547,
         "src": "66:965:3"
       }
     ],
@@ -2070,7 +2070,7 @@
   },
   "networks": {},
   "schemaVersion": "3.2.4",
-  "updatedAt": "2020-10-28T13:17:31.247Z",
+  "updatedAt": "2020-10-31T15:12:11.318Z",
   "devdoc": {
     "methods": {}
   },

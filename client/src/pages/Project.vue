@@ -128,7 +128,7 @@
 <script>
 import { date } from 'quasar';
 
-import IcddParser from 'src/utils/icdd-parser.js';
+import IcddParser from 'app/../utils/icdd.parser.js';
 import Assignment from 'src/models/assignment-model.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';

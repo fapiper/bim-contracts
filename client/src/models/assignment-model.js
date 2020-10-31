@@ -69,7 +69,7 @@ class Assignment {
         {
           text: 'Auftrag ablehnen',
           method: 'reject',
-          next: 5,
+          next: 2,
           type: 'award',
           checkForUpdate: (service, parent, siblings) => false,
         },

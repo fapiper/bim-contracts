@@ -1,5 +1,5 @@
-import { FlatTree, FlatNode } from 'src/utils/flat-tree.js';
-import Web3 from 'web3';
+const { FlatTree, FlatNode } = require('../tree.utils.js');
+const Web3 = require('web3');
 
 class BoQ extends FlatTree {
   constructor(id, name, label, date, roots, nodes) {
@@ -82,15 +82,30 @@ class BoQItem extends FlatNode {
   }
 
   static fromGAEB(item) {
+    const short_desc = (
+      (
+        ((((item || {}).description || {}).outline_text || {}).outl_txt || {})
+          .text_outl_txt || {}
+      ).p || {}
+    ).span;
+    const long_desc = (
+      (
+        (
+          (((item || {}).description || {}).complete_text || {}).detail_text ||
+          {}
+        ).text || {}
+      ).p || {}
+    ).span;
+
     return new BoQItem(
       item.$.id,
       item.$.r_no_part,
-      item.description?.outline_text?.outl_txt?.text_outl_txt?.p?.span || '',
-      item.description?.complete_text?.detail_text?.text?.p?.span || '',
+      short_desc,
+      long_desc,
       item.qty,
       item.qu
     );
   }
 }
 
-export default BoQ;
+module.exports = BoQ;

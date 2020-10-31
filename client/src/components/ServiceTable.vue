@@ -53,11 +53,19 @@
                 v-if="action.type === type"
                 :key="index"
                 round
-                :color="status[action.next].color"
+                :color="
+                  isReject(props.row.stage, action)
+                    ? status[5].color
+                    : status[action.next].color
+                "
                 dense
                 outline
                 class="q-mr-xs"
-                :icon="status[action.next].icon"
+                :icon="
+                  isReject(props.row.stage, action)
+                    ? status[5].icon
+                    : status[action.next].icon
+                "
                 @click="transition({ services: [props.row], action })"
               >
                 <q-tooltip>
@@ -151,6 +159,9 @@ export default {
     },
     childrenLoaded(children) {
       return children.some((child) => typeof child !== 'string');
+    },
+    isReject(stage, action) {
+      return stage === 3 && action.next === 2;
     },
     async loadChildren(props) {
       props.expand = !props.expand;

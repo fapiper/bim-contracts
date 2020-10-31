@@ -48,4 +48,4 @@ class FlatNode {
   }
 }
 
-export { FlatTree, FlatNode };
+module.exports = { FlatTree, FlatNode };

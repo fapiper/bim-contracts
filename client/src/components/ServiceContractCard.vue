@@ -89,7 +89,16 @@ export default {
             action.method
           );
         }
-        services.forEach((s) => (s.stage = action.next));
+        services.forEach((s) => {
+          if (
+            !s.parent ||
+            (s.parent.services && s.parent.services.every((n) => n.stage === 4))
+          ) {
+            console.log('pay from card', s.parent, s);
+            this.$emit('payAgreement', s.parent);
+          }
+          s.stage = action.next;
+        });
         this.$q.notify({
           textColor: next.textColor,
           color: next.color,

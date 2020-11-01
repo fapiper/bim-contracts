@@ -14,8 +14,8 @@ contract ServiceAgreement {
     mapping(address => bytes32[]) agreementsByContractor;
     mapping(address => bytes32[]) agreementsByClient;
 
-    modifier exists(bytes32 _agreement) {
-        require(agreements[_agreement].exists, 'Agreement not existing.');
+    modifier onlyAgreementContractor(bytes32 _agreement) {
+        require(msg.sender == agreements[_agreement].client, 'Unauthorized');
         _;
     }
 
@@ -65,5 +65,12 @@ contract ServiceAgreement {
             agreements[_agreement].contractor,
             agreements[_agreement].services
         );
+    }
+
+    function _payAgreement(bytes32 _agreement)
+        internal
+        onlyAgreementContractor(_agreement)
+    {
+        agreements[_agreement].payed = true;
     }
 }

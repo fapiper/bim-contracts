@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const config = require('../bim-contracts.config');
 const { abi } = require('../client/src/contracts/AgreementController.json');
@@ -10,20 +12,23 @@ const {
 const Web3 = require('web3');
 
 const n = 60;
-const file = 2;
+const file = 1;
 
 let start = 0;
 let end = 0;
+let endTx = 0;
 let offStart = 0;
 let offEnd = 0;
 let onStart = 0;
 let onEnd = 0;
+let onEndTx = 0;
 
 const csvWriter = createCsvWriter({
   path: `./benchmark/LV-${file}_latency.csv`,
   header: [
     { id: 'index', title: 'INDEX' },
     { id: 'gasUsed', title: 'GAS_USED' },
+    { id: 'gasUsedTx', title: 'GAS_USED_TX' },
     { id: 'servicesCount', title: 'COUNT_SERVICES' },
     { id: 'serviceSectionCount', title: 'COUNT_SERVICE_SECTION' },
     { id: 'serviceItemCount', title: 'COUNT_SERVICE_ITEM' },
@@ -31,6 +36,8 @@ const csvWriter = createCsvWriter({
     { id: 'total', title: 'TOTAL' },
     { id: 'off', title: 'OFF_CHAIN' },
     { id: 'on', title: 'ON_CHAIN' },
+    { id: 'totalTx', title: 'TOTAL_TX' },
+    { id: 'onTx', title: 'ON_CHAIN_TX' },
   ],
 });
 
@@ -43,12 +50,18 @@ const persistServices = async (orbitdb, projectId, boqs) => {
 };
 
 const createInitialAgreement = async (web3, icdd) => {
-  const accounts = await web3.eth.getAccounts();
+  const account = await web3.eth.accounts.privateKeyToAccount(
+    process.env.PRIVATE_KEY
+  );
+  console.log('account', account);
+
+  web3.eth.accounts.wallet.add(account);
+
   return {
     name: 'Test Agreement',
     services: icdd.boqs.flatMap((boq) => Object.values(boq.nodes)), // ATTENTION: This agreement takes ALL services and NOT only roots (as in default interface)
-    client: { address: accounts[0] },
-    contractor: { address: accounts[1] },
+    client: { address: account.address },
+    contractor: { address: account.address },
     hash: Web3.utils.sha3(new Date().toJSON()),
   };
 };
@@ -66,7 +79,7 @@ const sendInitialAgreement = (agreement, agreementController) => {
   ];
 
   return agreementController.methods
-    .createInitialAgreement(...payload)
+    .createProject(...payload)
     .send({ from: agreement.client.address, gas: 90000000 });
 };
 
@@ -74,8 +87,9 @@ const sendInitialAgreement = (agreement, agreementController) => {
   const metrics = [];
   try {
     const web3 = new Web3(
-      Web3.givenProvider ||
-        `http://${config.network.host}:${config.network.port}`
+      new Web3.providers.HttpProvider(
+        `https://ropsten.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
+      )
     );
     const agreementController = new web3.eth.Contract(
       abi,
@@ -99,11 +113,18 @@ const sendInitialAgreement = (agreement, agreementController) => {
       const res = await sendInitialAgreement(agreement, agreementController);
       console.log('success sent transaction', res);
       onEnd = Date.now();
-      await getTransactionReceiptMined(web3, res.transactionHash, 500);
       end = Date.now();
+      const resTx = await getTransactionReceiptMined(
+        web3,
+        res.transactionHash,
+        500
+      );
+      onEndTx = Date.now();
+      endTx = Date.now();
       metrics.push({
         index: i,
         gasUsed: res.gasUsed,
+        gasUsedTx: resTx.gasUsed,
         servicesCount: agreement.services.length,
         serviceSectionCount: agreement.services.filter(
           (service) => !service.qty
@@ -114,8 +135,10 @@ const sendInitialAgreement = (agreement, agreementController) => {
           (service) => service.billing_item
         ).length,
         total: end - start,
+        totalTx: endTx - start,
         off: offEnd - offStart,
         on: onEnd - onStart,
+        onTx: onEndTx - onStart,
       });
     }
 

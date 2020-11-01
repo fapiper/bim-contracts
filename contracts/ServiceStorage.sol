@@ -24,14 +24,6 @@ contract ServiceStorage is ServiceRoles, StateMachine {
     function _getServicesOf(bytes32 _section)
         internal
         view
-        returns (bytes32[] memory _services)
-    {
-        return services[_section];
-    }
-
-    function _getServices(bytes32 _section)
-        internal
-        view
         returns (
             bytes32[] memory _services,
             address[] memory _clients,
@@ -51,10 +43,6 @@ contract ServiceStorage is ServiceRoles, StateMachine {
             );
         }
         return (_services, _clients, _contractors, _stages);
-    }
-
-    function _isServiceItem(bytes32 _section) internal view returns (bool) {
-        return services[_section].length > 0;
     }
 
     function _addService(bytes32 _section, bytes32 _service) internal {

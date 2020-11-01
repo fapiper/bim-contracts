@@ -57,6 +57,10 @@ contract StateMachine {
         return true;
     }
 
+    function _isStarted(bytes32 _item) internal view returns (bool) {
+        return uint256(stages[_item]) > uint256(Stages.INITIALIZED);
+    }
+
     function _setStage(bytes32 _item, Stages _stage) internal {
         stages[_item] = _stage;
     }

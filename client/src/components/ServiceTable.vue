@@ -145,10 +145,13 @@ export default {
       this.$emit('showDetails', service);
     },
     transition({ services, action }) {
-      const node = services[0];
+      const node = services[services.length - 1];
+      console.log('node', node, 'services', services);
+
       const parent = this.data.find((s) => {
         return s.children.some((child) => child.hash === node.hash);
       });
+
       if (parent && action.checkForUpdate(node, parent, parent.children)) {
         services.push(parent);
       }

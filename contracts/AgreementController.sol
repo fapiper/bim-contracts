@@ -5,7 +5,7 @@ import './ServiceAgreement.sol';
 import './ServiceStorage.sol';
 
 contract AgreementController is ServiceAgreement, ServiceStorage {
-    function createInitialAgreement(
+    function createProject(
         bytes32 _agreement,
         address _contractor,
         bytes32[] calldata _roots,
@@ -24,18 +24,39 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         address _contractor,
         bytes32[] memory _services
     ) public returns (bool success) {
+        require(
+            _onlyAgreementContractor(_services),
+            'Not allowed. Only contractor can create agreement.'
+        );
         _createAgreement(_agreement, _contractor, _services);
         _deepUpdateRoles(_services, _contractor);
         return true;
     }
 
-    function _deepUpdateRoles(bytes32[] memory _services, address _contractor)
+    function _deepUpdateRoles(bytes32[] memory _sections, address _contractor)
         internal
     {
-        for (uint256 i = 0; i < _services.length; i++) {
-            _updateServiceRoles(_services[i], msg.sender, _contractor);
-            _deepUpdateRoles(_getServicesOf(_services[i]), _contractor);
+        bytes32[] memory _services;
+        for (uint256 i = 0; i < _sections.length; i++) {
+            (_services, , , ) = _getServicesOf(_sections[i]);
+            _updateServiceRoles(_sections[i], msg.sender, _contractor);
+            _deepUpdateRoles(_services, _contractor);
         }
+    }
+
+    function _onlyAgreementContractor(bytes32[] memory _services)
+        internal
+        view
+        returns (bool)
+    {
+        address _contractor;
+        for (uint256 i = 0; i < _services.length; i++) {
+            (, _contractor) = _getServiceRoles(_services[i]);
+            if (_isStarted(_services[i]) && msg.sender != _contractor) {
+                return false;
+            }
+        }
+        return true;
     }
 
     function getAgreementsByClient(address _client)
@@ -67,6 +88,11 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         return _getAgreement(_agreement);
     }
 
+    function payAgreement(bytes32 _agreement) external returns (bool success) {
+        _payAgreement(_agreement);
+        return true;
+    }
+
     function getService(bytes32 _service)
         external
         view
@@ -79,7 +105,7 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         return _getService(_service);
     }
 
-    function getServices(bytes32 _section)
+    function getServicesOf(bytes32 _section)
         external
         view
         returns (
@@ -89,7 +115,7 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
             Stages[] memory _stages
         )
     {
-        return _getServices(_section);
+        return _getServicesOf(_section);
     }
 
     function start(bytes32 _service) external returns (bool success) {

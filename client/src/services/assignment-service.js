@@ -88,7 +88,7 @@ class AssignmentService {
 
   async getChildren(projectId, agreement_hash, serviceHash) {
     const data = await this.agreementController.methods
-      .getServices(serviceHash)
+      .getServicesOf(serviceHash)
       .call();
 
     const services = await Promise.all(
@@ -99,7 +99,6 @@ class AssignmentService {
         service.client = data[1][i];
         service.contractor = data[2][i];
         service.stage = parseInt(data[3][i]);
-        if (service.stage !== 1) console.log('service stage ', service);
         return service;
       })
     );
@@ -164,7 +163,7 @@ class AssignmentService {
       services.map((s) => s.parent || n32),
     ];
     await this.agreementController.methods
-      .createInitialAgreement(...payload)
+      .createProject(...payload)
       .send({ from: contract.client.address, gas: 90000000 });
 
     return contract;

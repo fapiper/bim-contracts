@@ -15,7 +15,7 @@
     "dev": "truffle migrate && npm-run-all -l -p dev:server dev:client",
     "dev:client": "cd client && quasar dev",
     "dev:server": "cd server && yarn start",
-    "benchmark": "truffle migrate && node benchmark/run.spec.js"
+    "benchmark": "node benchmark/run.spec.js"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^3.2.0",

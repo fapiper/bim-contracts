@@ -7,6 +7,7 @@
         :key="award.hash"
         :contract="award"
         type="award"
+        @payAgreement="payAgreement"
       />
     </div>
   </q-page>
@@ -25,6 +26,9 @@ export default {
     this.loadAwards();
   },
   methods: {
+    payAgreement(agreement) {
+      console.log('pay', agreement);
+    },
     async loadAwards() {
       this.loading = true;
       this.awards = await this.$services.assignment.getAwardsByProject(

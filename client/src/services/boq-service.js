@@ -7,18 +7,13 @@ class BoQService {
 
   async loadDb(projectId) {
     if (this._assigned !== projectId) {
-      console.log('load boqdb', `projects.boqs`);
-      const boqdb = await this.orbitdb.docs(`projects.boqs`, {
+      const boqdb = await this.orbitdb.docs(`projects.${projectId}.boqs`, {
         indexBy: 'hash',
         create: true,
         accessController: {
           write: ['*'],
         },
       });
-      boqdb.events.on('replicated', (args) => {
-        console.log('replicated services', ...args);
-      });
-
       await boqdb.load();
       this._assigned = projectId;
       this.boqdb = boqdb;

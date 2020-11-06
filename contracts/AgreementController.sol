@@ -29,18 +29,18 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
             'Not allowed. Only contractor can create agreement.'
         );
         _createAgreement(_agreement, _contractor, _services);
-        _deepUpdateRoles(_services, _contractor);
+        _updateRoles(_services, _contractor);
         return true;
     }
 
-    function _deepUpdateRoles(bytes32[] memory _sections, address _contractor)
+    function _updateRoles(bytes32[] memory _sections, address _contractor)
         internal
     {
         bytes32[] memory _services;
         for (uint256 i = 0; i < _sections.length; i++) {
             (_services, , , ) = _getServicesOf(_sections[i]);
             _updateServiceRoles(_sections[i], msg.sender, _contractor);
-            _deepUpdateRoles(_services, _contractor);
+            _updateRoles(_services, _contractor);
         }
     }
 

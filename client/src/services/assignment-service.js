@@ -73,10 +73,12 @@ class AssignmentService {
                 const service = await this.boqService
                   .get(projectId, serviceHash)
                   .then((items) => items[0]);
-                service.client = data[0];
-                service.contractor = data[1];
-                service.stage = parseInt(data[2]);
-                return service;
+                if (service) {
+                  service.client = data[0];
+                  service.contractor = data[1];
+                  service.stage = parseInt(data[2]);
+                  return service;
+                }
               })
             );
             console.log('agreement', agreement);

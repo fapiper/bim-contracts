@@ -59,7 +59,7 @@ class BoQCtgy extends FlatNode {
     this.id = id;
     this.r_no_part = r_no_part;
     this.name = name;
-    this.hash = Web3.utils.sha3(id);
+    this.hash = Web3.utils.sha3(id + new Date().toJSON());
     this.billing_item = null;
   }
 
@@ -77,7 +77,7 @@ class BoQItem extends FlatNode {
     this.long_desc = long_desc;
     this.qty = qty;
     this.qty_unit = qty_unit;
-    this.hash = Web3.utils.sha3(id);
+    this.hash = Web3.utils.sha3(id + new Date().toJSON());
     this.billing_item = null;
   }
 

@@ -4,12 +4,12 @@
       <div class="text-overline">
         {{ contract.payed ? 'Bezahlt' : 'Bezahlung ausstehend' }}
       </div>
-      <div class="text-h5 q-mt-sm q-mb-xs">
-        Auftraggeber: {{ contract.client }}
-      </div>
-      <div class="text-h5 q-mt-sm q-mb-xs">
+      <div class="text-h6 q-mt-sm q-mb-xs">Leistungsvertrag</div>
+
+      <!-- <div class="q-mt-sm q-mb-xs">Auftraggeber: {{ contract.client }}</div>
+      <div class="q-mt-sm q-mb-xs">
         Auftragnehmer: {{ contract.contractor }}
-      </div>
+      </div> -->
       <div>
         <q-chip
           dense

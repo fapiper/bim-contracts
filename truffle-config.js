@@ -11,6 +11,7 @@ module.exports = {
       host: network.host,
       port: network.port,
       network_id: network.id || '*',
+      gas: 60000000,
     },
     ropsten: {
       provider: () =>
@@ -30,7 +31,7 @@ module.exports = {
           `https://kovan.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
         ),
       network_id: 42,
-      gas: 4500000,
+      gas: 60000000,
       gasPrice: 10000000000,
     },
   },

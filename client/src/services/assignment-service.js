@@ -166,7 +166,7 @@ class AssignmentService {
     ];
     await this.agreementController.methods
       .createProject(...payload)
-      .send({ from: contract.client.address, gas: 90000000 });
+      .send({ from: contract.client.address, gas: 60000000 });
 
     return contract;
   }

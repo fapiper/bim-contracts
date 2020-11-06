@@ -90,15 +90,15 @@ export default {
           );
         }
         services.forEach((s) => {
-          if (
-            !s.parent ||
-            (s.parent.services && s.parent.services.every((n) => n.stage === 4))
-          ) {
-            console.log('pay from card', s.parent, s);
-            this.$emit('payAgreement', s.parent);
-          }
           s.stage = action.next;
         });
+        console.log('this.contract pay?', this.contract);
+        const pay =
+          !this.contract.payed &&
+          this.contract.services.every((s) => s.stage === 4);
+        if (pay) {
+          this.$emit('payAgreement', this.contract);
+        }
         this.$q.notify({
           textColor: next.textColor,
           color: next.color,

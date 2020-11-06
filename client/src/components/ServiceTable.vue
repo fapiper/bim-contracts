@@ -81,7 +81,7 @@
                   clickable
                   v-close-popup
                   @click="assign(props.row)"
-                  v-if="isAssignment && isCtgy"
+                  v-if="isAssignment && isCtgy && props.row.billing_item"
                 >
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
@@ -146,8 +146,6 @@ export default {
     },
     transition({ services, action }) {
       const node = services[services.length - 1];
-      console.log('node', node, 'services', services);
-
       const parent = this.data.find((s) => {
         return s.children.some((child) => child.hash === node.hash);
       });
@@ -175,6 +173,7 @@ export default {
             this.assignment.hash,
             props.row.hash
           );
+          console.log('children', props.row.children);
         } catch (error) {}
       }
     },
@@ -213,6 +212,16 @@ export default {
           align: 'left',
           field: (row) => row.qty,
           format: (val, row) => (val ? `${val} ${row.qty_unit}` : ''),
+          style: 'width:200px',
+        },
+        {
+          name: 'price',
+          required: true,
+          label: 'Preis',
+          align: 'left',
+          field: (row) => row.billing_item,
+          format: (val, row) =>
+            val ? `${val.price === '' ? 0 : val.price} €` : '',
           style: 'width:200px',
         },
         {

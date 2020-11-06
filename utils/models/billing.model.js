@@ -29,7 +29,7 @@ class BillingModel extends FlatTree {
     const { roots, nodes } = super.build(
       billing.billing_model,
       {},
-      { builders }
+      { builders, selector: 'id' }
     );
     return new BillingModel(
       billing.billing_model.bm_info.currency,
@@ -55,7 +55,7 @@ class BillingUnit extends FlatNode {
     this.long_description = long_description;
     this.total_quantities = total_quantities;
     this.unit = unit;
-    this.total_price = total_price;
+    this.total_price = parseFloat(total_price);
     this.completion_date = completion_date;
     this.hash = Web3.utils.sha3(id);
   }
@@ -79,7 +79,7 @@ class BillingItem extends FlatNode {
     this.id = id;
     this.qty = qty;
     this.qty_unit = qty_unit;
-    this.price = price;
+    this.price = parseFloat(price);
     this.r_no_part_qty_split = r_no_part_qty_split;
     this.short_desc = short_desc;
     this.hash = Web3.utils.sha3(id);

@@ -10,6 +10,21 @@
         @payAgreement="payAgreement"
       />
     </div>
+    <q-dialog v-model="payAlert">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Leistungsvertrag abgeschlossen</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Eine Zahlung in Höhe von {{ price }} € wurde initiiert.
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Okay" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -20,14 +35,20 @@ export default {
   name: 'PageProjectAwards',
   components: { ServiceContractCard },
   data() {
-    return { awards: [] };
+    return { awards: [], payAlert: false, price: 0 };
   },
   mounted() {
     this.loadAwards();
   },
   methods: {
     payAgreement(agreement) {
-      console.log('pay', agreement);
+      let totalPrice = 0;
+      agreement.services.forEach((service) => {
+        totalPrice += service.billing_item ? service.billing_item.price : 0;
+      });
+      console.log('pay', agreement, totalPrice);
+      this.price = totalPrice;
+      this.payAlert = true;
     },
     async loadAwards() {
       this.loading = true;

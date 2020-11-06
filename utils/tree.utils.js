@@ -2,7 +2,11 @@ const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
 class FlatTree {
-  static build(tree, collection, { builders, parent, billing }) {
+  static build(
+    tree,
+    collection,
+    { builders, parent, billing, selector = 'hash' }
+  ) {
     const roots = [];
     for (const key in builders) {
       const _desc = reduce(key, tree);
@@ -10,21 +14,26 @@ class FlatTree {
         const desc = Array.isArray(_desc) ? _desc : Array.of(_desc); // Fix: xml2js parser transforms arrays with one entry to object
         for (let i = 0; i < desc.length; i++) {
           const node = builders[key](desc[i]);
-          collection[node.hash] = node;
+          collection[node[selector]] = node;
           if (parent) {
             node.addParent(parent);
-            collection[parent].children.push(node.hash);
+            collection[parent].children.push(node[selector]);
           } else {
-            roots.push(node.hash); // No parent exists. Node is root.
+            roots.push(node[selector]); // No parent exists. Node is root.
           }
           if (billing) {
-            const item = billing.nodes[node.hash];
+            console.log('node', node);
+            console.log('billing', billing);
+            const item = billing.nodes[node.id];
+            console.log('item', item);
+
             item && (node.billing_item = item);
           }
           this.build(desc[i], collection, {
             builders,
-            parent: node.hash,
+            parent: node[selector],
             billing,
+            selector,
           });
         }
       }

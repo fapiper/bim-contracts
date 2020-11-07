@@ -128,7 +128,6 @@
 
 <script>
 import { date } from 'quasar';
-
 import IcddParser from 'app/../utils/icdd.parser.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
@@ -180,23 +179,23 @@ export default {
     },
     async loadProjects() {
       this.loading = true;
-      this.$store.dispatch('project/loadProjects', this.$auth.user());
+      this.$store.dispatch(
+        'project/loadProjectsByUserAddress',
+        this.$auth.user().address
+      );
       this.loading = false;
     },
     async addProject() {
       this.$q.loading.show();
-      const client = this.$auth.user().address;
-      const contractor = this.project.contractor;
-
+      const project = {
+        name: this.project.name,
+        actors: [this.$auth.user().address, this.project.contractor],
+      };
+      const container = await IcddParser.parseFromFiles(
+        this.container.billingModel,
+        this.container.boqs
+      );
       try {
-        const project = {
-          name: this.project.name,
-          actors: [client, contractor],
-        };
-        const container = await IcddParser.parseFromFiles(
-          this.container.billingModel,
-          this.container.boqs
-        );
         await this.$store.dispatch('project/addProject', {
           project,
           container,

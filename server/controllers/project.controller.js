@@ -45,8 +45,8 @@ function update(req, res, next, isNew = true) {
  * Get project list
  */
 function list(req, res, next) {
-  const { limit = '0', skip = '0' } = req.query;
-  Project.list({ limit, skip })
+  const { limit = '0', skip = '0', userAddress } = req.query;
+  Project.list({ limit, skip, userAddress })
     .then((projects) => res.json(projects))
     .catch((err) => handleErr(next, err, 'getAll()'));
 }

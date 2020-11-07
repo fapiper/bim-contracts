@@ -27,8 +27,8 @@ ProjectSchema.statics = {
   /**
    * List projects in ascending order of 'dueDate' timestamp (oldest ones first)
    */
-  list({ skip = '0', limit = '0' } = {}) {
-    return this.find()
+  list({ skip = '0', limit = '0', userAddress } = {}) {
+    return this.find(userAddress ? { actors: userAddress } : {})
       .sort({ name: 1 })
       .skip(parseInt(skip))
       .limit(parseInt(limit))

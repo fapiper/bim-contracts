@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import auth from './auth';
 import project from './project';
+import agreement from './agreement';
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export default function (/* { ssrContext } */) {
     modules: {
       auth,
       project,
+      agreement,
     },
 
     // enable strict mode (adds overhead!)

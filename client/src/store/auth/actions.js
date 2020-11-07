@@ -13,9 +13,8 @@ async function fetchUser(privateKey) {
   );
   this._vm.$web3.eth.accounts.wallet.add(account);
   this._vm.$web3.eth.defaultAccount = account.address;
-  const db = await this._vm.$orbitdb.docs('users');
-  await db.load();
-  const users = db.query((u) => u.address === account.address);
+  await this._vm.$db.user.load();
+  const users = this._vm.$db.user.query((u) => u.address === account.address);
   if (users.length > 0) {
     return users[0];
   } else {
@@ -28,8 +27,6 @@ async function fetchUser(privateKey) {
 }
 
 export async function register(state, data) {
-  const db = await this._vm.$orbitdb.docs('users');
-
   const account = await this._vm.$web3.eth.accounts.create();
   await this._vm.$web3.eth.accounts.wallet.add(account);
   const accounts = await this._vm.$web3.eth.getAccounts();
@@ -47,7 +44,7 @@ export async function register(state, data) {
     iban: data.iban,
     createdAt: new Date().toJSON(),
   };
-  await db.put(user);
+  await this._vm.$db.user.put(user);
   state.commit('setUser', { privateKey, user });
   state.dispatch('setKey', {
     privateKey,

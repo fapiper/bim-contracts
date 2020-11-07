@@ -130,7 +130,6 @@
 import { date } from 'quasar';
 
 import IcddParser from 'app/../utils/icdd.parser.js';
-import Assignment from 'src/models/assignment-model.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -186,38 +185,22 @@ export default {
     },
     async addProject() {
       this.$q.loading.show();
+      const client = this.$auth.user().address;
+      const contractor = this.project.contractor;
+
       try {
+        const project = {
+          name: this.project.name,
+          actors: [client, contractor],
+        };
         const container = await IcddParser.parseFromFiles(
           this.container.billingModel,
           this.container.boqs
         );
-        const project = {
-          name: this.project.name,
-          actors: [this.$auth.user().address, this.project.contractor],
-        };
-        const agreement = {
-          services: container.boqs[0].roots,
-          client: project.actors[0],
-          contractor: project.actors[1],
-        };
-        this.$store.dispatch('project/addProject', project);
-        this.$store.dispatch('container/addContainer', container);
-        this.$store.dispatch('agreement/createAgreement', agreement);
-
-        const res = await this.$axios.post(`projects`, project);
-        await this.$services.project.put(res.data, container);
-        console.log('project', res.data);
-        const assignment = new Assignment(
-          this.project.name,
-          container.boqs.flatMap((boq) =>
-            boq.roots.map((hash) => boq.nodes[hash])
-          ),
-          project.actors[0],
-          project.actors[1]
-        );
-        await this.$services.assignment.assignInitial(project._id, assignment);
-
-        this.projects.push(res.data);
+        await this.$store.dispatch('project/addProject', {
+          project,
+          container,
+        });
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

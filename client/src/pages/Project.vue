@@ -68,6 +68,7 @@
                 filled
                 v-model="project.contractor"
                 label="Auftragnehmer"
+                hint="Account Adresse"
               />
               <q-file
                 ref="boqs"
@@ -139,11 +140,15 @@ export default {
   async mounted() {
     this.loadProjects();
   },
+  computed: {
+    projects() {
+      return this.$store.getters['project/projects'];
+    },
+  },
   data() {
     return {
       loading: true,
       dialog: false,
-      projects: [],
       project: {
         name: '',
         contractor: '',
@@ -176,36 +181,43 @@ export default {
     },
     async loadProjects() {
       this.loading = true;
-      const res = await this.$axios.get(
-        `users/${this.$auth.user()._id}/projects`
-      );
-      this.projects = res.data;
+      this.$store.dispatch('project/loadProjects', this.$auth.user());
       this.loading = false;
     },
     async addProject() {
       this.$q.loading.show();
       try {
-        const { billing, boqs } = await IcddParser.parseFromFiles(
+        const container = await IcddParser.parseFromFiles(
           this.container.billingModel,
           this.container.boqs
         );
-        const res = await this.$axios.post(`projects`, {
+        const project = {
           name: this.project.name,
-          owner: this.$auth.user()._id,
-          actors: [this.$auth.user()._id, this.project.contractor],
-        });
-        const project = res.data;
-        await this.$services.project.put(project, { billing, boqs });
-        console.log('project', project);
+          actors: [this.$auth.user().address, this.project.contractor],
+        };
+        const agreement = {
+          services: container.boqs[0].roots,
+          client: project.actors[0],
+          contractor: project.actors[1],
+        };
+        this.$store.dispatch('project/addProject', project);
+        this.$store.dispatch('container/addContainer', container);
+        this.$store.dispatch('agreement/createAgreement', agreement);
+
+        const res = await this.$axios.post(`projects`, project);
+        await this.$services.project.put(res.data, container);
+        console.log('project', res.data);
         const assignment = new Assignment(
           this.project.name,
-          boqs.flatMap((boq) => boq.roots.map((hash) => boq.nodes[hash])),
+          container.boqs.flatMap((boq) =>
+            boq.roots.map((hash) => boq.nodes[hash])
+          ),
           project.actors[0],
           project.actors[1]
         );
         await this.$services.assignment.assignInitial(project._id, assignment);
 
-        this.projects.push(project);
+        this.projects.push(res.data);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

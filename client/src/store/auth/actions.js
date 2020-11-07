@@ -7,7 +7,7 @@ const pushPrivateKeyToLocalStorage = (privateKey) => {
   LocalStorage.set('key_history', privateKeys.toString());
 };
 
-async function _fetchUser(privateKey) {
+async function fetchUser(privateKey) {
   const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
     privateKey
   );
@@ -62,7 +62,7 @@ export async function register(state, data) {
 
 export async function login(state, { privateKey, rememberMe }) {
   try {
-    const user = await _fetchUser.call(this, privateKey);
+    const user = await fetchUser.call(this, privateKey);
     state.commit('setUser', { user, privateKey });
     state.dispatch('setKey', {
       privateKey,
@@ -91,7 +91,7 @@ export async function fetch(state) {
   const privateKey = Cookies.get('authorization_key');
   if (privateKey) {
     try {
-      const user = await _fetchUser.call(this, privateKey);
+      const user = await fetchUser.call(this, privateKey);
       state.commit('setUser', { user, privateKey });
       return true;
     } catch (error) {

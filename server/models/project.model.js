@@ -10,14 +10,10 @@ const ProjectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
     actors: [
       {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
+        required: true,
       },
     ],
   },
@@ -39,17 +35,14 @@ ProjectSchema.statics = {
       .exec();
   },
   findAndPopulate(id) {
-    return this.findById(id).populate('actors').populate('owner').exec();
+    return this.findById(id).exec();
   },
   async updateAnPopulate(id, update) {
     await this.findByIdAndUpdate(id, update);
     return this.findAndPopulate(id);
   },
   findByUserId(userId) {
-    return this.find({ actors: userId })
-      .populate('actors')
-      .populate('owner')
-      .exec();
+    return this.find({ actors: userId }).exec();
   },
 };
 

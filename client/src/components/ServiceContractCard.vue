@@ -1,23 +1,27 @@
 <template>
   <q-card flat bordered>
     <q-card-section>
-      <div class="text-overline">
+      <div
+        class="text-overline"
+        :class="contract.payed ? 'text-positive' : 'text-grey'"
+      >
         {{ contract.payed ? 'Bezahlt' : 'Bezahlung ausstehend' }}
       </div>
-      <div class="text-h6 q-mt-sm q-mb-xs">Leistungsvertrag</div>
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        {{ contract.services[0].name }}
+        <template v-if="contract.services.length > 1">
+          und {{ contract.services.length - 1 }} weitere
+        </template>
+        <q-chip class="text-weight-regular" icon="assignment">{{
+          contract.hash
+        }}</q-chip>
+      </div>
 
       <!-- <div class="q-mt-sm q-mb-xs">Auftraggeber: {{ contract.client }}</div>
       <div class="q-mt-sm q-mb-xs">
         Auftragnehmer: {{ contract.contractor }}
       </div> -->
-      <div>
-        <q-chip
-          dense
-          square
-          :icon="isAssignment ? 'assignment' : 'assignment_ind'"
-          >{{ contract.hash }}</q-chip
-        >
-      </div>
+      <div></div>
     </q-card-section>
 
     <q-card-actions v-if="contract.services.length > 0">
@@ -91,10 +95,10 @@ export default {
         services.forEach((s) => {
           s.stage = action.next;
         });
-        const pay =
+        if (
           !this.contract.payed &&
-          this.contract.services.every((s) => s.stage === 4);
-        if (pay) {
+          this.contract.services.every((s) => s.stage === 4)
+        ) {
           this.$emit('payAgreement', this.contract);
         }
         this.$q.notify({

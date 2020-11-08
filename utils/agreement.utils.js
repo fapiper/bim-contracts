@@ -148,6 +148,13 @@ class AgreementUtils {
     return agreement;
   }
 
+  async pay(agreement) {
+    return this.agreementController.methods.payAgreement(agreement.hash).send({
+      from: agreement.client,
+      gas: 2000000,
+    });
+  }
+
   async handleTransition(userAddress, service, method) {
     return this.agreementController.methods[method](service.hash).send({
       from: userAddress,

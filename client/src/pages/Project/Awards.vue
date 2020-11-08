@@ -41,14 +41,19 @@ export default {
     this.loadAwards();
   },
   methods: {
-    payAgreement(agreement) {
+    async payAgreement(agreement) {
       let totalPrice = 0;
       agreement.services.forEach((service) => {
         totalPrice += service.billing_item ? service.billing_item.price : 0;
       });
       console.log('pay', agreement, totalPrice);
+      this.$q.loading.show();
+      await this.$db.agreement.pay(agreement);
+
       this.price = totalPrice;
+      this.$q.loading.hide();
       this.payAlert = true;
+      agreement.payed = true;
     },
     async loadAwards() {
       this.loading = true;

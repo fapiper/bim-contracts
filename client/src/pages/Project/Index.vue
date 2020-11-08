@@ -169,11 +169,9 @@ export default {
     },
     async loadBoqs() {
       this.boqsLoading = true;
-      this.services = await this.$services.boq.query(
-        this.project._id,
-        (item) => !item.parent
-      );
-      console.log('services', this.services);
+      const servicedb = await this.$db.service(this.project._id);
+      await servicedb.load();
+      this.services = servicedb.query((s) => !s.parent);
       this.boqsLoading = false;
     },
     async addActor() {

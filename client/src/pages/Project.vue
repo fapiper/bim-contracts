@@ -155,7 +155,6 @@ export default {
         boqs: [],
         billingModel: null,
       },
-      projectdb: null,
     };
   },
   methods: {

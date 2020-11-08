@@ -72,11 +72,12 @@ export default {
   methods: {
     async loadAssignments() {
       this.loading = true;
-      const project_hash = this.$route.params.project;
-      this.assignments = await this.$services.assignment.getAssignmentsByProject(
-        project_hash,
+      const projectId = this.$route.params.project;
+      this.assignments = await this.$db.agreement.getAssignmentsByProject(
+        projectId,
         this.$auth.user().address
       );
+      console.log('this.assignments', this.assignments);
       this.loading = false;
     },
     showDialog(service) {

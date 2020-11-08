@@ -1,8 +1,5 @@
 function populateProject(userdb, project) {
-  project.actors.forEach((actor) => {
-    const actorAddress = actor;
-    actor = userdb.query((a) => a.address === actorAddress)[0];
-  });
+  project.actors = userdb.query((a) => project.actors.includes(a.address));
 }
 
 export async function loadProjectsByUserAddress(state, userAddress) {
@@ -49,10 +46,11 @@ export async function addProject(state, { project, container }) {
   }
   const res = await this._vm.$axios.post(`projects`, project);
   project = res.data;
-  populateProject(this._vm.$db.user, project);
 
   // add services
-  const services = await this._vm.$db.container.add(project._id, container);
+  const services = Object.values(container.boqs[0].nodes);
+  const servicedb = await this._vm.$db.service(project._id);
+  await servicedb.putAll(services);
 
   // create agreement
   const agreement = {
@@ -62,9 +60,9 @@ export async function addProject(state, { project, container }) {
     createdAt: new Date().toJSON(),
   };
   this._vm.$db.agreement.addProject(services, agreement);
-  console.log('created agreement');
 
   // update store
+  populateProject(this._vm.$db.user, project); // populate after agreement has been created
   state.commit('addProject', project);
   return project;
 }

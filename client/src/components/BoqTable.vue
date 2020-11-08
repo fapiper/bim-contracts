@@ -72,11 +72,10 @@ export default {
     },
     async loadChildren(props) {
       if (!this.childrenLoaded[props.row.hash]) {
+        const servicedb = await this.$db.service(this.project);
+        await servicedb.load();
         this.childrenLoaded[props.row.hash] = true;
-        this.children = await this.$services.boq.query(
-          this.project,
-          (item) => item.parent === props.row.hash
-        );
+        this.children = servicedb.query((s) => s.parent === props.row.hash);
       }
       props.expand = !props.expand;
     },

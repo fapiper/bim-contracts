@@ -44,9 +44,9 @@ class AgreementDb {
     return this._buildContracts(projectId, assignments);
   }
 
-  async getAwardsByProject(projectId, user_address) {
+  async getAwardsByProject(projectId, userAddress) {
     const awards = await this.agreementController.methods
-      .getAgreementsByClient(user_address)
+      .getAgreementsByClient(userAddress)
       .call();
     console.log('awards', awards);
     return this._buildContracts(projectId, awards);

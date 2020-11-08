@@ -22,11 +22,7 @@ class FlatTree {
             roots.push(node[selector]); // No parent exists. Node is root.
           }
           if (billing) {
-            console.log('node', node);
-            console.log('billing', billing);
             const item = billing.nodes[node.id];
-            console.log('item', item);
-
             item && (node.billing_item = item);
           }
           this.build(desc[i], collection, {

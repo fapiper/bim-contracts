@@ -20,7 +20,6 @@
             :to="'/projects/' + project._id + '/assignments'"
             exact
           >
-            <!-- <q-badge color="red" floating>{{ newAssignments.length }}</q-badge> -->
           </q-route-tab>
           <q-route-tab
             label="Auftragsvergabe"
@@ -45,8 +44,6 @@
 </template>
 
 <script>
-// import { Roles } from 'src/models/user-model';
-
 export default {
   name: 'LayoutProject',
   data() {
@@ -60,16 +57,16 @@ export default {
     },
   },
   async mounted() {
-    this.loading = true;
-    await this.loadProject(this.$route.params.project);
-    this.loading = false;
+    this.loadProject();
   },
   methods: {
     async loadProject(projectId) {
-      return Promise.all([
-        this.$store.dispatch('project/loadProject', projectId),
-        this.$services.boq.loadDb(projectId),
-      ]);
+      this.loading = true;
+      await this.$store.dispatch(
+        'project/loadProject',
+        this.$route.params.project
+      );
+      this.loading = false;
     },
   },
 };

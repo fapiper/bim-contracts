@@ -133,13 +133,10 @@ class AgreementUtils {
     };
 
     const deep = TreeUtils.unflat(services);
-    for (const service of deep) {
-      await TreeUtils.deepHandle(service, addFn);
-    }
+    await TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
   }
 
   async create(agreement) {
-    console.log('create agreement', agreement);
     await this.agreementController.methods
       .createAgreement(
         Web3.utils.sha3(JSON.stringify(agreement)),

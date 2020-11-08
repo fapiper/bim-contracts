@@ -118,29 +118,35 @@ class AgreementUtils {
     return build(service);
   }
 
-  async addProject(services, agreement) {
-    const payload = [
-      Web3.utils.sha3(JSON.stringify(agreement)),
-      agreement.contractor,
-      services.filter((s) => !s.parent).map((s) => s.hash),
-      services.map((s) => s.hash),
-      services.map((s) => s.parent || n32),
-    ];
-    await this.agreementController.methods
-      .createProject(...payload)
-      .send({ from: agreement.client, gas: 60000000 });
+  async addServices(services, agreement) {
+    console.log('add', agreement);
 
-    return agreement;
+    const addFn = async (node, children) => {
+      const payload = [node.hash, children.map((service) => service.hash)];
+      const res = await this.agreementController.methods
+        .addServiceSection(...payload)
+        .send({
+          from: agreement.client,
+          gas: 2000000,
+        });
+      return res;
+    };
+
+    const deep = TreeUtils.unflat(services);
+    for (const service of deep) {
+      await TreeUtils.deepHandle(service, addFn);
+    }
   }
 
   async create(agreement) {
+    console.log('create agreement', agreement);
     await this.agreementController.methods
       .createAgreement(
         Web3.utils.sha3(JSON.stringify(agreement)),
         agreement.contractor,
         agreement.services.map((s) => s.hash)
       )
-      .send({ from: agreement.client, gas: 2000000 });
+      .send({ from: agreement.client, gas: 60000000 });
     return agreement;
   }
 

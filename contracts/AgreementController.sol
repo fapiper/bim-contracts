@@ -5,17 +5,11 @@ import './ServiceAgreement.sol';
 import './ServiceStorage.sol';
 
 contract AgreementController is ServiceAgreement, ServiceStorage {
-    function createProject(
-        bytes32 _agreement,
-        address _contractor,
-        bytes32[] calldata _roots,
-        bytes32[] calldata _services,
-        bytes32[] calldata _sections
-    ) external returns (bool success) {
-        for (uint256 i = 0; i < _services.length; i++) {
-            _addService(_sections[i], _services[i]);
-        }
-        createAgreement(_agreement, _contractor, _roots);
+    function addServiceSection(bytes32 _section, bytes32[] calldata _services)
+        external
+        returns (bool success)
+    {
+        _addServiceSection(_section, _services);
         return true;
     }
 

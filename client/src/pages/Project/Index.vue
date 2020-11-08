@@ -151,7 +151,7 @@ export default {
           client,
           { address: this.assigneeAddress }
         );
-        await this.$services.assignment.assign(this.project._id, assignment);
+        await this.$db.agreement.assign(this.project._id, assignment);
         this.$q.notify({
           type: 'positive',
           message: `Der Auftrag wurde erfolgreich vergeben.`,

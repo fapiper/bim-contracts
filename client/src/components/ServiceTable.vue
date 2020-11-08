@@ -167,14 +167,10 @@ export default {
     async loadChildren(props) {
       props.expand = !props.expand;
       if (!this.childrenLoaded(props.row.children)) {
-        try {
-          props.row.children = await this.$services.assignment.getChildren(
-            this.project,
-            this.assignment.hash,
-            props.row.hash
-          );
-          console.log('children', props.row.children);
-        } catch (error) {}
+        props.row.children = await this.$db.agreement.getChildren(
+          this.project,
+          props.row.hash
+        );
       }
     },
   },

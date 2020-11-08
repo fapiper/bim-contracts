@@ -1,14 +1,19 @@
-import { abi as AgreementControllerAbi } from 'src/contracts/AgreementController.json';
-import { controllerContract as AgreementControllerAddress } from 'app/../bim-contracts.config';
+const Web3 = require('web3');
+const {
+  controllerContract: AgreementControllerAddress,
+} = require('../bim-contracts.config');
+const {
+  abi: AgreementControllerAbi,
+} = require('../build/contracts/AgreementController.json');
 
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
 
-class AssignmentService {
-  constructor(orbitdb, boqService, web3) {
+class AgreementUtils {
+  constructor(orbitdb, serviceDb, web3) {
     this.orbitdb = orbitdb;
     this.assignmentdb = null;
-    this.boqService = boqService;
+    this.serviceDb = serviceDb;
     this.web3 = web3;
     this.agreementController = new web3.eth.Contract(
       AgreementControllerAbi,
@@ -16,88 +21,64 @@ class AssignmentService {
     );
   }
 
-  async loadDb(projectId) {
-    if (this._assigned !== projectId) {
-      const assignmentdb = await this.orbitdb.docstore(
-        `projects.${projectId}.assignments`,
-        {
-          indexBy: 'hash',
-          create: true,
-          accessController: {
-            write: ['*'],
-          },
-        }
-      );
-      await assignmentdb.load();
-      this._assigned = projectId;
-      this.assignmentdb = assignmentdb;
-    }
-    return this.assignmentdb;
-  }
-
   async getAssignmentsByProject(projectId, user_address) {
     const assignments = await this.agreementController.methods
       .getAgreementsByContractor(user_address)
       .call();
-    console.log('assignments', assignments);
-    return this._buildContracts(projectId, assignments);
+    return this.buildAgreement(projectId, assignments);
   }
 
-  async getAwardsByProject(projectId, user_address) {
+  async getAwardsByProject(projectId, userAddress) {
     const awards = await this.agreementController.methods
-      .getAgreementsByClient(user_address)
+      .getAgreementsByClient(userAddress)
       .call();
-    console.log('awards', awards);
-    return this._buildContracts(projectId, awards);
+    return this.buildAgreement(projectId, awards);
   }
 
-  async _buildContracts(projectId, contracts) {
-    return Promise.all(
-      contracts.map((contractHash) =>
-        this.agreementController.methods
-          .getAgreement(contractHash)
-          .call()
-          .then((agreement) => ({
-            hash: contractHash,
-            payed: agreement[0],
-            client: agreement[1],
-            contractor: agreement[2],
-            services: agreement[3],
-          }))
-          .then(async (agreement) => {
-            agreement.services = await Promise.all(
-              agreement.services.map(async (serviceHash) => {
-                const data = await this.agreementController.methods
-                  .getService(serviceHash)
-                  .call();
-                const service = await this.boqService
-                  .get(projectId, serviceHash)
-                  .then((items) => items[0]);
-                if (service) {
-                  service.client = data[0];
-                  service.contractor = data[1];
-                  service.stage = parseInt(data[2]);
-                  return service;
-                }
-              })
-            );
-            console.log('agreement', agreement);
-            return agreement;
-          })
-      )
-    );
+  async buildAgreement(projectId, contracts) {
+    const builder = async (hash) => {
+      const res = await this.agreementController.methods
+        .getAgreement(hash)
+        .call();
+      const agreement = {
+        hash,
+        payed: res[0],
+        client: res[1],
+        contractor: res[2],
+        services: res[3],
+      };
+      const servicedb = await this.serviceDb(projectId);
+      await servicedb.load();
+      agreement.services = await Promise.all(
+        agreement.services.map(async (serviceHash) => {
+          const data = await this.agreementController.methods
+            .getService(serviceHash)
+            .call();
+          const service = servicedb.get(serviceHash)[0];
+          if (service) {
+            service.client = data[0];
+            service.contractor = data[1];
+            service.stage = parseInt(data[2]);
+            return service;
+          }
+        })
+      );
+      return agreement;
+    };
+
+    return Promise.all(contracts.map(builder));
   }
 
-  async getChildren(projectId, agreement_hash, serviceHash) {
+  async getChildren(projectId, serviceHash) {
     const data = await this.agreementController.methods
       .getServicesOf(serviceHash)
       .call();
+    const servicedb = await this.serviceDb(projectId);
+    await servicedb.load();
 
     const services = await Promise.all(
-      data[0].map(async (hash, i) => {
-        const service = await this.boqService
-          .get(projectId, hash)
-          .then((items) => items[0]);
+      data[0].map((hash, i) => {
+        const service = servicedb.get(hash)[0];
         service.client = data[1][i];
         service.contractor = data[2][i];
         service.stage = parseInt(data[3][i]);
@@ -155,20 +136,19 @@ class AssignmentService {
     return assignments;
   }
 
-  async assignInitial(projectId, contract) {
-    const services = await this.getAllServices(projectId, contract.services);
+  async addProject(services, agreement) {
     const payload = [
-      contract.hash,
-      contract.contractor.address,
+      Web3.utils.sha3(JSON.stringify(agreement)),
+      agreement.contractor,
       services.filter((s) => !s.parent).map((s) => s.hash),
       services.map((s) => s.hash),
       services.map((s) => s.parent || n32),
     ];
     await this.agreementController.methods
       .createProject(...payload)
-      .send({ from: contract.client.address, gas: 60000000 });
+      .send({ from: agreement.client, gas: 60000000 });
 
-    return contract;
+    return agreement;
   }
 
   async assign(projectId, contract) {
@@ -191,4 +171,4 @@ class AssignmentService {
   }
 }
 
-export default AssignmentService;
+export default AgreementUtils;

@@ -26,8 +26,12 @@ contract ServiceRoles {
         address _client,
         address _contractor
     ) internal {
-        clientByService[_service] = _client;
-        contractorByService[_service] = _contractor;
+        if (clientByService[_service] == address(0)) {
+            clientByService[_service] = _client;
+            contractorByService[_service] = _contractor;
+        } else if (contractorByService[_service] == msg.sender) {
+            contractorByService[_service] = _contractor;
+        }
     }
 
     function _getServiceRoles(bytes32 _service)

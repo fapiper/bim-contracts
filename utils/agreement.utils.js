@@ -94,12 +94,16 @@ class AgreementUtils {
 
   async addServices(services, agreement) {
     const addFn = async (node, children) => {
-      const payload = [node.hash, children.map((service) => service.hash)];
+      const payload = [
+        node.hash,
+        children.map((service) => service.hash),
+        agreement.contractor,
+      ];
       await this.agreementController.methods
         .addServiceSection(...payload)
         .send({
           from: agreement.client,
-          gas: 2000000,
+          gas: 60000000,
         });
     };
     const deep = TreeUtils.unflat(services);

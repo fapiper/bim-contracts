@@ -1,34 +1,47 @@
 const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
-class FlatTree {
-  static build(
+class TreeUtils {
+  static async flatHandle(node, handleFn, collect = []) {
+    const children = await handleFn(node);
+    const _collect = await Promise.all(
+      children.map((child) => this.flatHandle(child, handleFn, collect))
+    );
+    _collect.push(node);
+    return _collect.flat();
+  }
+
+  static flat(
     tree,
     collection,
-    { builders, parent, billing, selector = 'hash' }
+    { builders, parent, billing, links, selector = 'hash' }
   ) {
     const roots = [];
     for (const key in builders) {
       const _desc = reduce(key, tree);
       if (_desc) {
-        const desc = Array.isArray(_desc) ? _desc : Array.of(_desc); // Fix: xml2js parser transforms arrays with one entry to object
+        const desc = Array.isArray(_desc) ? _desc : Array.of(_desc); // xml2js parser transforms arrays with one entry to object
         for (let i = 0; i < desc.length; i++) {
           const node = builders[key](desc[i]);
           collection[node[selector]] = node;
           if (parent) {
-            node.addParent(parent);
+            node.parent = parent;
             collection[parent].children.push(node[selector]);
           } else {
             roots.push(node[selector]); // No parent exists. Node is root.
           }
-          if (billing) {
-            const item = billing.nodes[node.id];
-            item && (node.billing_item = item);
+          if (billing && links) {
+            const ref = links.nodes[node.id];
+            if (ref) {
+              const item = billing.nodes[ref.link];
+              node.billing_item = item;
+            }
           }
-          this.build(desc[i], collection, {
+          this.flat(desc[i], collection, {
             builders,
             parent: node[selector],
             billing,
+            links,
             selector,
           });
         }
@@ -40,17 +53,8 @@ class FlatTree {
 
 class FlatNode {
   constructor() {
-    this.children = [];
     this.parent = null;
-  }
-
-  addChild(child) {
-    this.children.push(child);
-  }
-
-  addParent(parent) {
-    this.parent = parent;
+    this.children = [];
   }
 }
-
-module.exports = { FlatTree, FlatNode };
+module.exports = { TreeUtils, FlatNode };

@@ -173,6 +173,11 @@ export default {
         );
       }
     },
+    addZeroes(num) {
+      const dec = String(num).split('.')[1];
+      const len = dec && dec.length > 2 ? dec.length : 2;
+      return Number(num).toFixed(len);
+    },
   },
   computed: {
     isCtgy: function () {
@@ -216,8 +221,22 @@ export default {
           label: 'Preis',
           align: 'left',
           field: (row) => row.billing_item,
-          format: (val, row) =>
-            val ? `${val.price === '' ? 0 : val.price} €` : '',
+          format: (val, row) => {
+            if (val) {
+              console.log(
+                row.name || row.short_desc,
+                'val',
+                val.total_price || val.price
+              );
+
+              const price = this.addZeroes(
+                val.total_price || val.price
+              ).replace('.', ',');
+              return (
+                price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' €'
+              );
+            }
+          },
           style: 'width:200px',
         },
         {

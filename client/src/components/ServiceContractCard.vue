@@ -1,21 +1,22 @@
 <template>
-  <q-card flat bordered>
+  <q-card>
     <q-card-section>
-      <div
-        class="text-overline"
-        :class="contract.payed ? 'text-positive' : 'text-grey'"
-      >
-        {{ contract.payed ? 'Bezahlt' : 'Bezahlung ausstehend' }}
+      <div class="row justify-between align-center">
+        <div class="text-h6">
+          {{ contract.services[0].name }}
+          <template v-if="contract.services.length > 1">
+            und {{ contract.services.length - 1 }} weitere
+          </template>
+        </div>
+
+        <div
+          class="text-overline text-right"
+          :class="contract.payed ? 'text-positive' : 'text-grey'"
+        >
+          {{ contract.payed ? 'Bezahlt' : 'Bezahlung ausstehend' }}
+        </div>
       </div>
-      <div class="text-h6 q-mt-sm q-mb-xs">
-        {{ contract.services[0].name }}
-        <template v-if="contract.services.length > 1">
-          und {{ contract.services.length - 1 }} weitere
-        </template>
-        <q-chip class="text-weight-regular" icon="assignment">{{
-          contract.hash
-        }}</q-chip>
-      </div>
+      <q-chip size="sm" square icon="assignment">{{ contract.hash }}</q-chip>
 
       <!-- <div class="q-mt-sm q-mb-xs">Auftraggeber: {{ contract.client }}</div>
       <div class="q-mt-sm q-mb-xs">

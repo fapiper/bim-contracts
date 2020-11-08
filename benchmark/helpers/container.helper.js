@@ -1,4 +1,4 @@
-const IcddParser = require('../../utils/icdd.parser.js');
+const BimLvParser = require('../../utils/bim-lv.parser.js');
 const path = require('path');
 
 const fs = require('fs');
@@ -24,10 +24,10 @@ const parseIcdd = async (src) => {
     `/..${src}/${config.billingName}.xml`
   );
   const billing = await readFile(BillingFile).then((json) =>
-    IcddParser.parseBillingFile(json, false)
+    BimLvParser.parseBillingFile(json, false)
   );
   const boqs = await readFile(BoQFile).then((json) =>
-    IcddParser.parseBoQFiles([json], billing, false)
+    BimLvParser.parseBoQFiles([json], billing, false)
   );
   return { billing, boqs };
 };

@@ -1,5 +1,5 @@
 const getOrbitDB = require('./orbitdb.helper.js');
-const parseIcdd = require('./icdd.helper.js');
+const parseIcdd = require('./container.helper.js');
 const getTransactionReceiptMined = require('./transaction.helper.js');
 
 module.exports = {

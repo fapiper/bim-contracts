@@ -1,9 +1,8 @@
-const { FlatTree, FlatNode } = require('../tree.utils.js');
+const { TreeUtils, FlatNode } = require('../tree.utils.js');
 const Web3 = require('web3');
 
-class BillingModel extends FlatTree {
+class BillingModel {
   constructor(currency, roots, nodes) {
-    super();
     this.currency = currency;
     this.roots = roots;
     this.nodes = nodes;
@@ -26,7 +25,7 @@ class BillingModel extends FlatTree {
       'items.item': BillingItem.fromXml,
       'sub_items.item': BillingItem.fromXml,
     };
-    const { roots, nodes } = super.build(
+    const { roots, nodes } = TreeUtils.flat(
       billing.billing_model,
       {},
       { builders, selector: 'id' }

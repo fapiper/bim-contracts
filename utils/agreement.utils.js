@@ -1,4 +1,7 @@
 const Web3 = require('web3');
+
+const { TreeUtils } = require('./tree.utils.js');
+
 const {
   controllerContract: AgreementControllerAddress,
 } = require('../bim-contracts.config');
@@ -64,7 +67,9 @@ class AgreementUtils {
       return agreement;
     };
 
-    return Promise.all(contracts.map(builder));
+    return Promise.all(contracts.map(builder)).then((agreements) =>
+      agreements.filter((a) => a.services[0])
+    );
   }
 
   async getChildren(projectId, serviceHash) {
@@ -88,22 +93,13 @@ class AgreementUtils {
   }
 
   async getAllServices(projectId, services) {
-    const flatHandle = async (node, handleFn, collect = []) => {
-      const children = await handleFn(node);
-      const _collect = await Promise.all(
-        children.map((child) => flatHandle(child, handleFn, collect))
+    const handleFn = (node) => {
+      return this.boqService.query(projectId, (item) =>
+        node.children.some((hash) => item.hash === hash)
       );
-      _collect.push(node);
-      return _collect.flat();
     };
     const all = await Promise.all(
-      services.map((service) =>
-        flatHandle(service, (node) => {
-          return this.boqService.query(projectId, (item) =>
-            node.children.some((hash) => item.hash === hash)
-          );
-        })
-      )
+      services.map((service) => TreeUtils.flatHandle(service, handleFn))
     );
     return all.flat();
   }

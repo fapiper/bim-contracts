@@ -11,14 +11,17 @@ export default async ({ Vue }) => {
   const ipfs = await IPFS.create(config.ipfs);
   const orbitdb = await OrbitDB.createInstance(ipfs);
   Vue.prototype.$orbitdb = orbitdb;
+
   const services = {};
   const db = {};
 
   services.boq = new BoQService(orbitdb);
-  const payload = [orbitdb, services.boq, Vue.prototype.$web3];
-  services.assignment = new AssignmentService(...payload);
+  services.assignment = new AssignmentService(
+    orbitdb,
+    services.boq,
+    Vue.prototype.$web3
+  );
 
-  db.agreement = new AgreementDb(...payload);
   db.user = await orbitdb.docs('users', {
     accessController: {
       write: ['*'],
@@ -28,6 +31,7 @@ export default async ({ Vue }) => {
     orbitdb.docs(`projects.${projectId}.services`, {
       indexBy: 'hash',
     });
+  db.agreement = new AgreementDb(orbitdb, db.service, Vue.prototype.$web3);
 
   Vue.prototype.$services = services;
   Vue.prototype.$db = db;

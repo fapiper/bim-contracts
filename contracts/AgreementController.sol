@@ -5,11 +5,12 @@ import './ServiceAgreement.sol';
 import './ServiceStorage.sol';
 
 contract AgreementController is ServiceAgreement, ServiceStorage {
-    function addServiceSection(bytes32 _section, bytes32[] calldata _services)
-        external
-        returns (bool success)
-    {
-        _addServiceSection(_section, _services);
+    function addServiceSection(
+        bytes32 _section,
+        bytes32[] calldata _services,
+        address _contractor
+    ) external returns (bool success) {
+        _addServiceSection(_section, _services, _contractor);
         return true;
     }
 
@@ -30,8 +31,11 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
     function _updateRoles(bytes32[] memory _sections, address _contractor)
         internal
     {
+        address _currentContractor;
         bytes32[] memory _services;
         for (uint256 i = 0; i < _sections.length; i++) {
+            (, _currentContractor) = _getServiceRoles(_sections[i]);
+            if (_currentContractor == _contractor) break;
             (_services, , , ) = _getServicesOf(_sections[i]);
             _updateServiceRoles(_sections[i], msg.sender, _contractor);
             _updateRoles(_services, _contractor);

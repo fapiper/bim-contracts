@@ -1,7 +1,7 @@
-const { FlatTree, FlatNode } = require('../tree.utils.js');
+const { FlatUtils, FlatNode } = require('../tree.utils.js');
 const Web3 = require('web3');
 
-class BoQ extends FlatTree {
+class BoQ extends FlatUtils {
   constructor(id, name, label, date, roots, nodes) {
     super();
     this.id = id;
@@ -14,23 +14,7 @@ class BoQ extends FlatTree {
     this.hash = Web3.utils.sha3(this.id + this.created);
   }
 
-  assignProject(project) {
-    this.project_hash = project.hash;
-  }
-
-  static toStore(boq) {
-    return {
-      id: boq.id,
-      name: boq.name,
-      label: boq.label,
-      date: boq.date,
-      roots: boq.roots,
-      created: boq.created,
-      hash: boq.hash,
-    };
-  }
-
-  static fromGAEB(boq, billing) {
+  static fromGAEB(boq, { billing, links }) {
     const builders = {
       'boq_body.itemlist.item': BoQItem.fromGAEB,
       'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
@@ -39,7 +23,7 @@ class BoQ extends FlatTree {
     const { roots, nodes } = super.build(
       boq.gaeb.award.boq,
       {},
-      { builders, billing }
+      { builders, billing, links }
     );
     const info = boq.gaeb.award.boq.boq_info;
     return new BoQ(

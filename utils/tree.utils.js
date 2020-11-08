@@ -1,11 +1,11 @@
 const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
-class FlatTree {
+class FlatUtils {
   static build(
     tree,
     collection,
-    { builders, parent, billing, selector = 'hash' }
+    { builders, parent, billing, links, selector = 'hash' }
   ) {
     const roots = [];
     for (const key in builders) {
@@ -21,14 +21,18 @@ class FlatTree {
           } else {
             roots.push(node[selector]); // No parent exists. Node is root.
           }
-          if (billing) {
-            const item = billing.nodes[node.id];
-            item && (node.billing_item = item);
+          if (billing && links) {
+            const ref = links.nodes[node.id];
+            if (ref) {
+              const item = billing.nodes[ref.link];
+              node.billing_item = item;
+            }
           }
           this.build(desc[i], collection, {
             builders,
             parent: node[selector],
             billing,
+            links,
             selector,
           });
         }
@@ -53,4 +57,4 @@ class FlatNode {
   }
 }
 
-module.exports = { FlatTree, FlatNode };
+module.exports = { FlatUtils, FlatNode };

@@ -1,7 +1,7 @@
-const { FlatTree, FlatNode } = require('../tree.utils.js');
+const { FlatUtils, FlatNode } = require('../tree.utils.js');
 const Web3 = require('web3');
 
-class BillingModel extends FlatTree {
+class BillingModel extends FlatUtils {
   constructor(currency, roots, nodes) {
     super();
     this.currency = currency;

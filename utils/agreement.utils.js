@@ -64,7 +64,9 @@ class AgreementUtils {
       return agreement;
     };
 
-    return Promise.all(contracts.map(builder));
+    return Promise.all(contracts.map(builder)).then((agreements) =>
+      agreements.filter((a) => a.services[0])
+    );
   }
 
   async getChildren(projectId, serviceHash) {

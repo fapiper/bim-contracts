@@ -48,13 +48,13 @@ export async function addProject(state, { project, container }) {
   project = res.data;
 
   // add services
-  const services = Object.values(container.boqs[0].nodes);
+  const services = Object.values(container.boq.nodes);
   const servicedb = await this._vm.$db.service(project._id);
   await servicedb.putAll(services);
 
   // create agreement
   const agreement = {
-    services: container.boqs[0].roots,
+    services: container.boq.roots,
     client: project.actors[0],
     contractor: project.actors[1],
     createdAt: new Date().toJSON(),

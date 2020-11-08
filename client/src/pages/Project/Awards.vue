@@ -61,6 +61,7 @@ export default {
         this.$route.params.project,
         this.$auth.user().address
       );
+      console.log('this.awards', this.awards);
       this.loading = false;
     },
   },

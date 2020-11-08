@@ -71,14 +71,28 @@
                 hint="Account Adresse"
               />
               <q-file
-                ref="boqs"
+                filled
+                ref="links"
+                v-model="container.links"
+                label="BIM Links"
+                use-chips
+                counter
+              >
+                <template v-slot:before>
+                  <q-icon name="link" />
+                </template>
+                <template v-slot:append>
+                  <q-btn round dense flat icon="add" @click.stop />
+                </template>
+              </q-file>
+
+              <q-file
+                ref="boq"
                 filled
                 use-chips
                 counter
-                append
-                v-model="container.boqs"
-                multiple
-                label="Leistungsverzeichnisse"
+                v-model="container.boq"
+                label="Leistungsverzeichnis"
               >
                 <template v-slot:before>
                   <q-icon name="assignment" />
@@ -89,8 +103,8 @@
               </q-file>
               <q-file
                 filled
-                ref="billingModel"
-                v-model="container.billingModel"
+                ref="billing"
+                v-model="container.billing"
                 label="Abrechnungsplan"
                 use-chips
                 counter
@@ -130,8 +144,9 @@
 import { date } from 'quasar';
 import IcddParser from 'app/../utils/icdd.parser.js';
 
+import LinksFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BMlinks.xml';
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
-import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
+import BillingFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
 
 export default {
   name: 'PageProjectIndex',
@@ -152,8 +167,9 @@ export default {
         contractor: '',
       },
       container: {
-        boqs: [],
-        billingModel: null,
+        links: null,
+        boq: null,
+        billing: null,
       },
     };
   },
@@ -168,12 +184,11 @@ export default {
     },
     useDemoProject() {
       this.project.name = 'Demoprojekt';
-      this.container.boqs = [
-        new File([BoQFile], 'Demo-Leistungsverzeichnis.x83'),
-      ];
-      this.container.billingModel = new File(
-        [BillingModelFile],
-        'Demo-BillingModel.xml'
+      this.container.links = new File([LinksFile], 'Demo-Links.xml');
+      this.container.boq = new File([BoQFile], 'Demo-Leistungsverzeichnis.x83');
+      this.container.billing = new File(
+        [BillingFile],
+        'Demo-Abrechnungsplan.xml'
       );
     },
     async loadProjects() {
@@ -186,15 +201,16 @@ export default {
     },
     async addProject() {
       this.$q.loading.show();
-      const project = {
-        name: this.project.name,
-        actors: [this.$auth.user().address, this.project.contractor],
-      };
-      const container = await IcddParser.parseFromFiles(
-        this.container.billingModel,
-        this.container.boqs
-      );
       try {
+        const project = {
+          name: this.project.name,
+          actors: [this.$auth.user().address, this.project.contractor],
+        };
+        const container = await IcddParser.parseFromFiles(
+          this.container.links,
+          this.container.boq,
+          this.container.billing
+        );
         await this.$store.dispatch('project/addProject', {
           project,
           container,

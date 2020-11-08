@@ -3,7 +3,7 @@ const Web3 = require('web3');
 const { TreeUtils } = require('./tree.utils.js');
 
 const {
-  controllerContract: AgreementControllerAddress,
+  contract: { development: AgreementControllerAddress },
 } = require('../bim-contracts.config');
 const {
   abi: AgreementControllerAbi,

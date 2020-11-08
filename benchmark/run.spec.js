@@ -6,7 +6,7 @@ const { abi } = require('../client/src/contracts/AgreementController.json');
 
 const {
   getOrbitDB,
-  parseIcdd,
+  parseContainer,
   getTransactionReceiptMined,
 } = require('./helpers');
 const Web3 = require('web3');
@@ -49,20 +49,17 @@ const persistServices = async (orbitdb, projectId, boqs) => {
   return Promise.all(nodes.map((node) => boqdb.putAll(node)));
 };
 
-const createInitialAgreement = async (web3, icdd) => {
+const createAgreement = async (web3, container) => {
   const account = await web3.eth.accounts.privateKeyToAccount(
     process.env.PRIVATE_KEY
   );
-  console.log('account', account);
-
   web3.eth.accounts.wallet.add(account);
 
   return {
-    name: 'Test Agreement',
-    services: icdd.boqs.flatMap((boq) => Object.values(boq.nodes)), // ATTENTION: This agreement takes ALL services and NOT only roots (as in default interface)
-    client: { address: account.address },
-    contractor: { address: account.address },
-    hash: Web3.utils.sha3(new Date().toJSON()),
+    services: Object.values(container.boq.nodes).filter((s) => !s.parent),
+    client: account.address,
+    contractor: account.address,
+    createdAt: new Date().toJSON(),
   };
 };
 
@@ -93,27 +90,27 @@ const sendInitialAgreement = (agreement, agreementController) => {
     );
     const agreementController = new web3.eth.Contract(
       abi,
-      config.controllerContract
+      config.contract.ropsten
     );
 
     const projectId = '';
-    const icdd = await parseIcdd(path);
+    const container = await parseContainer(path);
     const orbitdb = await getOrbitDB();
     for (let i = 0; i < n; i++) {
       console.log('-----> Starting round', i);
       start = Date.now();
 
       offStart = Date.now();
-      await persistServices(orbitdb, projectId, icdd.boqs);
+      await persistServices(orbitdb, projectId, container.boq);
       offEnd = Date.now();
 
-      const agreement = await createInitialAgreement(web3, icdd);
-      onStart = Date.now();
+      const agreement = await createAgreement(web3, container);
       console.log('sending transaction...');
+      onStart = Date.now();
       const res = await sendInitialAgreement(agreement, agreementController);
-      console.log('success sent transaction', res);
       onEnd = Date.now();
       end = Date.now();
+      console.log('success sent transaction', res);
       const resTx = await getTransactionReceiptMined(
         web3,
         res.transactionHash,

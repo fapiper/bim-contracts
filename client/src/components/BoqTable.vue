@@ -47,7 +47,7 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-boq-table @assign="assign" :data="children" :project="project" />
+          <bc-boq-table :data="children" :project="project" />
         </q-td>
       </q-tr>
     </template>
@@ -64,19 +64,15 @@ export default {
     loading: Boolean,
   },
   methods: {
-    assign(service) {
-      this.$emit('assign', service);
-    },
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },
     async loadChildren(props) {
       if (!this.childrenLoaded[props.row.hash]) {
+        const servicedb = await this.$db.service(this.project);
+        await servicedb.load();
         this.childrenLoaded[props.row.hash] = true;
-        this.children = await this.$services.boq.query(
-          this.project,
-          (item) => item.parent === props.row.hash
-        );
+        this.children = servicedb.query((s) => s.parent === props.row.hash);
       }
       props.expand = !props.expand;
     },

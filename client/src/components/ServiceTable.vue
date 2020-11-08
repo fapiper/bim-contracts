@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import Assignment from 'src/models/assignment-model.js';
+import STATUS from 'assets/agreement.stages.js';
 
 export default {
   name: 'ComponentServiceTable',
@@ -167,14 +167,10 @@ export default {
     async loadChildren(props) {
       props.expand = !props.expand;
       if (!this.childrenLoaded(props.row.children)) {
-        try {
-          props.row.children = await this.$services.assignment.getChildren(
-            this.project,
-            this.assignment.hash,
-            props.row.hash
-          );
-          console.log('children', props.row.children);
-        } catch (error) {}
+        props.row.children = await this.$db.agreement.getChildren(
+          this.project,
+          props.row.hash
+        );
       }
     },
   },
@@ -189,7 +185,7 @@ export default {
   data() {
     return {
       children: {},
-      status: Assignment.STATUS,
+      status: STATUS,
       columns: [
         {
           name: 'id',

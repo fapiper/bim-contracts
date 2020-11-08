@@ -53,7 +53,6 @@
 
 <script>
 import ServiceContractCard from 'components/ServiceContractCard.vue';
-import Assignment from 'src/models/assignment-model.js';
 
 export default {
   name: 'PageProjectAssignments',
@@ -72,9 +71,9 @@ export default {
   methods: {
     async loadAssignments() {
       this.loading = true;
-      const project_hash = this.$route.params.project;
-      this.assignments = await this.$services.assignment.getAssignmentsByProject(
-        project_hash,
+      const projectId = this.$route.params.project;
+      this.assignments = await this.$db.agreement.getAssignmentsByProject(
+        projectId,
         this.$auth.user().address
       );
       this.loading = false;
@@ -87,17 +86,12 @@ export default {
       this.$q.loading.show();
       this.prompt = false;
       try {
-        const { privateKey, ...client } = this.$auth.user();
-        const assignment = new Assignment(
-          this.selected.short_desc || this.selected.name,
-          [this.selected],
-          client,
-          { address: this.address }
-        );
-        await this.$services.assignment.assign(
-          this.$route.params.project,
-          assignment
-        );
+        await this.$db.agreement.create({
+          services: [this.selected],
+          client: this.$auth.user().address,
+          contractor: this.address,
+          createdAt: new Date().toJSON(),
+        });
         this.$q.notify({
           type: 'positive',
           message: `Der Auftrag wurde erfolgreich vergeben.`,

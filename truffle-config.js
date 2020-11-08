@@ -5,7 +5,6 @@ const { network } = require('./bim-contracts.config');
 var HDWalletProvider = require('truffle-hdwallet-provider');
 
 module.exports = {
-  contracts_build_directory: './client/src/contracts',
   networks: {
     development: {
       host: network.host,

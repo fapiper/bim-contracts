@@ -1,4 +1,4 @@
-import { Cookies, Notify, LocalStorage } from 'quasar';
+import { uid, Cookies, Notify, LocalStorage } from 'quasar';
 
 const pushPrivateKeyToLocalStorage = (privateKey) => {
   let privateKeys = LocalStorage.getItem('key_history');
@@ -7,14 +7,16 @@ const pushPrivateKeyToLocalStorage = (privateKey) => {
   LocalStorage.set('key_history', privateKeys.toString());
 };
 
-const _login = async (account, axios, web3) => {
-  web3.eth.accounts.wallet.add(account);
-  web3.eth.defaultAccount = account.address;
-  const res = await axios.get('users', {
-    params: { address: account.address },
-  });
-  if (res.data.length > 0) {
-    return res.data[0];
+async function fetchUser(privateKey) {
+  const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
+    privateKey
+  );
+  this._vm.$web3.eth.accounts.wallet.add(account);
+  this._vm.$web3.eth.defaultAccount = account.address;
+  await this._vm.$db.user.load();
+  const users = this._vm.$db.user.query((u) => u.address === account.address);
+  if (users.length > 0) {
+    return users[0];
   } else {
     const message = 'Benutzer nicht bekannt';
     Notify.create({
@@ -22,7 +24,7 @@ const _login = async (account, axios, web3) => {
     });
     throw Error(message);
   }
-};
+}
 
 export async function register(state, data) {
   const account = await this._vm.$web3.eth.accounts.create();
@@ -31,15 +33,18 @@ export async function register(state, data) {
   await this._vm.$web3.eth.sendTransaction({
     from: accounts[0],
     to: account.address,
-    value: this._vm.$web3.utils.toWei('10', 'ether'),
+    value: this._vm.$web3.utils.toWei('50', 'ether'),
   });
-  const res = await this._vm.$axios.post('users', {
+  const privateKey = account.privateKey;
+
+  const user = {
+    _id: uid(),
     address: account.address,
     name: data.name,
     iban: data.iban,
-  });
-  const user = res.data;
-  const privateKey = account.privateKey;
+    createdAt: new Date().toJSON(),
+  };
+  await this._vm.$db.user.put(user);
   state.commit('setUser', { privateKey, user });
   state.dispatch('setKey', {
     privateKey,
@@ -54,10 +59,7 @@ export async function register(state, data) {
 
 export async function login(state, { privateKey, rememberMe }) {
   try {
-    const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
-      privateKey
-    );
-    const user = await _login(account, this._vm.$axios, this._vm.$web3);
+    const user = await fetchUser.call(this, privateKey);
     state.commit('setUser', { user, privateKey });
     state.dispatch('setKey', {
       privateKey,
@@ -85,11 +87,8 @@ export function setKey(state, { rememberMe, privateKey }) {
 export async function fetch(state) {
   const privateKey = Cookies.get('authorization_key');
   if (privateKey) {
-    const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
-      privateKey
-    );
     try {
-      const user = await _login(account, this._vm.$axios, this._vm.$web3);
+      const user = await fetchUser.call(this, privateKey);
       state.commit('setUser', { user, privateKey });
       return true;
     } catch (error) {

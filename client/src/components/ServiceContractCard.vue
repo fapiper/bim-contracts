@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import Assignment from 'src/models/assignment-model.js';
+import STATUS from 'assets/agreement.stages.js';
 
 export default {
   name: 'ComponentServiceContractCard',
@@ -58,7 +58,7 @@ export default {
     return {
       service: null,
       expanded: false,
-      status: Assignment.STATUS,
+      status: STATUS,
     };
   },
   computed: {
@@ -80,10 +80,9 @@ export default {
     async transition({ services, action }) {
       this.$q.loading.show();
       const next = this.status[action.next];
-      console.log('services', services);
       try {
         for (const service of services) {
-          await this.$services.assignment.handleTransition(
+          await this.$db.agreement.handleTransition(
             this.$auth.user().address,
             service,
             action.method
@@ -92,7 +91,6 @@ export default {
         services.forEach((s) => {
           s.stage = action.next;
         });
-        console.log('this.contract pay?', this.contract);
         const pay =
           !this.contract.payed &&
           this.contract.services.every((s) => s.stage === 4);

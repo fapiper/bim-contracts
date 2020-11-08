@@ -52,7 +52,7 @@ export default {
     },
     async loadAwards() {
       this.loading = true;
-      this.awards = await this.$services.assignment.getAwardsByProject(
+      this.awards = await this.$db.agreement.getAwardsByProject(
         this.$route.params.project,
         this.$auth.user().address
       );

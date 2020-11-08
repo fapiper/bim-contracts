@@ -68,6 +68,7 @@
                 filled
                 v-model="project.contractor"
                 label="Auftragnehmer"
+                hint="Account Adresse"
               />
               <q-file
                 ref="boqs"
@@ -127,9 +128,7 @@
 
 <script>
 import { date } from 'quasar';
-
 import IcddParser from 'app/../utils/icdd.parser.js';
-import Assignment from 'src/models/assignment-model.js';
 
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
 import BillingModelFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BillingModel.xml';
@@ -139,11 +138,15 @@ export default {
   async mounted() {
     this.loadProjects();
   },
+  computed: {
+    projects() {
+      return this.$store.getters['project/projects'];
+    },
+  },
   data() {
     return {
       loading: true,
       dialog: false,
-      projects: [],
       project: {
         name: '',
         contractor: '',
@@ -152,7 +155,6 @@ export default {
         boqs: [],
         billingModel: null,
       },
-      projectdb: null,
     };
   },
   methods: {
@@ -176,36 +178,27 @@ export default {
     },
     async loadProjects() {
       this.loading = true;
-      const res = await this.$axios.get(
-        `users/${this.$auth.user()._id}/projects`
+      this.$store.dispatch(
+        'project/loadProjectsByUserAddress',
+        this.$auth.user().address
       );
-      this.projects = res.data;
       this.loading = false;
     },
     async addProject() {
       this.$q.loading.show();
+      const project = {
+        name: this.project.name,
+        actors: [this.$auth.user().address, this.project.contractor],
+      };
+      const container = await IcddParser.parseFromFiles(
+        this.container.billingModel,
+        this.container.boqs
+      );
       try {
-        const { billing, boqs } = await IcddParser.parseFromFiles(
-          this.container.billingModel,
-          this.container.boqs
-        );
-        const res = await this.$axios.post(`projects`, {
-          name: this.project.name,
-          owner: this.$auth.user()._id,
-          actors: [this.$auth.user()._id, this.project.contractor],
+        await this.$store.dispatch('project/addProject', {
+          project,
+          container,
         });
-        const project = res.data;
-        await this.$services.project.put(project, { billing, boqs });
-        console.log('project', project);
-        const assignment = new Assignment(
-          this.project.name,
-          boqs.flatMap((boq) => boq.roots.map((hash) => boq.nodes[hash])),
-          project.actors[0],
-          project.actors[1]
-        );
-        await this.$services.assignment.assignInitial(project._id, assignment);
-
-        this.projects.push(project);
         this.dialog = false;
         this.$q.notify({
           type: 'positive',

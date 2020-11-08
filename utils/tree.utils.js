@@ -2,6 +2,15 @@ const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
 class TreeUtils {
+  static async flatHandle(node, handleFn, collect = []) {
+    const children = await handleFn(node);
+    const _collect = await Promise.all(
+      children.map((child) => this.flatHandle(child, handleFn, collect))
+    );
+    _collect.push(node);
+    return _collect.flat();
+  }
+
   static flat(
     tree,
     collection,

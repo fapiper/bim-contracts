@@ -92,45 +92,18 @@ class AgreementUtils {
     return services;
   }
 
-  async getAllServices(projectId, services) {
-    const handleFn = (node) => {
-      return this.boqService.query(projectId, (item) =>
-        node.children.some((hash) => item.hash === hash)
-      );
+  async addServices(services, agreement) {
+    const addFn = async (node, children) => {
+      const payload = [node.hash, children.map((service) => service.hash)];
+      await this.agreementController.methods
+        .addServiceSection(...payload)
+        .send({
+          from: agreement.client,
+          gas: 2000000,
+        });
     };
-    const all = await Promise.all(
-      services.map((service) => TreeUtils.flatHandle(service, handleFn))
-    );
-    return all.flat();
-  }
-
-  async getSuperServices(projectId, service) {
-    const build = async (node, collect = []) => {
-      const parents = node.parent
-        ? await this.boqService.get(projectId, node.parent)
-        : [];
-      const _collect = await Promise.all(
-        parents.map((child) => build(child, collect))
-      );
-      _collect.push(node);
-      return _collect.flat();
-    };
-    return build(service);
-  }
-
-  async addProject(services, agreement) {
-    const payload = [
-      Web3.utils.sha3(JSON.stringify(agreement)),
-      agreement.contractor,
-      services.filter((s) => !s.parent).map((s) => s.hash),
-      services.map((s) => s.hash),
-      services.map((s) => s.parent || n32),
-    ];
-    await this.agreementController.methods
-      .createProject(...payload)
-      .send({ from: agreement.client, gas: 60000000 });
-
-    return agreement;
+    const deep = TreeUtils.unflat(services);
+    await TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
   }
 
   async create(agreement) {
@@ -140,7 +113,7 @@ class AgreementUtils {
         agreement.contractor,
         agreement.services.map((s) => s.hash)
       )
-      .send({ from: agreement.client, gas: 2000000 });
+      .send({ from: agreement.client, gas: 60000000 });
     return agreement;
   }
 

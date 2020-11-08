@@ -45,9 +45,13 @@ contract ServiceStorage is ServiceRoles, StateMachine {
         return (_services, _clients, _contractors, _stages);
     }
 
-    function _addService(bytes32 _section, bytes32 _service) internal {
-        _nextStage(_service);
-        services[_section].push(_service);
+    function _addServiceSection(bytes32 _section, bytes32[] memory _services)
+        internal
+    {
+        for (uint256 i = 0; i < _services.length; i++) {
+            _nextStage(_services[i]);
+        }
+        services[_section] = _services;
     }
 
     function _start(bytes32 _service)

@@ -2,6 +2,18 @@ const reduce = (keys, object) =>
   keys.split('.').reduce((props, key) => props && props[key], object);
 
 class TreeUtils {
+  static async deepHandle(node, handleFn, once = true) {
+    const children = node.children || [];
+    for (const child of children) {
+      if (once) {
+        once = false;
+        handleFn && (await handleFn(node, children));
+      }
+      await this.deepHandle(child, handleFn);
+    }
+    return node;
+  }
+
   static async flatHandle(node, handleFn, collect = []) {
     const children = await handleFn(node);
     const _collect = await Promise.all(
@@ -9,6 +21,18 @@ class TreeUtils {
     );
     _collect.push(node);
     return _collect.flat();
+  }
+
+  static unflat(array) {
+    const hashTable = Object.create(null);
+    array.forEach((node) => (hashTable[node.hash] = { ...node, children: [] }));
+    const tree = [];
+    array.forEach((node) => {
+      if (node.parent && hashTable[node.parent])
+        hashTable[node.parent].children.push(hashTable[node.hash]);
+      else tree.push(hashTable[node.hash]);
+    });
+    return tree;
   }
 
   static flat(

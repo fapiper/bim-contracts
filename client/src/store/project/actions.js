@@ -54,12 +54,13 @@ export async function addProject(state, { project, container }) {
 
   // create agreement
   const agreement = {
-    services: container.boq.roots,
+    services: services.filter((service) => !service.parent),
     client: project.actors[0],
     contractor: project.actors[1],
     createdAt: new Date().toJSON(),
   };
-  await this._vm.$db.agreement.addProject(services, agreement);
+  await this._vm.$db.agreement.addServices(services, agreement);
+  await this._vm.$db.agreement.create(agreement);
 
   // update store
   populateProject(this._vm.$db.user, project); // populate after agreement has been created

@@ -1,8 +1,9 @@
 require('dotenv').config();
 
+const { TreeUtils } = require('../utils/tree.utils.js');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const config = require('../bim-contracts.config');
-const { abi } = require('../client/src/contracts/AgreementController.json');
+const { abi } = require('../build/contracts/AgreementController.json');
 
 const {
   getOrbitDB,
@@ -11,8 +12,11 @@ const {
 } = require('./helpers');
 const Web3 = require('web3');
 
-const n = 60;
+const n = 1;
 const file = 1;
+
+const n32 =
+  '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 let start = 0;
 let end = 0;
@@ -20,6 +24,7 @@ let endTx = 0;
 let offStart = 0;
 let offEnd = 0;
 let onStart = 0;
+let onEndServices = 0;
 let onEnd = 0;
 let onEndTx = 0;
 
@@ -36,17 +41,38 @@ const csvWriter = createCsvWriter({
     { id: 'total', title: 'TOTAL' },
     { id: 'off', title: 'OFF_CHAIN' },
     { id: 'on', title: 'ON_CHAIN' },
+    { id: 'onServices', title: 'ON_CHAIN_SERVICES' },
+    { id: 'onAgreement', title: 'ON_CHAIN_AGREEMENT' },
     { id: 'totalTx', title: 'TOTAL_TX' },
     { id: 'onTx', title: 'ON_CHAIN_TX' },
   ],
 });
 
-const persistServices = async (orbitdb, projectId, boqs) => {
-  const nodes = boqs.map((boq) => Object.values(boq.nodes));
+const persistServices = async (orbitdb, projectId, services) => {
+  const nodes = Object.values(services);
   const boqdb = await orbitdb.docs(`projects.${projectId}.boqs`, {
     indexBy: 'hash',
   });
   return Promise.all(nodes.map((node) => boqdb.putAll(node)));
+};
+
+const sendServices = (services, agreement, agreementController) => {
+  const addFn = async (node, children) => {
+    console.log('send service', node);
+
+    const payload = [
+      node.hash,
+      children.map((service) => service.hash),
+      agreement.contractor,
+    ];
+    await agreementController.methods.addServiceSection(...payload).send({
+      from: agreement.client,
+      gas: 8000000,
+      gasPrice: Web3.utils.toWei('100', 'gwei'),
+    });
+  };
+  const deep = TreeUtils.unflat(services);
+  return TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
 };
 
 const createAgreement = async (web3, container) => {
@@ -63,21 +89,18 @@ const createAgreement = async (web3, container) => {
   };
 };
 
-const sendInitialAgreement = (agreement, agreementController) => {
-  const n32 =
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
-
-  const payload = [
-    agreement.hash,
-    agreement.contractor.address,
-    agreement.services.filter((s) => !s.parent).map((s) => s.hash),
-    agreement.services.map((s) => s.hash),
-    agreement.services.map((s) => s.parent || n32),
-  ];
-
+const sendAgreement = (agreement, agreementController) => {
   return agreementController.methods
-    .createProject(...payload)
-    .send({ from: agreement.client.address, gas: 90000000 });
+    .createAgreement(
+      Web3.utils.sha3(JSON.stringify(agreement)),
+      agreement.contractor,
+      agreement.services.map((s) => s.hash)
+    )
+    .send({
+      from: agreement.client,
+      gas: 8000000,
+      gasPrice: Web3.utils.toWei('100', 'gwei'),
+    });
 };
 
 (async (path = `/files/${file}/`) => {
@@ -101,13 +124,19 @@ const sendInitialAgreement = (agreement, agreementController) => {
       start = Date.now();
 
       offStart = Date.now();
-      await persistServices(orbitdb, projectId, container.boq);
+      await persistServices(orbitdb, projectId, container.boq.nodes);
       offEnd = Date.now();
 
       const agreement = await createAgreement(web3, container);
       console.log('sending transaction...');
       onStart = Date.now();
-      const res = await sendInitialAgreement(agreement, agreementController);
+      await sendServices(
+        Object.values(container.boq.nodes),
+        agreement,
+        agreementController
+      );
+      onEndServices = Date.now();
+      const res = await sendAgreement(agreement, agreementController);
       onEnd = Date.now();
       end = Date.now();
       console.log('success sent transaction', res);
@@ -135,6 +164,8 @@ const sendInitialAgreement = (agreement, agreementController) => {
         totalTx: endTx - start,
         off: offEnd - offStart,
         on: onEnd - onStart,
+        onServices: onEndServices - onStart,
+        onAgreement: onEnd - onEndServices,
         onTx: onEndTx - onStart,
       });
     }

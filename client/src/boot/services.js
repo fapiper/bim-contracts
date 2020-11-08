@@ -19,7 +19,7 @@ export default async ({ Vue }) => {
     orbitdb.docs(`projects.${projectId}.services`, {
       indexBy: 'hash',
     });
-  db.agreement = new AgreementUtils(orbitdb, db.service, Vue.prototype.$web3);
+  db.agreement = new AgreementUtils(db.service, Vue.prototype.$web3);
 
   Vue.prototype.$db = db;
   return true;

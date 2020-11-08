@@ -47,7 +47,7 @@
         no-hover
       >
         <q-td colspan="100%" style="padding: 0">
-          <bc-boq-table @assign="assign" :data="children" :project="project" />
+          <bc-boq-table :data="children" :project="project" />
         </q-td>
       </q-tr>
     </template>
@@ -64,9 +64,6 @@ export default {
     loading: Boolean,
   },
   methods: {
-    assign(service) {
-      this.$emit('assign', service);
-    },
     hasChildren(props) {
       return props && props.row.children.length > 0;
     },

@@ -10,9 +10,7 @@ const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 class AgreementUtils {
-  constructor(orbitdb, serviceDb, web3) {
-    this.orbitdb = orbitdb;
-    this.assignmentdb = null;
+  constructor(serviceDb, web3) {
     this.serviceDb = serviceDb;
     this.web3 = web3;
     this.agreementController = new web3.eth.Contract(
@@ -124,18 +122,6 @@ class AgreementUtils {
     return build(service);
   }
 
-  async put(projectId, assignment) {
-    const assignmentdb = await this.loadDb(projectId);
-    const hash = await assignmentdb.put(assignment);
-    return hash;
-  }
-
-  async query(projectId, queryFn) {
-    const assignmentdb = await this.loadDb(projectId);
-    const assignments = await assignmentdb.query(queryFn);
-    return assignments;
-  }
-
   async addProject(services, agreement) {
     const payload = [
       Web3.utils.sha3(JSON.stringify(agreement)),
@@ -151,16 +137,15 @@ class AgreementUtils {
     return agreement;
   }
 
-  async assign(projectId, contract) {
+  async create(agreement) {
     await this.agreementController.methods
       .createAgreement(
-        contract.hash,
-        contract.contractor.address,
-        contract.services.map((s) => s.hash)
+        Web3.utils.sha3(JSON.stringify(agreement)),
+        agreement.contractor,
+        agreement.services.map((s) => s.hash)
       )
-      .send({ from: contract.client.address, gas: 2000000 });
-    await this.put(projectId, contract);
-    return contract;
+      .send({ from: agreement.client, gas: 2000000 });
+    return agreement;
   }
 
   async handleTransition(userAddress, service, method) {

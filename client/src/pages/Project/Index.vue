@@ -6,7 +6,6 @@
           <q-toolbar-title>Leistungen</q-toolbar-title>
         </q-toolbar>
         <bc-boq-table
-          @assign="showAssignPrompt"
           :data="services"
           :loading="boqsLoading"
           :project="project._id"
@@ -40,43 +39,6 @@
         </q-list>
       </div>
     </div>
-    <q-dialog v-model="assignPrompt">
-      <q-card style="min-width: 450px">
-        <q-card-section class="row items-center">
-          <div class="text-h6">Auftragsvergabe</div>
-          <q-space />
-          <q-btn icon="close" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <p>
-            Geben Sie zur Auftragsvergabe
-            <span class="text-weight-bold">{{
-              selectedBoq && (selectedBoq.short_desc || selectedBoq.name)
-            }}</span>
-            bitte den gewünschten Auftragnehmer an:
-          </p>
-          <q-input
-            filled
-            dense
-            placeholder="Adresse"
-            hint="Blockchain Identität"
-            v-model="assigneeAddress"
-            autofocus
-          />
-        </q-card-section>
-
-        <q-card-actions align="center">
-          <q-btn
-            unelevated
-            class="full-width"
-            color="primary"
-            label="Auftrag vergeben"
-            @click="assign"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
     <q-dialog v-model="addActorsPrompt">
       <q-card style="min-width: 450px">
         <q-card-section class="row items-center">
@@ -111,8 +73,6 @@
 </template>
 
 <script>
-import Assignment from 'src/models/assignment-model';
-
 export default {
   name: 'PageProjectOverview',
   data() {
@@ -122,8 +82,6 @@ export default {
       actorId: '',
       selectedBoq: null,
       boqsLoading: true,
-      assignPrompt: false,
-      assigneeAddress: '',
       services: [],
     };
   },
@@ -136,37 +94,6 @@ export default {
     },
   },
   methods: {
-    showAssignPrompt(service) {
-      this.selectedBoq = service;
-      this.assignPrompt = true;
-    },
-    async assign() {
-      this.$q.loading.show();
-      this.assignPrompt = false;
-      try {
-        const { privateKey, ...client } = this.$auth.user();
-        const assignment = new Assignment(
-          this.project.name,
-          this.selectedBoq,
-          client,
-          { address: this.assigneeAddress }
-        );
-        await this.$db.agreement.assign(this.project._id, assignment);
-        this.$q.notify({
-          type: 'positive',
-          message: `Der Auftrag wurde erfolgreich vergeben.`,
-          position: 'bottom-right',
-        });
-      } catch (error) {
-        console.error(error);
-        this.$q.notify({
-          type: 'negative',
-          message: `Bei der Auftragsvergabe ist ein Fehler aufgetreten.`,
-          position: 'bottom-right',
-        });
-      }
-      this.$q.loading.hide();
-    },
     async loadBoqs() {
       this.boqsLoading = true;
       const servicedb = await this.$db.service(this.project._id);

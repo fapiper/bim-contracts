@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import Assignment from 'src/models/assignment-model.js';
+import STATUS from 'assets/agreement.stages.js';
 
 export default {
   name: 'ComponentServiceContractCard',
@@ -58,7 +58,7 @@ export default {
     return {
       service: null,
       expanded: false,
-      status: Assignment.STATUS,
+      status: STATUS,
     };
   },
   computed: {

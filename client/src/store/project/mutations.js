@@ -3,7 +3,7 @@ export function setProjects(state, projects) {
 }
 
 export function addProject(state, project) {
-  state.projects = [project, ...state.projects];
+  state.projects = [...state.projects, project];
 }
 
 export function setProject(state, project) {

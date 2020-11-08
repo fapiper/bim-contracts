@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import Assignment from 'src/models/assignment-model.js';
+import STATUS from 'assets/agreement.stages.js';
 
 export default {
   name: 'ComponentServiceTable',
@@ -185,7 +185,7 @@ export default {
   data() {
     return {
       children: {},
-      status: Assignment.STATUS,
+      status: STATUS,
       columns: [
         {
           name: 'id',

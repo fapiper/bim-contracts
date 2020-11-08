@@ -92,35 +92,7 @@ class AgreementUtils {
     return services;
   }
 
-  async getAllServices(projectId, services) {
-    const handleFn = (node) => {
-      return this.boqService.query(projectId, (item) =>
-        node.children.some((hash) => item.hash === hash)
-      );
-    };
-    const all = await Promise.all(
-      services.map((service) => TreeUtils.flatHandle(service, handleFn))
-    );
-    return all.flat();
-  }
-
-  async getSuperServices(projectId, service) {
-    const build = async (node, collect = []) => {
-      const parents = node.parent
-        ? await this.boqService.get(projectId, node.parent)
-        : [];
-      const _collect = await Promise.all(
-        parents.map((child) => build(child, collect))
-      );
-      _collect.push(node);
-      return _collect.flat();
-    };
-    return build(service);
-  }
-
   async addServices(services, agreement) {
-    console.log('add', agreement);
-
     const addFn = async (node, children) => {
       const payload = [node.hash, children.map((service) => service.hash)];
       const res = await this.agreementController.methods
@@ -131,7 +103,6 @@ class AgreementUtils {
         });
       return res;
     };
-
     const deep = TreeUtils.unflat(services);
     await TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
   }

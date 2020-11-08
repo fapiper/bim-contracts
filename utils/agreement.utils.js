@@ -93,27 +93,17 @@ class AgreementUtils {
   }
 
   async addServices(services, agreement) {
-    const batch = new this.web3.BatchRequest();
-    const addFn = (node, children) => {
+    const addFn = async (node, children) => {
       const payload = [node.hash, children.map((service) => service.hash)];
-      batch.add(
-        this.agreementController.methods
-          .addServiceSection(...payload)
-          .send.request(
-            {
-              from: agreement.client,
-              gas: 2000000,
-            },
-            (error, res) => {
-              if (error) console.error(error);
-              console.log('added batch', res);
-            }
-          )
-      );
+      await this.agreementController.methods
+        .addServiceSection(...payload)
+        .send({
+          from: agreement.client,
+          gas: 2000000,
+        });
     };
     const deep = TreeUtils.unflat(services);
-    TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
-    await batch.execute();
+    await TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
   }
 
   async create(agreement) {

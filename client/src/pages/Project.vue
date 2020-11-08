@@ -142,7 +142,7 @@
 
 <script>
 import { date } from 'quasar';
-import IcddParser from 'app/../utils/icdd.parser.js';
+import BimLvParser from 'app/../utils/bim-lv.parser.js';
 
 import LinksFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/BMlinks.xml';
 import BoQFile from 'assets/demo/BillingModelShortSzenario2/Payload Documents/Leistungsverzeichnis_1.xml';
@@ -206,7 +206,7 @@ export default {
           name: this.project.name,
           actors: [this.$auth.user().address, this.project.contractor],
         };
-        const container = await IcddParser.parseFromFiles(
+        const container = await BimLvParser.parseFromFiles(
           this.container.links,
           this.container.boq,
           this.container.billing

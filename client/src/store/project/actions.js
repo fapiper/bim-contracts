@@ -59,7 +59,7 @@ export async function addProject(state, { project, container }) {
     contractor: project.actors[1],
     createdAt: new Date().toJSON(),
   };
-  this._vm.$db.agreement.addProject(services, agreement);
+  await this._vm.$db.agreement.addProject(services, agreement);
 
   // update store
   populateProject(this._vm.$db.user, project); // populate after agreement has been created

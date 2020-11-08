@@ -1,9 +1,8 @@
-const { FlatUtils, FlatNode } = require('../tree.utils.js');
+const { TreeUtils, FlatNode } = require('../tree.utils.js');
 const Web3 = require('web3');
 
-class BoQ extends FlatUtils {
+class BoQModel {
   constructor(id, name, label, date, roots, nodes) {
-    super();
     this.id = id;
     this.name = name;
     this.label = label;
@@ -20,13 +19,13 @@ class BoQ extends FlatUtils {
       'boq_body.boq_ctgy': BoQCtgy.fromGAEB,
     };
 
-    const { roots, nodes } = super.build(
+    const { roots, nodes } = TreeUtils.flat(
       boq.gaeb.award.boq,
       {},
       { builders, billing, links }
     );
     const info = boq.gaeb.award.boq.boq_info;
-    return new BoQ(
+    return new BoQModel(
       boq.gaeb.award.boq.$.id,
       info.name,
       info.lbl_boq,
@@ -92,4 +91,4 @@ class BoQItem extends FlatNode {
   }
 }
 
-module.exports = BoQ;
+module.exports = BoQModel;

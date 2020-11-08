@@ -1,7 +1,7 @@
 const xml2js = require('xml2js');
 
 const LinkModel = require('./models/link.model.js');
-const BoQ = require('./models/boq.model.js');
+const BoQModel = require('./models/boq.model.js');
 const BillingModel = require('./models/billing.model.js');
 
 const nameProcessor = (name) =>
@@ -19,7 +19,7 @@ const parserOptions = {
   async: true,
 };
 
-class IcddParser {
+class BimLvParser {
   static read(file) {
     const reader = new FileReader();
     return new Promise(function (resolve) {
@@ -49,7 +49,7 @@ class IcddParser {
 
   static async parseBoQFile(boq, config, isBrowser = true) {
     const parsed = await this.parseFromFile(boq, isBrowser);
-    return BoQ.fromGAEB(parsed, config);
+    return BoQModel.fromGAEB(parsed, config);
   }
 
   static async parseFromFiles(linksRaw, boqRaw, billingRaw) {
@@ -60,4 +60,4 @@ class IcddParser {
   }
 }
 
-module.exports = IcddParser;
+module.exports = BimLvParser;

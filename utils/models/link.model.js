@@ -1,8 +1,7 @@
-const { FlatUtils, FlatNode } = require('../tree.utils.js');
+const { TreeUtils, FlatNode } = require('../tree.utils.js');
 
-class LinkModel extends FlatUtils {
+class LinkModel {
   constructor(roots, nodes) {
-    super();
     this.roots = roots;
     this.nodes = nodes;
   }
@@ -13,7 +12,7 @@ class LinkModel extends FlatUtils {
       'bu_items.item_link.bu_sub_items.item_link': Link.fromItem,
       bu_link: Link.fromSection,
     };
-    const { roots, nodes } = super.build(
+    const { roots, nodes } = TreeUtils.flat(
       links.billing_model_link,
       {},
       { builders, selector: 'id' }

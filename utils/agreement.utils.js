@@ -1,7 +1,5 @@
 const Web3 = require('web3');
 
-const { TreeUtils } = require('./tree.utils.js');
-
 const {
   contract: { development: AgreementControllerAddress },
 } = require('../bim-contracts.config');
@@ -93,21 +91,15 @@ class AgreementUtils {
   }
 
   async addServices(services, agreement) {
-    const addFn = async (node, children) => {
-      const payload = [
-        node.hash,
-        children.map((service) => service.hash),
-        agreement.contractor,
-      ];
-      await this.agreementController.methods
-        .addServiceSection(...payload)
-        .send({
-          from: agreement.client,
-          gas: 60000000,
-        });
-    };
-    const deep = TreeUtils.unflat(services);
-    await TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
+    const payload = [
+      services.map((s) => s.hash),
+      services.map((s) => s.parent || n32),
+      agreement.contractor,
+    ];
+    await this.agreementController.methods.addServices(...payload).send({
+      from: agreement.client,
+      gas: 100000000,
+    });
   }
 
   async create(agreement) {

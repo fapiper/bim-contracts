@@ -10,7 +10,6 @@ module.exports = {
       host: network.host,
       port: network.port,
       network_id: network.id || '*',
-      gas: 60000000,
     },
     ropsten: {
       provider: () =>

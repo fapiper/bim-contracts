@@ -5,12 +5,12 @@ import './ServiceAgreement.sol';
 import './ServiceStorage.sol';
 
 contract AgreementController is ServiceAgreement, ServiceStorage {
-    function addServiceSection(
-        bytes32 _section,
+    function addServices(
         bytes32[] calldata _services,
+        bytes32[] calldata _sections,
         address _contractor
     ) external returns (bool success) {
-        _addServiceSection(_section, _services, _contractor);
+        _addServices(_services, _sections, _contractor);
         return true;
     }
 

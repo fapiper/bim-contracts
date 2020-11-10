@@ -1,6 +1,6 @@
 module.exports = {
   contract: {
-    development: '0xB2f31174a4166B5D7DA787fF4fe240bAE4631B66',
+    development: '0x24CA71Bc5b89f8fE0685885Ed1317153A377B156',
     ropsten: '0xb5d4f9340bE24eBB428681567a6DE4014A09E8bC',
   },
   network: {

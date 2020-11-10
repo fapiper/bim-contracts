@@ -15,7 +15,7 @@
     "dev": "truffle migrate && npm-run-all -l -p dev:server dev:client",
     "dev:client": "cd client && quasar dev",
     "dev:server": "cd server && yarn start",
-    "dev:network": "ganache-cli --port 7545 --hostname 127.0.0.1 --networkId 5777 --gasLimit 60000000 --defaultBalanceEther 10000",
+    "dev:network": "ganache-cli --port 7545 --hostname 127.0.0.1 --networkId 5777 --gasLimit 100000000 --defaultBalanceEther 10000",
     "benchmark": "node benchmark/run.spec.js"
   },
   "dependencies": {

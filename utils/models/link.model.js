@@ -7,7 +7,6 @@ class LinkModel {
   }
 
   static fromXml(links) {
-    console.log('links fromXml', links);
     const builders = {
       'bu_items.item_link.bu_sub_items.item_link': Link.fromItem,
       bu_link: Link.fromSection,

@@ -1,6 +1,8 @@
 module.exports = {
-  controllerContract: '0xB2f31174a4166B5D7DA787fF4fe240bAE4631B66',
-  ropstenControllerContract: '0xF98761884e7eBdBc3F275ad5a11d721a9133fBE1',
+  contract: {
+    development: '0xB2f31174a4166B5D7DA787fF4fe240bAE4631B66',
+    ropsten: '0xb5d4f9340bE24eBB428681567a6DE4014A09E8bC',
+  },
   network: {
     host: '127.0.0.1',
     port: 7545,

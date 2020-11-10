@@ -58,7 +58,7 @@ class TreeUtils {
             const ref = links.nodes[node.id];
             if (ref) {
               const item = billing.nodes[ref.link];
-              node.billing_item = item;
+              item && (node.billing_item = item);
             }
           }
           this.flat(desc[i], collection, {

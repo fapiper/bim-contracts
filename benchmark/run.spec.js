@@ -12,8 +12,8 @@ const {
 } = require('./helpers');
 const Web3 = require('web3');
 
-const n = 1;
-const file = 1;
+const n = 10;
+const file = 5;
 
 const n32 =
   '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -32,6 +32,8 @@ const csvWriter = createCsvWriter({
   path: `./benchmark/LV-${file}_latency.csv`,
   header: [
     { id: 'index', title: 'INDEX' },
+    { id: 'gasUsedServices', title: 'GAS_USED_SERVICES' },
+    { id: 'gasUsedAgreement', title: 'GAS_USED_AGREEMENT' },
     { id: 'gasUsed', title: 'GAS_USED' },
     { id: 'gasUsedTx', title: 'GAS_USED_TX' },
     { id: 'servicesCount', title: 'COUNT_SERVICES' },
@@ -49,14 +51,14 @@ const csvWriter = createCsvWriter({
 });
 
 const persistServices = async (orbitdb, projectId, services) => {
-  const nodes = Object.values(services);
-  const boqdb = await orbitdb.docs(`projects.${projectId}.boqs`, {
+  const servicedb = await orbitdb.docs(`projects.${projectId}.boqs`, {
     indexBy: 'hash',
   });
-  return Promise.all(nodes.map((node) => boqdb.putAll(node)));
+  return servicedb.putAll(services);
 };
 
-const sendServices = (services, agreement, agreementController) => {
+const sendServices = async (services, agreement, agreementController) => {
+  let gasUsed = 0;
   const addFn = async (node, children) => {
     console.log('send service', node);
 
@@ -65,24 +67,29 @@ const sendServices = (services, agreement, agreementController) => {
       children.map((service) => service.hash),
       agreement.contractor,
     ];
-    await agreementController.methods.addServiceSection(...payload).send({
-      from: agreement.client,
-      gas: 8000000,
-      gasPrice: Web3.utils.toWei('100', 'gwei'),
-    });
+    const res = await agreementController.methods
+      .addServiceSection(...payload)
+      .send({
+        from: agreement.client,
+        gas: 8000000,
+        gasPrice: Web3.utils.toWei('100', 'gwei'),
+      });
+    console.log('succesfull sent service', res);
+    gasUsed += res.gasUsed;
   };
   const deep = TreeUtils.unflat(services);
-  return TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
+  await TreeUtils.deepHandle({ hash: n32, children: deep }, addFn);
+  return gasUsed;
 };
 
-const createAgreement = async (web3, container) => {
+const createAgreement = async (web3, services) => {
   const account = await web3.eth.accounts.privateKeyToAccount(
     process.env.PRIVATE_KEY
   );
   web3.eth.accounts.wallet.add(account);
 
   return {
-    services: Object.values(container.boq.nodes).filter((s) => !s.parent),
+    services: services.filter((s) => !s.parent),
     client: account.address,
     contractor: account.address,
     createdAt: new Date().toJSON(),
@@ -119,22 +126,25 @@ const sendAgreement = (agreement, agreementController) => {
     const projectId = '';
     const container = await parseContainer(path);
     const orbitdb = await getOrbitDB();
+
+    const services = Object.values(container.boq.nodes);
     for (let i = 0; i < n; i++) {
       console.log('-----> Starting round', i);
       start = Date.now();
 
       offStart = Date.now();
-      await persistServices(orbitdb, projectId, container.boq.nodes);
+      await persistServices(orbitdb, projectId, services);
       offEnd = Date.now();
 
-      const agreement = await createAgreement(web3, container);
-      console.log('sending transaction...');
+      const agreement = await createAgreement(web3, services);
+      console.log('sending services...');
       onStart = Date.now();
-      await sendServices(
-        Object.values(container.boq.nodes),
+      const gasUsedServices = await sendServices(
+        services,
         agreement,
         agreementController
       );
+      console.log('creating agreement...');
       onEndServices = Date.now();
       const res = await sendAgreement(agreement, agreementController);
       onEnd = Date.now();
@@ -149,17 +159,14 @@ const sendAgreement = (agreement, agreementController) => {
       endTx = Date.now();
       metrics.push({
         index: i,
-        gasUsed: res.gasUsed,
-        gasUsedTx: resTx.gasUsed,
+        gasUsedServices: gasUsedServices,
+        gasUsedAgreement: res.gasUsed,
+        gasUsedAgreementTx: resTx.gasUsed,
+        gasUsed: gasUsedServices + res.gasUsed,
         servicesCount: agreement.services.length,
-        serviceSectionCount: agreement.services.filter(
-          (service) => !service.qty
-        ).length,
-        serviceItemCount: agreement.services.filter((service) => service.qty)
-          .length,
-        billingCount: agreement.services.filter(
-          (service) => service.billing_item
-        ).length,
+        serviceSectionCount: services.filter((service) => !service.qty).length,
+        serviceItemCount: services.filter((service) => service.qty).length,
+        billingCount: services.filter((service) => service.billing_item).length,
         total: end - start,
         totalTx: endTx - start,
         off: offEnd - offStart,
@@ -180,6 +187,13 @@ const sendAgreement = (agreement, agreementController) => {
     return process.exit(0);
   } catch (error) {
     console.error('[upload-services.benchmark] ERROR', error);
+    console.log('metrics', metrics);
+    await csvWriter
+      .writeRecords(metrics) // returns a promise
+      .then(() => {
+        console.log('...Done');
+      });
+    console.log('[upload-services.benchmark] FINISHED');
     return process.exit(1);
   }
 })();

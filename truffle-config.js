@@ -11,6 +11,12 @@ module.exports = {
       port: network.port,
       network_id: network.id || '*',
     },
+    geth: {
+      host: 'localhost',
+      port: 8000,
+      network_id: '*',
+      gas: 60000000,
+    },
     ropsten: {
       provider: () =>
         new HDWalletProvider(

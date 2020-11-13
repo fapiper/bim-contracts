@@ -52,9 +52,9 @@
           <q-input
             filled
             dense
-            placeholder="Adresse"
+            placeholder="Accountadresse"
             hint="Blockchain Identität"
-            v-model="actorId"
+            v-model="actorAdress"
             autofocus
           />
         </q-card-section>
@@ -79,7 +79,7 @@ export default {
     return {
       actorsLoading: true,
       addActorsPrompt: false,
-      actorId: '',
+      actorAdress: '',
       selectedBoq: null,
       boqsLoading: true,
       services: [],
@@ -107,11 +107,11 @@ export default {
       try {
         const project = await this.$store.dispatch(
           'project/addActor',
-          this.actorId
+          this.actorAdress
         );
         this.$q.notify({
           type: 'positive',
-          message: `${this.actorId} erfolgreich hinzugefügt.`,
+          message: `${this.actorAdress} erfolgreich hinzugefügt.`,
           position: 'bottom-right',
         });
         console.log('updated', project);

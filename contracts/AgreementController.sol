@@ -32,10 +32,17 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         internal
     {
         address _currentContractor;
+        address _currentClient;
+
         bytes32[] memory _services;
         for (uint256 i = 0; i < _sections.length; i++) {
-            (, _currentContractor) = _getServiceRoles(_sections[i]);
-            if (_currentContractor == _contractor) break;
+            (_currentClient, _currentContractor) = _getServiceRoles(
+                _sections[i]
+            );
+            if (
+                _currentContractor == _contractor &&
+                _currentClient == msg.sender
+            ) break;
             (_services, , , ) = _getServicesOf(_sections[i]);
             _updateServiceRoles(_sections[i], msg.sender, _contractor);
             _updateRoles(_services, _contractor);

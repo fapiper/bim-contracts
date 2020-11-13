@@ -11,6 +11,7 @@ async function fetchUser(privateKey) {
   const account = await this._vm.$web3.eth.accounts.privateKeyToAccount(
     privateKey
   );
+
   this._vm.$web3.eth.accounts.wallet.add(account);
   this._vm.$web3.eth.defaultAccount = account.address;
   await this._vm.$db.user.load();
@@ -44,6 +45,7 @@ export async function register(state, data) {
     iban: data.iban,
     createdAt: new Date().toJSON(),
   };
+  await this._vm.$db.user.load();
   await this._vm.$db.user.put(user);
   state.commit('setUser', { privateKey, user });
   state.dispatch('setKey', {

@@ -65,21 +65,12 @@ function remove(req, res, next) {
  * Add actors to existing project
  */
 async function addActor(req, res, next) {
-  const userId = req.body.actorId || '';
-  const exists = await User.exists({ _id: userId });
-  if (exists) {
-    return Project.updateAnPopulate(id(req), { $addToSet: { actors: userId } })
-      .then((project) => handle(req, res, project))
-      .catch((err) =>
-        handleErr(next, err, 'addActor(' + userId + ', ' + id(req) + ')')
-      );
-  } else {
-    return handleErr(
-      next,
-      'User not exists',
-      'addActor(' + id(req) + ', ' + userId + ')'
+  const actor = req.body.actorAddress || '';
+  return Project.updateAnPopulate(id(req), { $addToSet: { actors: actor } })
+    .then((project) => handle(req, res, project))
+    .catch((err) =>
+      handleErr(next, err, 'addActor(' + userId + ', ' + id(req) + ')')
     );
-  }
 }
 
 module.exports = { get, create, update, list, remove, addActor };

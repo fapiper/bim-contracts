@@ -185,7 +185,7 @@ export default {
     useDemoProject() {
       this.project.name = 'Demoprojekt';
       this.container.links = new File([LinksFile], 'Demo-Links.xml');
-      this.container.boq = new File([BoQFile], 'Demo-Leistungsverzeichnis.x83');
+      this.container.boq = new File([BoQFile], 'Demo-Leistungsverzeichnis.xml');
       this.container.billing = new File(
         [BillingFile],
         'Demo-Abrechnungsplan.xml'

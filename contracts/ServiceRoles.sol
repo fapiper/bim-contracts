@@ -26,10 +26,11 @@ contract ServiceRoles {
         address _client,
         address _contractor
     ) internal {
-        if (clientByService[_service] == address(0)) {
+        if (
+            clientByService[_service] == address(0) ||
+            contractorByService[_service] == msg.sender
+        ) {
             clientByService[_service] = _client;
-            contractorByService[_service] = _contractor;
-        } else if (contractorByService[_service] == msg.sender) {
             contractorByService[_service] = _contractor;
         }
     }

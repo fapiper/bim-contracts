@@ -1,4 +1,4 @@
-# BIMcontracts (bim-contracts)
+# BIMcontracts Demo (bim-contracts)
 
 ## Requirements
 
@@ -7,7 +7,9 @@
 - [Yarn](https://yarnpkg.com/lang/en/docs/install)
 - [Ganache CLI](https://github.com/trufflesuite/ganache-cli)
 
-## Get started
+## Installation
+
+Application config resides in `bim-contracts.config.js`
 
 **1)** Install dependencies
 
@@ -15,20 +17,38 @@
 yarn install
 ```
 
-**2)** Create a mongodb database:
+**2)** Create a mongodb database and update config
 
-```bash
-
+```javascript
+  mongodb: {
+    uri: '<MONGODB_URI>',
+  }
 ```
 
-**3)** Start local Ganache Blockchain
+**3)** Start Ganache Blockchain
 
 ```bash
 yarn dev:network
 ```
 
-**3)** Start Server and Client application
+**4)** Start Server and Client application
 
 ```bash
 yarn dev
 ```
+
+**5)** Update contract address in config
+
+```javascript
+  contract: {
+    development: '<CONTRACT_ADDRESS>',
+  }
+```
+
+## Usage
+
+**1)** Create a minimum of two example accounts and remind their address and private keys
+
+**2)** Create a new building project from one account and fill in the other account as contractor
+
+**3)** Contractor can now start services and create new service agreements. Client can approve and reject finished services.

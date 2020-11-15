@@ -53,6 +53,7 @@
                 v-if="action.type === type"
                 :key="index"
                 round
+                :disable="!verifyAction(props.row)"
                 :color="
                   isReject(props.row.stage, action)
                     ? status[5].color
@@ -81,15 +82,15 @@
                   clickable
                   v-close-popup
                   @click="assign(props.row)"
-                  v-if="isAssignment && isCtgy && props.row.billing_item"
+                  v-if="
+                    isAssignment &&
+                    isCtgy &&
+                    props.row.billing_item &&
+                    isContractor(props.row)
+                  "
                 >
                   <q-item-section>
                     <q-item-label>Auftrag vergeben</q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item clickable v-close-popup @click="showDetails(props.row)">
-                  <q-item-section>
-                    <q-item-label>Auftragsdetails</q-item-label>
                   </q-item-section>
                 </q-item>
               </q-list>
@@ -138,6 +139,16 @@ export default {
     type: String,
   },
   methods: {
+    verifyAction(service) {
+      if (this.type === 'assignment') {
+        return this.isContractor(service);
+      } else {
+        return service.client === this.$auth.user().address;
+      }
+    },
+    isContractor(service) {
+      return service.contractor === this.$auth.user().address;
+    },
     assign(service) {
       this.$emit('assign', service);
     },
@@ -223,12 +234,6 @@ export default {
           field: (row) => row.billing_item,
           format: (val, row) => {
             if (val) {
-              console.log(
-                row.name || row.short_desc,
-                'val',
-                val.total_price || val.price
-              );
-
               const price = this.addZeroes(
                 val.total_price || val.price
               ).replace('.', ',');

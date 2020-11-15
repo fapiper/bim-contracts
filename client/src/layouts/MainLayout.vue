@@ -157,7 +157,6 @@ export default {
   },
   methods: {
     copy(e, label) {
-      console.log('label', label);
       copyToClipboard(e.target.value).then(() => {
         this.$q.notify({
           message: `${label} in die Zwischenablage kopiert.`,

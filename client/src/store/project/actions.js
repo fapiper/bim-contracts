@@ -50,6 +50,9 @@ export async function addProject(state, { project, container }) {
   // add services
   const services = Object.values(container.boq.nodes);
   const servicedb = await this._vm.$db.service(project._id);
+  services.forEach((service) => {
+    service.createdAt = new Date().toJSON();
+  });
   await servicedb.putAll(services);
 
   // create agreement

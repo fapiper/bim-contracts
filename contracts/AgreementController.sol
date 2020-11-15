@@ -20,6 +20,10 @@ contract AgreementController is ServiceAgreement, ServiceStorage {
         bytes32[] memory _services
     ) public returns (bool success) {
         require(
+            _contractor != msg.sender,
+            'Not allowed. Client equals contractor.'
+        );
+        require(
             _onlyAgreementContractor(_services),
             'Not allowed. Only contractor can create agreement.'
         );
